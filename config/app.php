@@ -170,7 +170,9 @@ return [
     |
     | NOTE: The long name supports HTML markup for styling.
     */
-    'long_name' => env('app.long_name', '<b>Laravel</b> ESK'),
+    'long_name' => env('app.long_name', '<b>Kaduna State</b> '),
+    'name'      => env('app.full_name', '<b>Kaduna State Government</b>'),
+
 
     /*
     |--------------------------------------------------------------------------
@@ -182,7 +184,9 @@ return [
     |
     | NOTE: The short name does not support any HTML markup.
     */
-    'short_name' => env('app.short_name', 'LESK'),
+    'short_name' => env('app.short_name', 'FMS'),
+
+    /* 'short_name' => env('app.short_name', 'LESK'), */
 
     /*
     |--------------------------------------------------------------------------
@@ -194,7 +198,7 @@ return [
     |
     | NOTE: The tag line supports HTML markup for styling.
     */
-    'tag_line' => env('app.tag_line', 'Anything you want'),
+    'tag_line' => env('app.tag_line', 'version 1.0'),
 
     /*
     |--------------------------------------------------------------------------
@@ -207,7 +211,8 @@ return [
     |
     | NOTE: The tag line supports HTML markup for styling.
     */
-    'copyright_line' => env('app.copyright', '<strong>Copyright &copy; 2015 <a href="#">Company</a>.</strong> All rights reserved.'),
+    'copyright_line' => env('app.copyright', '<strong>Copyright © 2017 <a href="#">Hallowgate Systems</a>.</strong> All rights reserved.'),
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -217,7 +222,7 @@ return [
     | Boolean flag that allows users to register themselves, defaults to true.
     |
     */
-    'allow_registration' => env('app.allow_registration', true),
+    'allow_registration' => env('app.allow_registration', false),
 
     /*
     |--------------------------------------------------------------------------

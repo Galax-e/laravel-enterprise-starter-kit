@@ -23,6 +23,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Colorbox -->
     <link href="{{ asset("/assets/colorbox/example1/colorbox.css") }}" rel="stylesheet" type="text/css" />
 
+    <!-- @cpnwaugha jQuery Toast -->
+    <link href="{{ asset("/bower_components/admin-lte/dist/css/jquery.toast.css") }}" rel="stylesheet" type="text/css" />
+
     <!-- Application CSS-->
     <link href="{{ asset(elixir('css/all.css')) }}" rel="stylesheet" type="text/css" />
 
@@ -38,6 +41,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <script src="{{ asset ("/bower_components/admin-lte/plugins/jQuery/jQuery-2.1.4.min.js") }}"></script>
       <!-- Bootstrap 3.3.2 JS -->
       <script src="{{ asset ("/bower_components/admin-lte/bootstrap/js/bootstrap.min.js") }}" type="text/javascript"></script>
+
+      <!-- JQuery UI js-->
+      <script src="{{ asset("/bower_components/admin-lte/plugins/jQueryUI/jquery-ui-1.12.1/jquery-ui.min.js") }}"></script>
+
+       <script src="{{ asset ("/bower_components/admin-lte/dist/js/jquery.toast.js") }}" type="text/javascript"></script>
+
       <!-- AdminLTE App -->
       <script src="{{ asset ("/bower_components/admin-lte/dist/js/app.min.js") }}" type="text/javascript"></script>
 

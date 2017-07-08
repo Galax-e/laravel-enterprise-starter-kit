@@ -5,6 +5,8 @@
     <title>{{ Setting::get('app.short_name') }} | {{ $page_title or "Page Title" }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- Set a meta reference to the CSRF token for use in AJAX request -->
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Bootstrap 3.3.4 -->
     <link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
     <!-- Font Awesome Icons 4.4.0 -->
@@ -15,6 +17,9 @@
     <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}" rel="stylesheet" type="text/css" />
     <!-- iCheck -->
     <link href="{{ asset("/bower_components/admin-lte/plugins/iCheck/square/blue.css") }}" rel="stylesheet" type="text/css" />
+    
+    <!-- Custom favicon-->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset ("/assets/themes/default/img/favicon.png") }}" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,10 +38,14 @@
     @include('flash::message')
     @include('partials._errors')
 </div>
+<style type="text/css">
+    .login-box{margin-top: -10px; width: 409px;}
+</style>
 
 <div class="login-box">
     <div class="login-logo">
-        {!! Setting::get('app.long_name') !!} | {{ $page_title or "Page Title" }}
+        <div class="login-logo" style="padding-top:-20px;"><img src="{{ asset ("/assets/themes/default/img/fms.png") }}" alt="User Image"></div>
+        {!! Setting::get('app.long_name') !!}<br/> FMS | {{ $page_title or "Page Title" }}
     </div><!-- /.login-logo -->
     <div class="login-box-body">
 

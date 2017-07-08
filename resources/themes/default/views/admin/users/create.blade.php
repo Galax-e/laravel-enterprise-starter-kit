@@ -34,5 +34,5 @@
     <!-- Select2 js -->
     @include('partials._body_bottom_select2_js_role_search')
     @include('partials._body_bottom_select2_js_user_settings')
-    @include('partials._body_bottom_submit_user_edit_form_js')
+    @include('partials._body_bottom_submit_user_create_form_js')
 @endsection

@@ -43,7 +43,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'username', 'email', 'password', 'auth_type', 'enabled'];
+    protected $fillable = ['position', 'first_name', 'middle_name', 'last_name', 'ministry', 'department', 'staff_code', 'username', 'email', 'password', 'auth_type', 'enabled'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -489,6 +489,25 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             });
         }
     }
+
+    /**
+     * If option enabled, send an email to the user to notify him of his creation,
+     * and subsequently have him do a password reset.
+     */
+    // public function enabledEmail()
+    // {
+    //     if (Setting::get('auth.email_user_on_enable')) {
+    //         // Set or reset validation code.
+    //         $confirmation_code = str_random(30);
+    //         $this->confirmation_code = $confirmation_code;
+    //         $this->save();
+    //         // Send email.
+    //         Mail::send(['html' => 'emails.html.email_validation', 'text' => 'emails.text.email_validation'], ['user' => $this], function ($message) {
+    //             $message->from(Setting::get('mail.system_sender_address'), Setting::get('mail.system_sender_label'));
+    //             $message->to($this->email, $this->full_name)->subject(trans('emails.email_validation.subject', ['first_name' => $this->first_name]));
+    //         });
+    //     }
+    // }
 
 
     /**

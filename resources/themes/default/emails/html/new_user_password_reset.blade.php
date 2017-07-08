@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!Doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,27 +37,28 @@
                             <table class="inner-body" align="center" width="570" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; background-color: #FFFFFF; margin: 0 auto; padding: 0; width: 570px; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 570px;">
 <!-- Body content --><tr>
 <td class="content-cell" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 35px;">
-                                        <h1 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 19px; font-weight: bold; margin-top: 0; text-align: left;">Hi {{ $user->first_name }}, </h1>
+                                        <h1 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 19px; font-weight: bold; margin-top: 0; text-align: left;">Hi {{ $user->first_name }}</h1>
 <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Welcome to Kaduna State Government | File Management System.</p>
 <table class="action" align="center" width="100%" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; margin: 30px auto; padding: 0; text-align: center; width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 100%;"><tr>
 <td align="center" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
             <table width="100%" border="0" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;"><tr>
 <td align="center" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
-                        <table border="0" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;"><tr>
-<td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
-                                    <h1>Your password was changed!</h1>
+                        
+<p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;"><b>Congratulations</b>, your account has been activated. Your details are:<br/>
 
-This is just a quick note to inform you that your password was changed.
-<br>
-                            </td>
+<h3 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 13px; font-weight: bold; margin-top: 0; text-align: left;">Name: {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }} <br>Position: {{ $user->position }} <br>Ministry: {{ $user->ministry }} <br>Department: {{ $user->department }}</h3>
+
+You are required to reset your password on first login. To do this, click the button below.</p>
+                        <table border="0" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;"><tr>
+                        
+<td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
+                                    <a href="{{ url('password/reset/'.$token) }}" class="button button-blue" target="_blank" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-radius: 3px; box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16); color: #FFF; display: inline-block; text-decoration: none; -webkit-text-size-adjust: none; background-color: #3097D1; border-top: 10px solid #3097D1; border-right: 18px solid #3097D1; border-bottom: 10px solid #3097D1; border-left: 18px solid #3097D1;">Reset Password</a>
+                                </td>
                             </tr></table>
 </td>
                 </tr></table>
 </td>
     </tr></table>
-<p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">If you did not request to change your password, your account may have been compromised<br>
-and you should go to the <a href="{{ route('recover_password') }}">Recover password</a> page to reset it.<br>
-<br></p>
 <!-- Salutation -->
 <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Regards,<br>Peter Emmanuel (PhD),</br> <br>Kaduna State Government.</p>
 <!-- Subcopy -->

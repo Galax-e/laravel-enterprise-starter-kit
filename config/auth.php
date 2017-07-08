@@ -4,6 +4,51 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Authentication Defaults
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default authentication "guard" and password
+    | reset options for your application. You may change these defaults
+    | as required, but they're a perfect start for most applications.
+    |
+    */
+
+    'defaults' => [
+        'guard' => 'web',
+        'passwords' => 'users',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Guards
+    |--------------------------------------------------------------------------
+    |
+    | Next, you may define every authentication guard for your application.
+    | Of course, a great default configuration has been defined for you
+    | here which uses session storage and the Eloquent user provider.
+    |
+    | All authentication drivers have a user provider. This defines how the
+    | users are actually retrieved out of your database or other storage
+    | mechanisms used by this application to persist your user's data.
+    |
+    | Supported: "session", "token"
+    |
+    */
+
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Authentication Driver
     |--------------------------------------------------------------------------
     |
@@ -17,6 +62,8 @@ return [
 
     'driver' => 'eloquent-ldap',
 
+    
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Model
@@ -26,7 +73,7 @@ return [
     | Eloquent model should be used to retrieve your users. Of course, it
     | is often just the "User" model but you may use whatever you like.
     |
-    */
+     */
 
     'model' => App\User::class,
 
@@ -56,12 +103,15 @@ return [
     | considered valid. This security feature keeps tokens short-lived so
     | they have less time to be guessed. You may change this as needed.
     |
+    | Default
+    |
     */
 
     'password' => [
         'email' => 'emails.html.password_reset',
         'table' => 'password_resets',
         'expire' => 60,
+        'new_user_email' => 'emails.html.new_user_password_reset',
     ],
 
 
@@ -73,7 +123,8 @@ return [
     | Specify if accounts are enabled as they are created when registering or
     | if they are disabled, and waiting for an user administrator to manually
     | enable them.
-    |
+    | 
+    | default: true
     */
     'enable_user_on_create' => env('auth.enable_user_on_create', true),
 
@@ -86,8 +137,9 @@ return [
     | Should the system send an email to a user, after the registration form is
     | submitted, with a validation link.
     |
+    | default: false
     */
-    'email_validation' => env('auth.email_validation', false),
+    'email_validation' => env('auth.email_validation', true),
 
 
     /*
@@ -98,10 +150,22 @@ return [
     | Should the system automatically enable users if they pass the email
     | validation test?
     |
+    | default:false
     */
-    'enable_user_on_validation' => env('auth.enable_user_on_validation', false),
+    'enable_user_on_validation' => env('auth.enable_user_on_validation', true),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Email user on enable
+    |--------------------------------------------------------------------------
+    |
+    | Should the system automatically send user invitation email to login?
+    |
+    | default:false
+    */
+    'email_user_on_enable' => env('auth.email_user_on_enable', true),
 
+    
     /*
     |--------------------------------------------------------------------------
     | Enable remember token

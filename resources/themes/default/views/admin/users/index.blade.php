@@ -69,7 +69,8 @@
                                                 {!! Form::checkbox('chkUser[]', $user->id); !!}
                                             @endif
                                         </td>
-                                        <td><img src="{{ Gravatar::get($user->email , 'tiny') }}" class="user-image" alt="User Image"/></td>
+                                        <td>{{-- <img src="{{ Gravatar::get($user->email , 'tiny') }}" class="user-image" alt="User Image"/> --}}
+                                         <img src="{{asset("/img/profile_picture/photo/".$user->avatar) }}" class="offline tiny" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/></td>
                                         <td>{!! link_to_route('admin.users.show', $user->username, [$user->id], []) !!}</td>
                                         <td>{!! link_to_route('admin.users.show', $user->full_name, [$user->id], []) !!}</td>
                                         <td>{{ $user->roles->count() }}</td>

@@ -10,11 +10,29 @@
 
         <div class="tab-pane active" id="tab_profile">
             <div class="form-group">
+                {!! Form::label('position', trans('admin/users/general.columns.position')) !!}
+                @if ( $user->isRoot() )
+                    {!! Form::text('position', null, ['class' => 'form-control', 'readonly']) !!}
+                @else
+                    {!! Form::text('position', null, ['class' => 'form-control']) !!}
+                @endif
+            </div>
+            
+            <div class="form-group">
                 {!! Form::label('first_name', trans('admin/users/general.columns.first_name')) !!}
                 @if ( $user->isRoot() )
                     {!! Form::text('first_name', null, ['class' => 'form-control', 'readonly']) !!}
                 @else
                     {!! Form::text('first_name', null, ['class' => 'form-control']) !!}
+                @endif
+            </div>
+            
+             <div class="form-group">
+                {!! Form::label('middle_name', trans('admin/users/general.columns.middle_name')) !!}
+                @if ( $user->isRoot() )
+                    {!! Form::text('middle_name', null, ['class' => 'form-control', 'readonly']) !!}
+                @else
+                    {!! Form::text('middle_name', null, ['class' => 'form-control']) !!}
                 @endif
             </div>
 
@@ -24,6 +42,33 @@
                     {!! Form::text('last_name', null, ['class' => 'form-control', 'readonly']) !!}
                 @else
                     {!! Form::text('last_name', null, ['class' => 'form-control']) !!}
+                @endif
+            </div>
+            
+            <div class="form-group">
+                {!! Form::label('ministry', trans('admin/users/general.columns.ministry')) !!}
+                @if ( $user->isRoot() )
+                    {!! Form::text('ministry', null, ['class' => 'form-control', 'readonly']) !!}
+                @else
+                    {!! Form::text('ministry', null, ['class' => 'form-control']) !!}
+                @endif
+            </div>
+            
+            <div class="form-group">
+                {!! Form::label('department', trans('admin/users/general.columns.department')) !!}
+                @if ( $user->isRoot() )
+                    {!! Form::text('department', null, ['class' => 'form-control', 'readonly']) !!}
+                @else
+                    {!! Form::text('department', null, ['class' => 'form-control']) !!}
+                @endif
+            </div>
+            
+            <div class="form-group">
+                {!! Form::label('staff_code', trans('admin/users/general.columns.staff_code')) !!}
+                @if ( $user->isRoot() )
+                    {!! Form::text('staff_code', null, ['class' => 'form-control', 'readonly']) !!}
+                @else
+                    {!! Form::text('staff_code', null, ['class' => 'form-control']) !!}
                 @endif
             </div>
 
@@ -38,17 +83,17 @@
 
             <div class="form-group">
                 {!! Form::label('email', trans('admin/users/general.columns.email')) !!}
-                {!! Form::text('email', null, ['class' => 'form-control']) !!}
+                {!! Form::email('email', null, ['class' => 'form-control', 'id' => 'cpn-email-field']) !!}
             </div>
 
             <div class="form-group">
                 {!! Form::label('password', trans('admin/users/general.columns.password')) !!}
-                {!! Form::password('password', ['class' => 'form-control']) !!}
+                {!! Form::password('password', ['class' => 'form-control', 'readonly', 'id' => 'cpn-pwd-field']) !!}
             </div>
 
             <div class="form-group">
                 {!! Form::label('password_confirmation', trans('admin/users/general.columns.password_confirmation')) !!}
-                {!! Form::password('password_confirmation', ['class' => 'form-control']) !!}
+                {!! Form::password('password_confirmation', ['class' => 'form-control', 'readonly', 'id' => 'cpn-pwdcf-field']) !!}
             </div>
 
             <div class="form-group">
