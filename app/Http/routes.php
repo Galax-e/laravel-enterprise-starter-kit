@@ -158,6 +158,16 @@ Route::group(['middleware' => 'authorize'], function () {
 
     }); // End of ADMIN group
 
+    // Elfinder Glide
+
+    Route::get('glide/{path}', function($path){
+        $server = \League\Glide\ServerFactory::create([
+            'source' => app('filesystem')->disk('public')->getDriver(),
+        'cache' => storage_path('glide'),
+        ]);
+        return $server->getImageResponse($path, Input::query());
+    })->where('path', '.+');
+
     // Uncomment to enable Rapyd datagrid.
 //    require __DIR__.'/rapyd.php';
 

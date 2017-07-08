@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'timezone' => env('app.timezone', 'UTC'),
+    'timezone' => env('app.timezone', 'Africa/Lagos'),
 
     /*
     |--------------------------------------------------------------------------
@@ -355,6 +355,10 @@ return [
         Arcanedev\Settings\SettingsServiceProvider::class,
         Libern\SqlLogging\SqlLoggingServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
+
+
+        Barryvdh\Elfinder\ElfinderServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
     ),
 
     /*
@@ -419,6 +423,9 @@ return [
 //        'Setting'     => Arcanedev\Settings\Facades\Setting::class,
         'Setting'     => App\Facades\SettingFacade::class,
         'Agent'         => Jenssegers\Agent\Facades\Agent::class,
+
+
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

@@ -78,4 +78,6 @@ desired effect
         </div>
     </div>
 
+    <script type="text/javascript" src="{{ asset ("/packages/barryvdh/elfinder/js/standalonepopup.min.js") }}"></script>
+
 </body>
