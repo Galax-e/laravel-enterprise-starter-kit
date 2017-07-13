@@ -52,7 +52,7 @@ return [
         'mail'=>[
             'to'   => env('lern.mail_recipient'),
             'from' => env('mail.system_sender_address'),
-            'smtp' => false,
+            'smtp' => env('smtp.enabled', false),
         ],
 
         /**

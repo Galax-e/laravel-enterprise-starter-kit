@@ -15,6 +15,7 @@ class CreateUserRequest extends Request {
     }
 
     /**
+     * @cpnwaugha: c-e added regex to validation
      * Get the validation rules that apply to the request.
      *
      * @return array
@@ -22,7 +23,7 @@ class CreateUserRequest extends Request {
     public function rules()
     {
         return [
-            'email'    => 'required|unique:users',
+            'email'    => 'required|unique:users|regex:/^[\w]+(\.[\w]+)*(@hallowgate\.com)+$/i',
             'username' => 'required|unique:users',
             'password' => 'required|confirmed',
         ];

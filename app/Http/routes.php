@@ -1,5 +1,6 @@
 <?php
 
+ // $namespace = '\Unisharp\Laravelfilemanager\controllers';
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -10,6 +11,35 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+
+Route::get('read', 'FilesController@read');
+Route::post('comment', 'FilesController@comment');
+Route::get('commentrefresh', ['as' => 'commentrefresh', 'uses' => 'DashboardController@commentRefresh']);
+Route::get('ajaxcomment', ['as' => 'ajaxcomment', 'uses' => 'FilesController@ajaxComment']);
+
+Route::get('dataphp', ['as' => 'dataphp', 'uses' => 'MemoController@dataphp']);
+
+Route::get('show-message/{id}','FilesController@show_message');
+Route::post('edit/{id}','FilesController@edit');
+Route::get('edit-records','FilesController@index');
+
+Route::post('newdocument','FileManagement\UploadController@upload');
+Route::post('newfolder','FileManagement\UploadController@newfolder');
+Route::post('update','FilesController@update'); // remove the id
+Route::post('share/{id}','FilesController@share');
+
+Route::post('requestform','FilesController@requestform');
+Route::post('ajaxfolderrequest', ['as'=>'ajaxfolderrequest', 'uses'=>'FilesController@ajaxFolderRequest']);
+
+Route::post('storepinform','FilesController@storepinform');
+
+
+Route::get('/error',function(){
+   abort(503);
+});
+
+Route::get('testnotif', 'MessageController@index');
+
 
 // Authentication routes...
 Route::get( 'auth/login',               ['as' => 'login',                   'uses' => 'Auth\AuthController@getLogin']);
@@ -28,20 +58,50 @@ Route::post('password/email',           ['as' => 'recover_passwordPost',    'use
 // Password reset routes...
 Route::get( 'password/reset/{token}',   ['as' => 'reset_password',          'uses' => 'Auth\PasswordController@getReset']);
 Route::post('password/reset',           ['as' => 'reset_passwordPost',      'uses' => 'Auth\PasswordController@postReset']);
+
 // Registration terms
 Route::get( 'faust',                    ['as' => 'faust',                   'uses' => 'FaustController@index']);
 
 // Application routes...
-Route::get( '/',       ['as' => 'backslash',   'uses' => 'HomeController@index']);
-Route::get( 'home',    ['as' => 'home',        'uses' => 'HomeController@index']);
-Route::get( 'welcome', ['as' => 'welcome',     'uses' => 'HomeController@welcome']);
+Route::get( '/',          ['as' => 'backslash',   'uses' => 'HomeController@index']);
+Route::get( 'home',       ['as' => 'home',        'uses' => 'HomeController@index']);
+Route::get( 'welcome',    ['as' => 'welcome',     'uses' => 'HomeController@welcome']);
+
+// Custom routes to test feeds
+Route::get( 'news/feed',  ['as' => 'feed',        'uses' => 'News\NewsController@newsfeed']);
+Route::get( 'news/stream',['as' => 'newsstream',  'uses' => 'News\NewsController@newsstream']);
+
+
 
 // Routes in this group must be authorized.
 Route::group(['middleware' => 'authorize'], function () {
     // Application routes...
-    Route::get(   'dashboard',      ['as' => 'dashboard',          'uses' => 'DashboardController@index']);
+    Route::get(   'compose',      ['as' => 'compose',          'uses' => 'MemoController@compose']);
+	Route::get(   'dashboard',      ['as' => 'dashboard',          'uses' => 'DashboardController@index']);
+	Route::get(   'inbox',      ['as' => 'inbox',          'uses' => 'MemoController@inbox']);
+    Route::get(   'read_memo/{id}',      ['as' => 'read_memo/{id}',          'uses' => 'MemoController@read_memo']);
+	Route::get(   'session',      ['as' => 'session',          'uses' => 'DashboardController@session']);
+	Route::post(   'store',      ['as' => 'store',          'uses' => 'DashboardController@store']);
+    Route::get(   'viewall',      ['as' => 'viewall',          'uses' => 'DashboardController@viewall']);
+    Route::get(   'viewallrequest',      ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
+	Route::post(   'store-session',      ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
+	Route::post(   'store_memo',      ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
     Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
     Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
+
+    //Notifications
+    Route::get( 'folder_notification',['as' => 'folder_notification',  'uses' => 'FolderNotificationController@fetch']);
+    Route::get( 'memo_notification',  ['as' => 'memo_notification',    'uses' => 'MemoNotificationController@fetch']);
+    Route::get( 'request_file_notification',  ['as' => 'request_file_notification',    'uses' => 'RequestFileNotificationController@fetch']);
+
+    Route::get( 'notif_seen', ['as' => 'notif_seen',  'uses' => 'FolderNotificationController@notificationseen']);
+    Route::get( 'memo_seen',  ['as' => 'memo_seen',   'uses' => 'MemoNotificationController@notificationseen']);
+    Route::get( 'request_file_seen',  ['as' => 'request_file_seen',   'uses' => 'RequestFileNotificationController@notificationseen']);
+    
+    Route::get( 'scandir',    ['as' => 'scandir',    'uses' => 'FileManagement\SearchFolderController@scanDirectory']);
+    
+    Route::get(   'user/profile/photo',   ['as' => 'user.profile.photo',       'uses' => 'UsersController@profilePhoto']);
+    Route::patch( 'user/profile/photo',   ['as' => 'user.profile.photo.patch', 'uses' => 'UsersController@profilePhotoUpdate']);
 
     // Site administration section
     Route::group(['prefix' => 'admin'], function () {
@@ -154,22 +214,9 @@ Route::group(['middleware' => 'authorize'], function () {
         Route::get(   'settings/{settingKey}/confirm-delete', ['as' => 'admin.settings.confirm-delete',   'uses' => 'SettingsController@getModalDelete']);
         Route::get(   'settings/{settingKey}/delete',         ['as' => 'admin.settings.delete',           'uses' => 'SettingsController@destroy']);
 
-
-
     }); // End of ADMIN group
-
-    // Elfinder Glide
-
-    Route::get('glide/{path}', function($path){
-        $server = \League\Glide\ServerFactory::create([
-            'source' => app('filesystem')->disk('public')->getDriver(),
-        'cache' => storage_path('glide'),
-        ]);
-        return $server->getImageResponse($path, Input::query());
-    })->where('path', '.+');
 
     // Uncomment to enable Rapyd datagrid.
 //    require __DIR__.'/rapyd.php';
 
 }); // end of AUTHORIZE middleware group
-

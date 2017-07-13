@@ -13,18 +13,14 @@ class CreateActivitiesTable extends Migration
     public function up()
     {
 
-
-        if(!Schema::hasTable('activities')){
-
-            Schema::create('activities', function (Blueprint $table) {
-                $table->increments('id');
-                $table->string('folder_id');
-                $table->string('activity_by');
-                $table->string('activity');          
-                $table->timestamps();
-            });
-        }
-        
+        Schema::create('activities', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('type')->nullable()->default('onfolder');
+            $table->string('folder_id');
+            $table->string('activity_by');
+            $table->string('activity');          
+            $table->timestamps();
+        });
     }
 
     /**

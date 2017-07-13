@@ -3,7 +3,10 @@
 return [
 
     'text'              => [
-        'welcome'   => 'Welcome',
+        'welcome' 		=> 'Kaduna State Government | File Management System',
+		'home-header' 	=> 'Welcome to MyDESK v4.0',
+        'newsstream'	=> 'New Stream',
+        'newsfeed'  	=> 'News Feed',
     ],
 
     'button'              => [
@@ -18,7 +21,7 @@ return [
         'display'           => 'Show details',
         'replay'            => 'Replay',
         'update'            => 'Update',
-        'enable'            => 'Enable',
+        'enable'            => 'Enable user and send mail',
         'enabled'           => 'Enabled',
         'disable'           => 'Disable',
         'disabled'          => 'Disabled',
@@ -31,7 +34,12 @@ return [
         'email-validated'   => 'You have successfully verified your account.',
         'profile'              => [
             'updated'             => 'Profile updated',
+            'photo'         => [
+                'update'          => 'Update Profile Picture',
+                'updated'         => 'Profile photo updated',
+            ],
         ],
+        'enabled-and-mailed'   => 'User has been enabled and mailed to Join',
     ],
 
     'tabs'              => [
@@ -44,6 +52,7 @@ return [
         'data'              => 'Data',
         'profile'           => 'Profile',
         'settings'          => 'Settings',
+        'pix'               => 'Picture',
     ],
 
     'error'              => [
@@ -78,13 +87,24 @@ return [
         'msg-account-enabled'          => 'Account :username enabled.',
         'msg-profile-show'             => 'Showing profile of: :username.',
         'msg-profile-update'           => 'Updating profile of: :username.',
+        'enabled-and-emailed'          => 'User enabled and mailed to Join',
     ],
 
     'page'              => [
         'profile'              => [
             'title'             => 'User | Profile',
             'description'       => 'Displaying user: :full_name',
-            'section-title'     => 'Profile details'
+            'section-title'     => 'Profile details',
+            'photo'             => [
+                'title'         => 'User | Profile Picture',
+                'description'   => 'Displaying user: :full_name',
+                'section-title' => 'Photo details',
+            ],
+            'audit-log'       =>  [
+                'category'      =>   'Profile picture update',
+                'msg-profile-picture-show'     => 'User viewing profile picture',
+                'msg-profile-picture-update'   => 'User profile picture updated'
+            ],
         ],
     ],
 

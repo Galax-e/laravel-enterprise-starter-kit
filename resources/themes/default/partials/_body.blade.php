@@ -18,7 +18,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="skin-blue sidebar-mini">
+<body class="skin-blue sidebar-collapse sidebar-mini">
 
     <!-- Main body content -->
     @include('partials._body_content')
@@ -77,6 +77,107 @@ desired effect
             </div>
         </div>
     </div>
+
+     <!-- Request file modal-->
+   <div class="modal fade" id="requestFileModal" role="dialog">
+   <div class="modal-dialog">
+     <!-- Modal content-->
+     <div class="modal-content">         
+       <div class="box box-info">
+         <div class="box-header">
+           <i class="fa fa-envelope"></i>
+           <h3 class="box-title">Request for file</h3>
+           <!-- tools box -->
+           <div class="pull-right box-tools">
+             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
+           </div><!-- /. tools -->
+         </div>          
+         <form method="post" id="request_form" action="requestform">
+
+             {{ csrf_field() }}
+             <div class="box-body">
+               <div class="form-group">
+                 <input type="text" class="form-control" id="foldername" name="foldername" placeholder="File No/ Name"/>
+               </div>
+               <div>
+                 <textarea class="textarea" name="desc" id="desc" placeholder="Full Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+               </div>
+           </div>
+           <div class="box-footer clearfix">
+             <button id='requestFileBtn' class="pull-right btn btn-default" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+           </div>
+         </form>        
+         </div>
+     </div>
+   </div>
+ </div>
+ 
+    <!-- Create pin modal-->
+    <div class="modal fade" id="createPinModal" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+    
+        <!-- Modal content-->
+        <div class="modal-content">      
+            
+            <div class="box box-info">
+            <div class="box-header">
+                <i class="fa fa-key"></i>
+                <h3 class="box-title">Create/ Change PIN</h3>
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+            <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button></div><!-- /. tools -->
+            </div>        <form method="post" id="pin_form" action="storepinform">
+            {{ csrf_field() }}
+            <div class="box-body">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="new_pin" name="new_pin" placeholder="New PIN"/>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="confirmpin" name="confirmpin" placeholder="confirm PIN"/>
+                </div>
+            </div>
+            <div class="box-footer clearfix">
+                <button id="createPinBtn" class="pull-right btn btn-default" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+            </div>
+        </form>             
+        </div>    
+        </div>
+    </div>
+    </div>
+
+
+    <!-- @cpnwaugha: c-e needed to bring in all the pretty adminLTE functions-->
+    <!--FastClick -->
+    <script src="{{ asset("/bower_components/admin-lte/plugins/fastclick/fastclick.min.js") }}" type="text/javascript"></script>
+
+    <!-- Sparkline -->
+    <script src="{{ asset("/bower_components/admin-lte/plugins/sparkline/jquery.sparkline.min.js") }}" type="text/javascript"></script>
+    <!-- jvectormap -->
+    <script src="{{ asset("/bower_components/admin-lte/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js") }}" type="text/javascript"></script>
+    <script src="{{ asset("/bower_components/admin-lte/plugins/jvectormap/jquery-jvectormap-world-mill-en.js") }}" type="text/javascript"></script>
+    <!-- SlimScroll 1.3.0 -->
+    <script src="{{ asset("/bower_components/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js") }}" type="text/javascript"></script>
+    <!-- ChartJS 1.0.1 -->
+    <script src="{{ asset("/bower_components/admin-lte/plugins/chartjs/Chart.min.js") }}" type="text/javascript"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <!--<script src="{{ asset("/bower_components/admin-lte/dist/js/pages/dashboard2.js") }}" type="text/javascript"></script>-->
+    <!-- AdminLTE for demo purposes -->
+
+    @if(Auth::check())
+        @if(Auth::user()->isRoot())
+            <script src="{{ asset("/bower_components/admin-lte/dist/js/demo.js") }}" type="text/javascript"></script>
+        @endif
+    @endif
+
+    <script>
+        $(function(){
+            $('#navi').hover(function(){
+                $(this).animate({width:'200px'},500);
+            },function(){
+                $(this).animate({width:'65px'},500);
+            }).trigger('mouseleave');
+        });
+    </script>
 
     <script type="text/javascript" src="{{ asset ("/packages/barryvdh/elfinder/js/standalonepopup.min.js") }}"></script>
 

@@ -1,0 +1,19 @@
+<?php
+
+return [
+
+    'audit-log'           => [
+        'category'              => '{{namespace}}',
+        'msg-index'             => 'Accessed index {{namespace}}.',
+    ],
+
+    'page'              => [
+        'index'              => [
+            'title'                     => '{{namespace}} | index',
+            'description'               => 'Landing page of the {{namespace}} module.',
+            'box-title'                 => 'Title of the box.',
+            'welcome'                   => 'Welcome to the {{namespace}} module.',
+            ],
+        ],
+
+];

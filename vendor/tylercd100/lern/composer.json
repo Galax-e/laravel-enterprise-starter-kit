@@ -1,0 +1,45 @@
+{
+    "name": "tylercd100/lern",
+    "description": "LERN (Laravel Exception Recorder and Notifier) is a Laravel 5 package that will record exceptions into a database and will notify you via Email, Pushover or Slack.",
+    "keywords": [
+        "laravel",
+        "exceptions",
+        "monolog",
+        "pushover",
+        "slack",
+        "LERN",
+        "tylercd100"
+    ],
+    "homepage": "https://github.com/tylercd100/lern",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tyler Arbon",
+            "email": "tylercd100@gmail.com"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "Tylercd100\\LERN\\":"src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tylercd100\\LERN\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^5.6|^7.0",
+        "illuminate/support": "^5.1",
+        "monolog/monolog": "^1.22",
+        "tylercd100/laravel-notify": "^1.8.5"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.1.0",
+        "phpunit/phpunit": "^4.8 || ^5.6",
+        "doctrine/dbal": "~2.3"
+    },
+    "suggest": {
+    }
+}

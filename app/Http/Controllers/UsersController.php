@@ -19,6 +19,19 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 use Mail;
 use Setting;
+use Image;
+
+use App\Repositories\Criteria\User\UserWhereEmailEquals;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Password;
+
+
+// @cpnwaugha: c-e: added a custompassword Facade
+use App\Facades\Password as customPassword;
+
+
 
 class UsersController extends Controller
 {
@@ -26,7 +39,8 @@ class UsersController extends Controller
     /**
      * @var User
      */
-    protected $user;
+    protected $user;  
+    
 
     /**
      * @var Role
@@ -37,6 +51,11 @@ class UsersController extends Controller
      * @var Permission
      */
     protected $perm;
+
+    /**
+     * @var Redirect
+     */
+     protected $redirectTo = '/dashboard';
 
     /**
      * @param User $user
@@ -136,12 +155,19 @@ class UsersController extends Controller
             $attributes['role'] = [];
         }
 
+        // @cpnwaugha:c-e: Force user to be enabled on create
+        $attributes['enabled'] = Setting::get('auth.enable_user_on_create'); //true;
+
         // Create basic user.
         $user = $this->user->create($attributes);
         // Run the update method to set enabled status and roles membership.
         $user->update($attributes);
 
         Flash::success( trans('admin/users/general.status.created') ); // 'User successfully created');
+        
+        // @cpnwaugha: c-e: send mail to user on-create
+        $this->postEmail($request);
+        Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('User created, enabled attribute true, and email sent', ['username' => $user->username]));
 
         return redirect('/admin/users');
     }
@@ -357,7 +383,7 @@ class UsersController extends Controller
             $user->emailPasswordChange();
         }
 
-        Flash::success( trans('admin/users/general.status.updated') );
+        Flash::success( trans('admin/users/general.status.updated') ); // User successfully updated
 
         return redirect('/admin/users');
     }
@@ -380,6 +406,12 @@ class UsersController extends Controller
         $this->user->delete($id);
 
         Flash::success( trans('admin/users/general.status.deleted') );
+
+        // Custom-edit: mail user on enable
+        Mail::send('emails.account_deleted', compact('password'), function ($message) use ($user) {
+            $message->from('hello@app.com', 'Hallowgate Systems');
+            $message->to($user->email, $user->name)->subject('Your Account has been deleted.');          
+        });
 
         return redirect('/admin/users');
     }
@@ -418,6 +450,7 @@ class UsersController extends Controller
     }
 
     /**
+     * Custom Edit: User should be send a verification email when admin enables user.
      * @param $id
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
@@ -429,8 +462,14 @@ class UsersController extends Controller
 
         $user->enabled = true;
         $user->save();
+        
+        // Custom-edit: mail user on enable
+        Mail::send('emails.account_enabled', compact('password'), function ($message) use ($user) {
+            $message->from('hello@app.com', 'Hallowgate Systems');
+            $message->to($user->email, $user->name)->subject('Your Account has been enabled. You can now login');          
+        });
 
-        Flash::success(trans('admin/users/general.status.enabled'));
+        Flash::success(trans('admin/users/general.status.enabled')); // User enabled
 
         return redirect('/admin/users');
     }
@@ -453,6 +492,13 @@ class UsersController extends Controller
 
             $user->enabled = false;
             $user->save();
+
+            // Custom-edit: mail user on disable
+            Mail::send('emails.account_disabled', compact('password'), function ($message) use ($user) {
+                $message->from('hello@app.com', 'Hallowgate Systems');
+                $message->to($user->email, $user->name)->subject('Your Account has been disabled.');          
+            });
+
             Flash::success(trans('admin/users/general.status.disabled'));
         }
 
@@ -475,6 +521,13 @@ class UsersController extends Controller
                 $user = $this->user->find($user_id);
                 $user->enabled = true;
                 $user->save();
+
+                // Custom-edit: mail selected user on enable
+                Mail::queue('emails.account_enabled', compact('password'), function ($message) use ($user) {
+                    $message->from('hello@app.com', 'Hallowgate Systems');
+                    $message->to($user->email, $user->name)->subject('Your Account has been enabled. You can now login');          
+                });
+
             }
             Flash::success(trans('admin/users/general.status.global-enabled'));
         }
@@ -482,6 +535,8 @@ class UsersController extends Controller
         {
             Flash::warning(trans('admin/users/general.status.no-user-selected'));
         }
+
+
         return redirect('/admin/users');
     }
 
@@ -507,6 +562,12 @@ class UsersController extends Controller
                 {
                     $user->enabled = false;
                     $user->save();
+
+                    // Custom-edit: mail selected user on disable
+                    Mail::queue('emails.account_disabled', compact('password'), function ($message) use ($user) {
+                        $message->from('chukwuma@hallowgate.com', 'Hallowgate Systems');
+                        $message->to($user->email, $user->name)->subject('Your Account has been disabled.');          
+                    });
                 }
             }
             Flash::success(trans('admin/users/general.status.global-disabled'));
@@ -663,5 +724,136 @@ class UsersController extends Controller
 
         return redirect()->route('user.profile');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | @cpnwaugha: c-e: profile photo update.
+    |--------------------------------------------------------------------------
+    |
+    | User can update his profile photo
+    |
+    |
+    */
+
+    /**
+     * @return \Illuminate\View\View
+     */
+    public function profilePhoto()
+    {
+
+        $user = Auth::user();
+
+        Audit::log(Auth::user()->id, trans('general.audit-log.category-profile'), trans('general.audit-log.msg-profile-show', ['username' => $user->username]));
+
+        $page_title = trans('general.page.profile.photo.title');
+        $page_description = trans('general.page.profile.photo.description', ['full_name' => $user->full_name]);
+
+        return view('user.profile_photo', compact('user', 'page_title', 'page_description'));
+    }
+
+    
+    /**
+     * @param UpdateUserRequest $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function profilePhotoUpdate(Request $request)
+    {
+        $this->validate($request, [
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if($request->hasFile('avatar')){
+            $avatar = $request->file('avatar');
+            $filename = $avatar->getClientOriginalName().'-'.time() .'.'.$avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300,300)->save(public_path('/img/profile_picture/photo/' . $filename));
+        
+            $user = Auth::user();
+            $user->avatar = $filename;
+            $user->save();
+        }
+        Audit::log(Auth::user()->id, trans('general.audit-log.category-profile'), trans('general.audit-log.msg-profile-update', ['username' => $user->username]));
+        Flash::success( trans('general.status.profile.photo.updated') );
+
+        return redirect()->back(); // route('user.profile.photo');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | @cpnwaugha: c-e: email sending codes to users from here
+    |--------------------------------------------------------------------------
+    |
+    | System to send email to user when they are enabled in the system.
+    |
+    |
+    */
+
+    /**
+     * Send a reset link to the given user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postEmail(Request $request)
+    {
+
+        $this->validate($request, ['email' => 'required|email']);       
+
+        $email = $request->input('email');
+        $user = $this->user->pushCriteria(new UserWhereEmailEquals($email))->all()->first();
+
+        Audit::log(null, trans('passwords.audit-log.category'), trans('admin/users/general.status.created-and-emailed', ['email' => $email]));
+
+        if (is_null($user)) {
+            Flash::error( trans(Password::INVALID_USER) );
+            return redirect()->back(); //redirect('/admin/users');
+        }
+        elseif ($user->auth_type !== 'internal') {
+            Flash::error(trans('passwords.auth_type'));
+            return redirect()->back(); //redirect('/admin/users');
+        } else {
+            // @cpnwaugha: c-e
+            // serves as scaffold that sits on the vendor defined files.
+
+            $view = 'emails.html.new_user_password_reset';
+            $response = (new customPassword)->sendNewUserResetLink($request->only('email'), function (Message $message) {
+                $message->subject($this->getEmailSubject());
+            }, $view);
+
+            /*
+            Custom-edit: code store
+            
+            $user->password = str_random(20); // yes this is bcrypted in User model ;)
+            // do a save from $request->all() etc
+
+            $reset_token = strtolower(str_random(64));
+            DB::table('password_resets')->insert([
+                'email' => $request->email,
+                'token' => $reset_token,
+                'created_at' => Carbon::now(),
+            ]);
+           */
+
+           switch ($response) {
+                case customPassword::RESET_LINK_SENT:
+                    Flash::success(trans('passwords.created'));
+                    return redirect()->back()->with('status', trans($response));
+
+                case customPassword::INVALID_USER:
+                    Flash::error( trans($response) );
+                    return redirect()->back()->withErrors(['email' => trans($response)]);
+            }
+            //return redirect('/admin/users');
+        }
+    }
+
+    /**
+    * Get the e-mail subject line to be used for the reset link email.
+    *
+    * @return string
+    */
+   protected function getEmailSubject()
+   {
+       return isset($this->subject) ? $this->subject : 'Your account has been created.';
+   }
 
 }

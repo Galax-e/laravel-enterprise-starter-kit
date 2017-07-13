@@ -1,0 +1,45 @@
+{
+    "name": "tylercd100/laravel-notify",
+    "description": "",
+    "keywords": [
+        "laravel",
+        "notifications",
+        "monolog",
+        "tylercd100"
+    ],
+    "homepage": "https://github.com/tylercd100/laravel-notify",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tyler Arbon",
+            "email": "tylercd100@gmail.com"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "Tylercd100\\Notify\\":"src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tylercd100\\Notify\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "illuminate/support": "^5.0",
+        "monolog/monolog": "^1.11",
+        "php": "^5.5.9|^7.0",
+        "psr/log": "^1.0",
+        "tylercd100/monolog-mailgun": "^2.0",
+        "tylercd100/monolog-sms":"^1.2"
+    },
+    "require-dev": {
+        "raven/raven": "~0.11",
+        "phpunit/phpunit": "^4.8|^5.0",
+        "orchestra/testbench": "^3.1.0"
+    },
+    "suggest": {
+        "raven/raven": "Required to use the Raven driver for Sentry (~0.11)."
+    }
+}

@@ -350,11 +350,11 @@ class ProductionSeeder extends Seeder
         // Assign membership to role admins, membership to role users is
         // automatic.
         $userRoot = User::create([
-            "first_name"    => "Root",
+            "first_name"    => "Chukwuma",
             "last_name"     => "SuperUser",
             "username"      => "root",
-            "email"         => "root@email.com",
-            "password"      => "Password1",
+            "email"         => "root@hallowgate.com",
+            "password"      => "PeterEmma17",
             "auth_type"     => "internal",
             "enabled"       => true
         ]);

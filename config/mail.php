@@ -120,8 +120,19 @@ return [
     | web and will instead be written to your application's logs files so
     | you may inspect the message. This is great for local development.
     |
+    | default: false
     */
 
     'pretend' => false,
+
+    /*
+    'markdown' => [
+        'theme' => 'default',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+    ],
+    */
 
 ];

@@ -1,25 +1,6 @@
 <script type="text/javascript">    
     $(function(){
 
-       // refreshCommenDiv();
-       
-       //setInterval(function(){
-        //   refreshCommenDiv(); // refresh page every sec.       
-        //}, 1000); 
-
-        /*if(!window.Notification) {
-			alert('Sorry, notifications are not supported. This application requires notification');
-		} 
-		else {
-			Notification.requestPermission(function(p) {
-				if(p === 'denied') {
-					alert('You have denied notifications.');
-				}else if(p === 'granted') {
-					alert('You have granted notifications.');
-				}
-			});
-		}*/
-
        $.ajaxSetup({
            headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -206,7 +187,6 @@
            }
        }
 
-<<<<<<< HEAD
        //Ajax call.
        // hide requestFileModal
        $('#requestFileBtn').on('click', function(e){
@@ -248,15 +228,5 @@
        $('#createPinBtn').on('click', function(){
             $('#createPinModal').modal('hide');
        });
-=======
-       // hide requestFileModal
-      $('#requestFileBtn').on('click', function(){
-           $('#requestFileModal').modal('hide');
-      });
-
-      $('#createPinBtn').on('click', function(){
-           $('#createPinModal').modal('hide');
-      });
->>>>>>> 84b5e1fb31d30adb1e66586b5374f8f42e2a812e
    })
 </script>

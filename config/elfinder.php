@@ -26,10 +26,17 @@ return array(
     |    ]
     */
     'disks' => [
-            'public' => [
+
+    ],
+
+    /*
+    'disks' => [
+            'public/files' => [
             'glideURL' => '/glide',
         ],
     ],
+
+    */
 
     /*
     |--------------------------------------------------------------------------
@@ -41,7 +48,7 @@ return array(
     */
 
     'route' => [
-        'prefix' => 'admin/elfinder',
+        'prefix' => 'admin/registry',
         'middleware' => 'authorize', //Set to null to disable middleware filter
     ],
 

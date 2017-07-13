@@ -34,5 +34,10 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'authorize' => \App\Http\Middleware\AuthorizeRoute::class,
+        /*
+         * @cpnwaugha: c-e: custom middlewares
+         */
+        'multiuser' => \Unisharp\Laravelfilemanager\middlewares\MultiUser::class,
+        'createdeffolder' => \Unisharp\Laravelfilemanager\middlewares\CreateDefaultFolder::class,
     ];
 }

@@ -32,6 +32,7 @@ class PasswordController extends Controller
      * @var User
      */
     protected $user;
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new password controller instance.

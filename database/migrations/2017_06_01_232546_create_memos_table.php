@@ -12,19 +12,17 @@ class CreateMemosTable extends Migration
      */
     public function up()
     {
-
-        if(!Schema::hasTable('activities')){
-            Schema::create('memos', function (Blueprint $table) {
-                $table->increments('id');
-                $table->string('email_name');
-                $table->string('emailfrom');
-                $table->string('emailto');
-                $table->string('subject');
-                $table->string('message');
-                $table->timestamps();
-            });
-        }
-        
+        Schema::create('memos', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('email_name');
+            $table->string('emailfrom');
+            $table->string('emailto');
+            $table->string('subject');
+            $table->string('message');
+            $table->string('clearance_level')->nullable();
+            $table->string('category')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

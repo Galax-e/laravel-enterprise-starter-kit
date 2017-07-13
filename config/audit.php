@@ -6,12 +6,12 @@ return [
     | Enabled
     |--------------------------------------------------------------------------
     |
-    | The Audit functionality is disabled by default, to enabled it set
+    | The Audit functionality is disabled by default, to enable it set
     | the variable 'AUDIT_ENABLED' to true in your '.env' file.
-    |
+    | @cpnwaugha:c-e => default: false
     */
 
-    'enabled' => env('audit.enabled', false),
+    'enabled' => env('audit.enabled', true),
 
     /*
     |--------------------------------------------------------------------------

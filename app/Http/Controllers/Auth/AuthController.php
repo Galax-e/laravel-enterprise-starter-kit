@@ -12,6 +12,8 @@ use Redirect;
 use Setting;
 use Validator;
 
+use App\activity;
+
 class AuthController extends Controller
 {
     /*
@@ -34,7 +36,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+		$this->middleware('guest', ['except' => 'getLogout']);
     }
 
     /**
@@ -96,7 +98,11 @@ class AuthController extends Controller
             if ( ('root' == $user->username) || ($user->enabled) )
             {
                 Audit::log(Auth::user()->id, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-success', ['username' => $user->username]));
-
+		$user2 = new activity;
+		$user2->activity_by= $user->username;
+		$user2->activity= 'Successful login';
+		$user2->save();
+		
                 Flash::success("Welcome " . Auth::user()->first_name);
                 return redirect()->intended($this->redirectPath());
             }
@@ -197,6 +203,7 @@ class AuthController extends Controller
         }
 
     }
+
 
     public function verify($confirmation_code, Request $request)
     {

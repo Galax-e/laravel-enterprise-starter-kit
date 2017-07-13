@@ -2,9 +2,13 @@
 
     <!-- Header -->
     @include('partials._body_header')
+    
 
     <!-- Sidebar -->
-    @include('partials._body_left_sidebar')
+    <div id="navi">
+        @include('partials._body_left_sidebar')
+    </div>
+    
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -38,6 +42,11 @@
         <!-- Body right sidebar -->
         @include('partials._body_right_sidebar')
     @endif
+
+{{-- custom scripts when user is authenticaated goes here. --}}
+@if(Auth::user())
+    @include('partials._body_bottom_custom_file_ctrl_js')
+@endif
 
 </div><!-- ./wrapper -->
 

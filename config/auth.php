@@ -121,7 +121,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Specify if accounts are enabled as they are created when registering or
-    | if they are disabled, and waiting for an user administrator to manually
+    | if they are disabled, and waiting for an   |administrator to manually
     | enable them.
     | 
     | default: true

@@ -1,0 +1,38 @@
+{
+    "name": "sroutier/lesk-modules",
+    "description": "Module package for Laravel enterprise starter kit",
+    "keywords": ["modules", "laravel", "lesk"],
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Shea Lewis",
+            "email": "shea.lewis89@gmail.com"
+        },
+        {
+            "name": "Sebastien Routier",
+            "email": "sroutier@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/database": "5.1.*|5.2.*",
+        "illuminate/support": "5.1.*|5.2.*",
+        "illuminate/filesystem": "5.1.*|5.2.*",
+        "illuminate/config": "5.1.*|5.2.*",
+        "illuminate/routing": "5.1.*|5.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+          "Sroutier\\LESKModules\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "suggest": {
+        "wikimedia/composer-merge-plugin": "Allows the ability to create and merge composer.json files for your individual modules for module-specific dependency management."
+    }
+}
