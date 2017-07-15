@@ -3,9 +3,10 @@
 namespace Adldap\Connections;
 
 /**
- * The Connection interface used for making connections. Implementing
- * this interface on connection classes helps unit and functional
- * test classes that require a connection.
+ * The Connection interface used for making
+ * connections. Implementing this interface
+ * on connection classes helps unit and functional
+ * testing classes that require a connection.
  *
  * Interface ConnectionInterface
  */
@@ -191,24 +192,6 @@ interface ConnectionInterface
     public function getFirstEntry($searchResult);
 
     /**
-     * Retrieves the next entry from a search result.
-     *
-     * @param $entry
-     *
-     * @return mixed
-     */
-    public function getNextEntry($entry);
-
-    /**
-     * Retrieves the ldap entry's attributes.
-     *
-     * @param $entry
-     *
-     * @return mixed
-     */
-    public function getAttributes($entry);
-
-    /**
      * Retrieve the last error on the current
      * connection.
      *
@@ -273,7 +256,7 @@ interface ConnectionInterface
      * @param string $password
      * @param bool   $sasl
      *
-     * @return bool
+     * @return mixed
      */
     public function bind($username, $password, $sasl = false);
 
@@ -353,7 +336,7 @@ interface ConnectionInterface
      * @param string $newParent
      * @param bool   $deleteOldRdn
      *
-     * @return bool
+     * @return mixed
      */
     public function rename($dn, $newRdn, $newParent, $deleteOldRdn = false);
 
@@ -364,7 +347,7 @@ interface ConnectionInterface
      * @param string $dn
      * @param array  $entry
      *
-     * @return bool
+     * @return mixed
      */
     public function modify($dn, array $entry);
 

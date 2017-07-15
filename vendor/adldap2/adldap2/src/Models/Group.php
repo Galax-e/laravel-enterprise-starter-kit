@@ -4,12 +4,13 @@ namespace Adldap\Models;
 
 use Adldap\Models\Traits\HasDescriptionTrait;
 use Adldap\Models\Traits\HasMemberOfTrait;
-use Adldap\Objects\BatchModification;
 use Adldap\Schemas\ActiveDirectory;
 
 class Group extends Entry
 {
-    use HasDescriptionTrait, HasMemberOfTrait;
+    use HasDescriptionTrait;
+
+    use HasMemberOfTrait;
 
     /**
      * Returns all users apart of the current group.
@@ -28,13 +29,7 @@ class Group extends Entry
             unset($dns['count']);
 
             foreach ($dns as $dn) {
-                $query = $this->query->newInstance();
-
-                $member = $query->findByDn($dn);
-
-                if ($member instanceof AbstractModel) {
-                    $members[] = $member;
-                }
+                $members[] = $this->getAdldap()->search()->findByDn($dn);
             }
         }
 
@@ -68,12 +63,7 @@ class Group extends Entry
             $entry = $entry->getDn();
         }
 
-        $modification = new BatchModification();
-        $modification->setAttribute(ActiveDirectory::MEMBER);
-        $modification->setType(LDAP_MODIFY_BATCH_ADD);
-        $modification->setValues([$entry]);
-
-        $this->addModification($modification);
+        $this->setModification(ActiveDirectory::MEMBER, LDAP_MODIFY_BATCH_ADD, $entry);
 
         return $this->save();
     }
@@ -91,12 +81,7 @@ class Group extends Entry
             $entry = $entry->getDn();
         }
 
-        $modification = new BatchModification();
-        $modification->setAttribute(ActiveDirectory::MEMBER);
-        $modification->setType(LDAP_MODIFY_BATCH_REMOVE);
-        $modification->setValues([$entry]);
-
-        $this->addModification($modification);
+        $this->setModification(ActiveDirectory::MEMBER, LDAP_MODIFY_BATCH_REMOVE, $entry);
 
         return $this->save();
     }
@@ -108,11 +93,7 @@ class Group extends Entry
      */
     public function removeMembers()
     {
-        $modification = new BatchModification();
-        $modification->setAttribute(ActiveDirectory::MEMBER);
-        $modification->setType(LDAP_MODIFY_BATCH_REMOVE_ALL);
-
-        $this->addModification($modification);
+        $this->setModification(ActiveDirectory::MEMBER, LDAP_MODIFY_BATCH_REMOVE_ALL, []);
 
         return $this->save();
     }

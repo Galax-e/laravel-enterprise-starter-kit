@@ -3,10 +3,9 @@
 namespace Adldap\Objects;
 
 use ArrayIterator;
-use Countable;
 use IteratorAggregate;
 
-class Paginator implements Countable, IteratorAggregate
+class Paginator implements IteratorAggregate
 {
     /**
      * The complete results array.

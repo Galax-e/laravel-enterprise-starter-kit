@@ -10,7 +10,8 @@ use Adldap\Schemas\ActiveDirectory;
 class Users extends AbstractBase implements QueryableInterface, CreateableInterface
 {
     /**
-     * Finds a user with the specified username.
+     * Finds a user with the specified username
+     * in the connection connection.
      *
      * @param string $username
      * @param array  $fields
@@ -19,7 +20,10 @@ class Users extends AbstractBase implements QueryableInterface, CreateableInterf
      */
     public function find($username, $fields = [])
     {
-        return $this->search()->findBy(ActiveDirectory::ACCOUNT_NAME, $username, $fields);
+        return $this->search()
+            ->select($fields)
+            ->whereEquals(ActiveDirectory::ACCOUNT_NAME, $username)
+            ->first();
     }
 
     /**
@@ -28,18 +32,17 @@ class Users extends AbstractBase implements QueryableInterface, CreateableInterf
      * @param array  $fields
      * @param bool   $sorted
      * @param string $sortBy
-     * @param string $sortDirection
      *
      * @throws AdldapException
      *
      * @return array|bool
      */
-    public function all($fields = [], $sorted = true, $sortBy = ActiveDirectory::COMMON_NAME, $sortDirection = 'asc')
+    public function all($fields = [], $sorted = true, $sortBy = 'cn')
     {
         $search = $this->search()->select($fields);
 
         if ($sorted) {
-            $search->sortBy($sortBy, $sortDirection);
+            $search->sortBy($sortBy);
         }
 
         return $search->get();
@@ -48,7 +51,7 @@ class Users extends AbstractBase implements QueryableInterface, CreateableInterf
     /**
      * Creates a new search limited to users only.
      *
-     * @return \Adldap\Query\Builder
+     * @return Search
      */
     public function search()
     {
@@ -57,7 +60,7 @@ class Users extends AbstractBase implements QueryableInterface, CreateableInterf
 
         return $this->getAdldap()
             ->search()
-            ->whereEquals($personCategory, $person);
+            ->where($personCategory, '=', $person);
     }
 
     /**
@@ -69,7 +72,7 @@ class Users extends AbstractBase implements QueryableInterface, CreateableInterf
      */
     public function newInstance(array $attributes = [])
     {
-        return (new User($attributes, $this->search()))
+        return (new User($attributes, $this->getAdldap()))
             ->setAttribute(ActiveDirectory::OBJECT_CLASS, [
                 ActiveDirectory::TOP,
                 ActiveDirectory::PERSON,
@@ -121,7 +124,7 @@ class Users extends AbstractBase implements QueryableInterface, CreateableInterf
                 $status['has_expired'] = true;
             }
 
-            $result = $this->getAdldap()->search()
+            $result = $this->adldap->search()
                 ->where(ActiveDirectory::OBJECT_CLASS, '*')
                 ->first();
 

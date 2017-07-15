@@ -17,7 +17,7 @@ class Computers extends AbstractBase implements QueryableInterface, CreateableIn
      */
     public function find($name, $fields = [])
     {
-        return $this->search()->findBy(ActiveDirectory::COMMON_NAME, $name, $fields);
+        return $this->search()->select($fields)->find($name);
     }
 
     /**
@@ -26,16 +26,15 @@ class Computers extends AbstractBase implements QueryableInterface, CreateableIn
      * @param array     $fields
      * @param bool|true $sorted
      * @param string    $sortBy
-     * @param string    $sortDirection
      *
      * @return array|bool
      */
-    public function all($fields = [], $sorted = true, $sortBy = ActiveDirectory::COMMON_NAME, $sortDirection = 'asc')
+    public function all($fields = [], $sorted = true, $sortBy = 'cn')
     {
         $search = $this->search()->select($fields);
 
         if ($sorted) {
-            $search->sortBy($sortBy, $sortDirection);
+            $search->sortBy($sortBy);
         }
 
         return $search->get();
@@ -44,13 +43,13 @@ class Computers extends AbstractBase implements QueryableInterface, CreateableIn
     /**
      * Creates a new search limited to computers only.
      *
-     * @return \Adldap\Query\Builder
+     * @return Search
      */
     public function search()
     {
         return $this->getAdldap()
             ->search()
-            ->whereEquals(ActiveDirectory::OBJECT_CATEGORY, ActiveDirectory::COMPUTER);
+            ->where(ActiveDirectory::OBJECT_CATEGORY, '=', ActiveDirectory::COMPUTER);
     }
 
     /**
@@ -62,7 +61,7 @@ class Computers extends AbstractBase implements QueryableInterface, CreateableIn
      */
     public function newInstance(array $attributes = [])
     {
-        return (new Computer($attributes, $this->search()))
+        return (new Computer($attributes, $this->getAdldap()))
             ->setAttribute(ActiveDirectory::OBJECT_CLASS, [
                 ActiveDirectory::TOP,
                 ActiveDirectory::PERSON,

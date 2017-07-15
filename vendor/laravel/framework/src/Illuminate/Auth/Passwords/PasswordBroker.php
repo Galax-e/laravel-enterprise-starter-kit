@@ -64,18 +64,17 @@ class PasswordBroker implements PasswordBrokerContract
         $this->users = $users;
         $this->mailer = $mailer;
         $this->tokens = $tokens;
-        $this->emailView = $emailView;;
+        $this->emailView = $emailView;
     }
 
     /**
-     * @cpnwaugha: c-e: added a newemailview parameter.
      * Send a password reset link to a user.
      *
      * @param  array  $credentials
      * @param  \Closure|null  $callback
      * @return string
      */
-    public function sendResetLink(array $credentials, Closure $callback = null, $newmailview = null)
+    public function sendResetLink(array $credentials, Closure $callback = null)
     {
         // First we will check to see if we found a user at the given credentials and
         // if we did not we will redirect back to this current URI with a piece of
@@ -91,14 +90,12 @@ class PasswordBroker implements PasswordBrokerContract
         // the current URI having nothing set in the session to indicate errors.
         $token = $this->tokens->create($user);
 
-        // @cpnwaugha: c-e: call email reset link with the newemailview
-        $this->emailResetLink($user, $token, $callback, $newmailview);
+        $this->emailResetLink($user, $token, $callback);
 
         return PasswordBrokerContract::RESET_LINK_SENT;
     }
 
     /**
-     * // @cpnwaugha: c-e: added newemailview parameter
      * Send the password reset link via e-mail.
      *
      * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
@@ -106,18 +103,13 @@ class PasswordBroker implements PasswordBrokerContract
      * @param  \Closure|null  $callback
      * @return int
      */
-    public function emailResetLink(CanResetPasswordContract $user, $token, Closure $callback = null, $newmailview = null)
+    public function emailResetLink(CanResetPasswordContract $user, $token, Closure $callback = null)
     {
         // We will use the reminder view that was given to the broker to display the
         // password reminder e-mail. We'll pass a "token" variable into the views
         // so that it may be displayed for an user to click for password reset.
-        
-        if(!$newmailview){
-            $view = $this->emailView;
-        }
-        else{
-            $view = $newmailview;
-        }
+        $view = $this->emailView;
+
         return $this->mailer->send($view, compact('token', 'user'), function ($m) use ($user, $token, $callback) {
             $m->to($user->getEmailForPasswordReset());
 
@@ -258,5 +250,4 @@ class PasswordBroker implements PasswordBrokerContract
     {
         return $this->tokens;
     }
-
 }

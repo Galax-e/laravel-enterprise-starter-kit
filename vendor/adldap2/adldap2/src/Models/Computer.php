@@ -9,7 +9,11 @@ use Adldap\Schemas\ActiveDirectory;
 
 class Computer extends Entry
 {
-    use HasCriticalSystemObjectTrait, HasDescriptionTrait, HasLastLogonAndLogOffTrait;
+    use HasCriticalSystemObjectTrait;
+
+    use HasDescriptionTrait;
+
+    use HasLastLogonAndLogOffTrait;
 
     /**
      * Returns the computers operating system.

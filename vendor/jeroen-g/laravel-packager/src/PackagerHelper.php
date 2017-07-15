@@ -5,6 +5,7 @@ namespace JeroenG\Packager;
 use ZipArchive;
 use RuntimeException;
 use GuzzleHttp\Client;
+//use Illuminate\Support\Composer;
 use Illuminate\Filesystem\Filesystem;
 
 /**
@@ -29,6 +30,7 @@ class PackagerHelper
     public function __construct(Filesystem $files)
     {
         $this->files = $files;
+        //$this->composer = new Composer($files);
     }
 
     /**
@@ -112,7 +114,7 @@ class PackagerHelper
      */
     public function removeDir($path)
     {
-        if ($path == 'packages' or $path == '/') {
+        if ($path == 'packages' || $path == '/') {
             return false;
         }
 
@@ -184,5 +186,16 @@ class PackagerHelper
         @chmod($zipFile, 0777);
         @unlink($zipFile);
         return $this;
+    }
+    
+    /**
+     * New composer instance that dumps autoloads.
+     * 
+     * @return mixed
+     */
+    public function dumpAutoloads()
+    {
+        //return $this->composer->dumpAutoloads();
+        shell_exec('composer dump-autoload');
     }
 }

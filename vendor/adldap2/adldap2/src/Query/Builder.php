@@ -3,55 +3,24 @@
 namespace Adldap\Query;
 
 use Adldap\Classes\Utilities;
-use Adldap\Connections\ConnectionInterface;
 use Adldap\Exceptions\InvalidQueryOperatorException;
-use Adldap\Exceptions\ModelNotFoundException;
-use Adldap\Models\Entry;
-use Adldap\Objects\Paginator;
 use Adldap\Schemas\ActiveDirectory;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Criteria;
-use InvalidArgumentException;
 
 class Builder
 {
     /**
-     * The field key for a where statement.
+     * Stores the current query string.
      *
      * @var string
      */
-    public static $whereFieldKey = 'field';
+    protected $query = '';
 
     /**
-     * The operator key for a where statement.
-     *
-     * @var string
-     */
-    public static $whereOperatorKey = 'operator';
-
-    /**
-     * The value key for a where statement.
-     *
-     * @var string
-     */
-    public static $whereValueKey = 'value';
-
-    /**
-     * The available binding types.
+     * Stores the selects to use in the query when assembled.
      *
      * @var array
      */
-    public $bindings = [
-        'where'     => 'wheres',
-        'orWhere'   => 'orWheres',
-    ];
-
-    /**
-     * Stores the column selects to use in the query when assembled.
-     *
-     * @var array
-     */
-    public $selects = [];
+    protected $selects = [];
 
     /**
      * Stores the current where filters
@@ -59,7 +28,7 @@ class Builder
      *
      * @var array
      */
-    public $wheres = [];
+    protected $wheres = [];
 
     /**
      * Stores the current or where filters
@@ -67,419 +36,67 @@ class Builder
      *
      * @var array
      */
-    public $orWheres = [];
+    protected $orWheres = [];
 
     /**
-     * Stores the raw filters on the current query.
-     *
-     * @var array
-     */
-    public $filters = [];
-
-    /**
-     * Stores the bool to determine whether or
-     * not the current query is paginated.
-     *
-     * @var bool
-     */
-    public $paginated = false;
-
-    /**
-     * Stores the field to sort search results by.
+     * The opening query string.
      *
      * @var string
      */
-    protected $sortByField = '';
+    protected static $open = '(';
 
     /**
-     * Stores the direction to sort the results by.
+     * The closing query string.
      *
      * @var string
      */
-    protected $sortByDirection = '';
+    protected static $close = ')';
 
     /**
-     * The distinguished name to perform searches upon.
+     * The field key for a where statement.
      *
-     * @var string|null
+     * @var string
      */
-    protected $dn;
+    protected static $whereFieldKey = 'field';
 
     /**
-     * The object category model class mappings.
+     * The operator key for a where statement.
      *
-     * @var array
+     * @var string
      */
-    protected $mappings = [
-        ActiveDirectory::OBJECT_CATEGORY_COMPUTER               => 'Adldap\Models\Computer',
-        ActiveDirectory::OBJECT_CATEGORY_PERSON                 => 'Adldap\Models\User',
-        ActiveDirectory::OBJECT_CATEGORY_GROUP                  => 'Adldap\Models\Group',
-        ActiveDirectory::MS_EXCHANGE_SERVER                     => 'Adldap\Models\ExchangeServer',
-        ActiveDirectory::OBJECT_CATEGORY_CONTAINER              => 'Adldap\Models\Container',
-        ActiveDirectory::OBJECT_CATEGORY_PRINTER                => 'Adldap\Models\Printer',
-        ActiveDirectory::OBJECT_CATEGORY_ORGANIZATIONAL_UNIT    => 'Adldap\Models\OrganizationalUnit',
-    ];
+    protected static $whereOperatorKey = 'operator';
 
     /**
-     * Stores the bool to determine whether or not
-     * to search LDAP recursively.
+     * The value keey for a where statement.
      *
-     * @var bool
+     * @var string
      */
-    protected $recursive = true;
-
-    /**
-     * Stores the bool to determine whether or not
-     * to search LDAP on the base scope.
-     *
-     * @var bool
-     */
-    protected $read = false;
-
-    /**
-     * Stores the bool to determine whether or not
-     * to return LDAP results in their raw format.
-     *
-     * @var bool
-     */
-    protected $raw = false;
-
-    /**
-     * Stores the current connection instance.
-     *
-     * @var ConnectionInterface
-     */
-    protected $connection;
-
-    /**
-     * Stores the current grammar instance.
-     *
-     * @var Grammar
-     */
-    protected $grammar;
-
-    /**
-     * Constructor.
-     *
-     * @param ConnectionInterface $connection
-     * @param Grammar             $grammar
-     */
-    public function __construct(ConnectionInterface $connection, Grammar $grammar)
-    {
-        $this->connection = $connection;
-        $this->grammar = $grammar;
-    }
-
-    /**
-     * Returns a new Query Builder instance.
-     *
-     * @return Builder
-     */
-    public function newInstance()
-    {
-        $new = new self($this->connection, $this->grammar);
-
-        $new->setDn($this->getDn());
-
-        return $new;
-    }
+    protected static $whereValueKey = 'value';
 
     /**
      * Returns the current query.
      *
-     * @param string|array $columns
-     *
-     * @return array|ArrayCollection|bool
-     */
-    public function get($columns = [])
-    {
-        return $this->select($columns)->query($this->getQuery());
-    }
-
-    /**
-     * Compiles and returns the current query string.
-     *
      * @return string
      */
-    public function getQuery()
+    public function get()
     {
-        return $this->grammar->compileQuery($this);
-    }
-
-    /**
-     * Returns the current Grammar instance.
-     *
-     * @return Grammar
-     */
-    public function getGrammar()
-    {
-        return $this->grammar;
-    }
-
-    /**
-     * Returns the current Connection instance.
-     *
-     * @return ConnectionInterface
-     */
-    public function getConnection()
-    {
-        return $this->connection;
-    }
-
-    /**
-     * Returns the builders DN to perform
-     * searches upon.
-     *
-     * @return string
-     */
-    public function getDn()
-    {
-        return $this->dn;
-    }
-
-    /**
-     * Sets the DN to perform searches upon.
-     *
-     * @param string|null $dn
-     *
-     * @return Builder
-     */
-    public function setDn($dn = null)
-    {
-        $this->dn = $dn;
-
-        return $this;
-    }
-
-    /**
-     * Performs the specified query on the current LDAP connection.
-     *
-     * @param string $query
-     *
-     * @return array|ArrayCollection
-     */
-    public function query($query)
-    {
-        $dn = $this->getDn();
-
-        $selects = $this->getSelects();
-
-        if ($this->read) {
-            // If read is true, we'll perform a read search, retrieving one record.
-            $results = $this->connection->read($dn, $query, $selects);
-        } elseif ($this->recursive) {
-            // If recursive is true, we'll perform a recursive search.
-            $results = $this->connection->search($dn, $query, $selects);
-        } else {
-            // Read and recursive is false, we'll return a listing.
-            $results = $this->connection->listing($dn, $query, $selects);
+        // Return the query if it exists
+        if (!empty($this->query)) {
+            return $this->query;
         }
 
-        return $this->newCollection($this->processResults($results));
-    }
+        // Looks like our query hasn't been assembled
+        // yet, let's try to assemble it
+        $this->assembleQuery();
 
-    /**
-     * Paginates the current LDAP query.
-     *
-     * @param int  $perPage
-     * @param int  $currentPage
-     * @param bool $isCritical
-     *
-     * @return Paginator|bool
-     */
-    public function paginate($perPage = 50, $currentPage = 0, $isCritical = true)
-    {
-        // Set the current query to paginated.
-        $this->paginated = true;
-
-        // Stores all LDAP entries in a page array.
-        $pages = [];
-
-        $cookie = '';
-
-        do {
-            $this->connection->controlPagedResult($perPage, $isCritical, $cookie);
-
-            $results = $this->connection->search($this->getDn(), $this->getQuery(), $this->getSelects());
-
-            if ($results) {
-                $this->connection->controlPagedResultResponse($results, $cookie);
-
-                // We'll collect the results into the pages array.
-                $pages[] = $results;
-            }
-        } while ($cookie !== null && !empty($cookie));
-
-        if (count($pages) > 0) {
-            return $this->processPaginatedResults($pages, $perPage, $currentPage);
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns the first entry in a search result.
-     *
-     * @param string|array $columns
-     *
-     * @return Entry|bool
-     */
-    public function first($columns = [])
-    {
-        $results = $this->get($columns);
-
-        if ($results instanceof ArrayCollection) {
-            return $results->first();
-        } elseif (is_array($results) && array_key_exists(0, $results)) {
-            return $results[0];
-        }
-
-        // No entries were returned, return false
-        return false;
-    }
-
-    /**
-     * Returns the first entry in a search result.
-     *
-     * If no entry is found, an exception is thrown.
-     *
-     * @throws ModelNotFoundException
-     *
-     * @return array|bool
-     */
-    public function firstOrFail()
-    {
-        $record = $this->first();
-
-        if (!$record) {
-            $message = 'Unable to find record in Active Directory.';
-
-            throw new ModelNotFoundException($message);
-        }
-
-        return $record;
-    }
-
-    /**
-     * Finds a record using ambiguous name resolution.
-     *
-     * @param string $anr
-     *
-     * @return bool|Entry
-     */
-    public function find($anr)
-    {
-        return $this->whereEquals(ActiveDirectory::ANR, $anr)->first();
-    }
-
-    /**
-     * Finds a record by the specified attribute and value.
-     *
-     * @param string       $attribute
-     * @param string       $value
-     * @param array|string $columns
-     *
-     * @return Entry|bool
-     */
-    public function findBy($attribute, $value, $columns = [])
-    {
-        return $this->whereEquals($attribute, $value)->first($columns);
-    }
-
-    /**
-     * Finds a record using ambiguous name resolution. If a record
-     * is not found, an exception is thrown.
-     *
-     * @param string $anr
-     *
-     * @throws ModelNotFoundException
-     *
-     * @return array|bool
-     */
-    public function findOrFail($anr)
-    {
-        $entry = $this->find($anr);
-
-        // Make sure we check if the result is an entry or an array before
-        // we throw an exception in case the user wants raw results.
-        if (!$entry instanceof Entry && !is_array($entry)) {
-            $message = 'Unable to find record in Active Directory.';
-
-            throw new ModelNotFoundException($message);
-        }
-
-        return $entry;
-    }
-
-    /**
-     * Finds a record by its distinguished name.
-     *
-     * @param string $dn
-     * @param array  $fields
-     *
-     * @return bool|Entry
-     */
-    public function findByDn($dn, $fields = [])
-    {
-        return $this
-            ->setDn($dn)
-            ->read(true)
-            ->select($fields)
-            ->whereHas(ActiveDirectory::OBJECT_CLASS)
-            ->first();
-    }
-
-    /**
-     * Finds a record by its distinguished name.
-     *
-     * Fails upon no records returned.
-     *
-     * @param string $dn
-     * @param array  $fields
-     *
-     * @throws ModelNotFoundException
-     *
-     * @return bool|Entry
-     */
-    public function findByDnOrFail($dn, $fields = [])
-    {
-        return $this
-            ->setDn($dn)
-            ->read(true)
-            ->select($fields)
-            ->whereHas(ActiveDirectory::OBJECT_CLASS)
-            ->firstOrFail();
-    }
-
-    /**
-     * Finds the Base DN of your domain controller.
-     *
-     * @return string|bool
-     */
-    public function findBaseDn()
-    {
-        $result = $this
-            ->setDn(null)
-            ->read()
-            ->raw()
-            ->whereHas(ActiveDirectory::OBJECT_CLASS)
-            ->first();
-
-        $key = ActiveDirectory::DEFAULT_NAMING_CONTEXT;
-
-        if (is_array($result) && array_key_exists($key, $result)) {
-            if (array_key_exists(0, $result[$key])) {
-                return $result[$key][0];
-            }
-        }
-
-        return false;
+        // Return the assembled query
+        return $this->query;
     }
 
     /**
      * Adds the inserted fields to query on the current LDAP connection.
      *
-     * @param array|string $fields
+     * @param array $fields
      *
      * @return Builder
      */
@@ -487,25 +104,11 @@ class Builder
     {
         if (is_array($fields)) {
             foreach ($fields as $field) {
-                $this->selects[] = $field;
+                $this->addSelect($field);
             }
         } elseif (is_string($fields)) {
-            $this->selects[] = $fields;
+            $this->addSelect($fields);
         }
-
-        return $this;
-    }
-
-    /**
-     * Adds a raw filter to the current query.
-     *
-     * @param string $filter
-     *
-     * @return Builder
-     */
-    public function rawFilter($filter)
-    {
-        $this->filters[] = $filter;
 
         return $this;
     }
@@ -521,73 +124,7 @@ class Builder
      */
     public function where($field, $operator = null, $value = null)
     {
-        // If the column is an array, we will assume it is an array of
-        // key-value pairs and can add them each as a where clause.
-        if (is_array($field)) {
-            foreach ($field as $key => $value) {
-                $this->whereEquals($key, $value);
-            }
-        } else {
-            $this->addBinding($field, $operator, $value, __FUNCTION__);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds a where equals clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function whereEquals($field, $value)
-    {
-        $this->where($field, Operator::$equals, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds a where approximately equals clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function whereApproximatelyEquals($field, $value)
-    {
-        $this->where($field, Operator::$approximatelyEquals, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds a where has clause to the current query.
-     *
-     * @param string $field
-     *
-     * @return Builder
-     */
-    public function whereHas($field)
-    {
-        $this->where($field, Operator::$has);
-
-        return $this;
-    }
-
-    /**
-     * Adds a where not has clause to the current query.
-     *
-     * @param string $field
-     *
-     * @return Builder
-     */
-    public function whereNotHas($field)
-    {
-        $this->where($field, Operator::$notHas);
+        $this->addWhere($field, $operator, $value);
 
         return $this;
     }
@@ -602,22 +139,7 @@ class Builder
      */
     public function whereContains($field, $value)
     {
-        $this->where($field, Operator::$contains, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds a where contains clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function whereNotContains($field, $value)
-    {
-        $this->where($field, Operator::$notContains, $value);
+        $this->addWhere($field, Operator::$contains, $value);
 
         return $this;
     }
@@ -632,22 +154,7 @@ class Builder
      */
     public function whereStartsWith($field, $value)
     {
-        $this->where($field, Operator::$startsWith, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds a where *not* starts with clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function whereNotStartsWith($field, $value)
-    {
-        $this->where($field, Operator::$notStartsWith, $value);
+        $this->addWhere($field, Operator::$startsWith, $value);
 
         return $this;
     }
@@ -662,7 +169,7 @@ class Builder
      */
     public function whereEndsWith($field, $value)
     {
-        $this->where($field, Operator::$endsWith, $value);
+        $this->addWhere($field, Operator::$endsWith, $value);
 
         return $this;
     }
@@ -678,73 +185,7 @@ class Builder
      */
     public function orWhere($field, $operator = null, $value = null)
     {
-        // If the column is an array, we will assume it is an array of
-        // key-value pairs and can add them each as a where clause.
-        if (is_array($field)) {
-            foreach ($field as $key => $value) {
-                $this->orWhereEquals($key, $value);
-            }
-        } else {
-            $this->addBinding($field, $operator, $value, __FUNCTION__);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds an or where has clause to the current query.
-     *
-     * @param string $field
-     *
-     * @return Builder
-     */
-    public function orWhereHas($field)
-    {
-        $this->orWhere($field, Operator::$has);
-
-        return $this;
-    }
-
-    /**
-     * Adds a where not has clause to the current query.
-     *
-     * @param string $field
-     *
-     * @return Builder
-     */
-    public function orWhereNotHas($field)
-    {
-        $this->orWhere($field, Operator::$notHas);
-
-        return $this;
-    }
-
-    /**
-     * Adds an or where equals clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function orWhereEquals($field, $value)
-    {
-        $this->orWhere($field, Operator::$equals, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds a or where approximately equals clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function orWhereApproximatelyEquals($field, $value)
-    {
-        $this->orWhere($field, Operator::$approximatelyEquals, $value);
+        $this->addOrWhere($field, $operator, $value);
 
         return $this;
     }
@@ -759,22 +200,7 @@ class Builder
      */
     public function orWhereContains($field, $value)
     {
-        $this->orWhere($field, Operator::$contains, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds an or where *not* contains clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function orWhereNotContains($field, $value)
-    {
-        $this->orWhere($field, Operator::$notContains, $value);
+        $this->addOrWhere($field, Operator::$contains, $value);
 
         return $this;
     }
@@ -789,22 +215,7 @@ class Builder
      */
     public function orWhereStartsWith($field, $value)
     {
-        $this->orWhere($field, Operator::$startsWith, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds an or where *not* starts with clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function orWhereNotStartsWith($field, $value)
-    {
-        $this->orWhere($field, Operator::$notStartsWith, $value);
+        $this->addOrWhere($field, Operator::$startsWith, $value);
 
         return $this;
     }
@@ -819,22 +230,7 @@ class Builder
      */
     public function orWhereEndsWith($field, $value)
     {
-        $this->orWhere($field, Operator::$endsWith, $value);
-
-        return $this;
-    }
-
-    /**
-     * Adds an or where *not* ends with clause to the current query.
-     *
-     * @param string $field
-     * @param string $value
-     *
-     * @return Builder
-     */
-    public function orWhereNotEndsWith($field, $value)
-    {
-        $this->orWhere($field, Operator::$notEndsWith, $value);
+        $this->addOrWhere($field, Operator::$endsWith, $value);
 
         return $this;
     }
@@ -864,10 +260,9 @@ class Builder
         $selects = $this->selects;
 
         if (count($selects) > 0) {
-            // Always make sure object category, class, and distinguished
+            // Always make sure object category and distinguished
             // name are included in the selected fields
             $selects[] = ActiveDirectory::OBJECT_CATEGORY;
-            $selects[] = ActiveDirectory::OBJECT_CLASS;
             $selects[] = ActiveDirectory::DISTINGUISHED_NAME;
         }
 
@@ -895,224 +290,236 @@ class Builder
     }
 
     /**
-     * Sorts the LDAP search results by the
-     * specified field and direction.
+     * Returns the current query string.
+     *
+     * @return string
+     */
+    public function getQuery()
+    {
+        // Return the query if it exists
+        if (!empty($this->query)) {
+            return $this->query;
+        }
+
+        /*
+         * Looks like our query hasn't been assembled
+         * yet, let's try to assemble it
+         */
+        return $this->assembleQuery();
+    }
+
+    /**
+     * Adds the inserted field to the selects property.
      *
      * @param string $field
-     * @param string $direction
-     *
-     * @return Builder
      */
-    public function sortBy($field, $direction = 'asc')
+    private function addSelect($field)
     {
-        $this->sortByField = $field;
-
-        if ($direction === 'asc' || $direction === 'desc') {
-            $this->sortByDirection = $direction;
+        // We'll make sure the field isn't empty
+        // before we add it to the selects
+        if (!empty($field)) {
+            $this->selects[] = $field;
         }
-
-        return $this;
     }
 
     /**
-     * Sets the recursive property to tell the search
-     * whether or not to search recursively.
-     *
-     * @param bool $recursive
-     *
-     * @return Builder
-     */
-    public function recursive($recursive = true)
-    {
-        $this->recursive = (bool) $recursive;
-
-        return $this;
-    }
-
-    /**
-     * Sets the recursive property to tell the search
-     * whether or not to search on the base scope and
-     * return a single entry.
-     *
-     * @param bool $read
-     *
-     * @return Builder
-     */
-    public function read($read = true)
-    {
-        $this->read = (bool) $read;
-
-        return $this;
-    }
-
-    /**
-     * Sets the recursive property to tell the search
-     * whether or not to return the LDAP results in
-     * their raw format.
-     *
-     * @param bool $raw
-     *
-     * @return Builder
-     */
-    public function raw($raw = true)
-    {
-        $this->raw = (bool) $raw;
-
-        return $this;
-    }
-
-    /**
-     * Returns a new LDAP Entry instance.
-     *
-     * @param array $attributes
-     *
-     * @return Entry
-     */
-    public function newLdapEntry(array $attributes = [])
-    {
-        $attribute = ActiveDirectory::OBJECT_CATEGORY;
-
-        if (array_key_exists($attribute, $attributes) && array_key_exists(0, $attributes[$attribute])) {
-            // We'll explode the DN so we can grab it's object category.
-            $category = Utilities::explodeDn($attributes[$attribute][0]);
-
-            // Make sure the category string exists in the attribute array
-            if (array_key_exists(0, $category)) {
-                $category = strtolower($category[0]);
-
-                if (array_key_exists($category, $this->mappings)) {
-                    $model = $this->mappings[$category];
-
-                    return (new $model([], $this))->setRawAttributes($attributes);
-                }
-            }
-        }
-
-        // A default entry object if the object category isn't found
-        return (new Entry([], $this))->setRawAttributes($attributes);
-    }
-
-    /**
-     * Returns a new doctrine array collection instance.
-     *
-     * @param array $elements
-     *
-     * @return ArrayCollection
-     */
-    public function newCollection(array $elements = [])
-    {
-        return new ArrayCollection($elements);
-    }
-
-    /**
-     * Adds a binding to the query.
+     * Adds the inserted field, operator and value
+     * to the wheres property array.
      *
      * @param string $field
      * @param string $operator
-     * @param string $value
-     * @param string $type
+     * @param null   $value
      *
      * @throws InvalidQueryOperatorException
-     *
-     * @return Builder
      */
-    public function addBinding($field, $operator, $value, $type = 'where')
+    private function addWhere($field, $operator, $value = null)
     {
-        if (!array_key_exists($type, $this->bindings)) {
-            throw new InvalidArgumentException("Invalid binding type: {$type}.");
-        }
-
-        $operator = $this->getOperator($operator);
-
-        $value = Utilities::escape($value);
-
-        $this->{$this->bindings[$type]}[] = compact('field', 'operator', 'value');
-
-        return $this;
+        $this->wheres[] = [
+            self::$whereFieldKey    => $field,
+            self::$whereOperatorKey => $this->getOperator($operator),
+            self::$whereValueKey    => Utilities::escape($value),
+        ];
     }
 
     /**
-     * Processes LDAP search results into a nice array.
+     * Adds the inserted field, operator and value
+     * to the orWheres property array.
      *
-     * If raw is not set to true, an ArrayCollection is returned.
+     * @param string $field
+     * @param string $operator
+     * @param null   $value
      *
-     * @param resource $results
-     *
-     * @return array|ArrayCollection
+     * @throws InvalidQueryOperatorException
      */
-    private function processResults($results)
+    private function addOrWhere($field, $operator, $value = null)
     {
-        $entries = $this->connection->getEntries($results);
-
-        if ($this->raw === true) {
-            return $entries;
-        } else {
-            $models = [];
-
-            if (is_array($entries) && array_key_exists('count', $entries)) {
-                for ($i = 0; $i < $entries['count']; $i++) {
-                    $models[] = $this->newLdapEntry($entries[$i]);
-                }
-            }
-
-            // If the current query isn't paginated, we'll
-            // sort the models array here
-            if (!$this->paginated) {
-                $models = $this->processSort($models);
-            }
-
-            return $models;
-        }
+        $this->orWheres[] = [
+            self::$whereFieldKey    => $field,
+            self::$whereOperatorKey => $this->getOperator($operator),
+            self::$whereValueKey    => Utilities::escape($value),
+        ];
     }
 
     /**
-     * Processes paginated LDAP results.
+     * Returns a query string for does not equal.
      *
-     * @param array $pages
-     * @param int   $perPage
-     * @param int   $currentPage
+     * Produces: (!(field=value))
      *
-     * @return Paginator|bool
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
      */
-    private function processPaginatedResults($pages, $perPage = 50, $currentPage = 0)
+    private function buildDoesNotEqual($field, $value)
     {
-        // Make sure we have at least one page of results
-        if (count($pages) > 0) {
-            $objects = [];
-
-            // Go through each page and process the results into an objects array
-            foreach ($pages as $results) {
-                $processed = $this->processResults($results);
-
-                $objects = array_merge($objects, $processed);
-            }
-
-            $objects = $this->processSort($objects);
-
-            // Return a new Paginator instance
-            return new Paginator($objects, $perPage, $currentPage, count($pages));
-        }
-
-        // Looks like we don't have any results, return false
-        return false;
+        return $this::$open.Operator::$doesNotEqual.$this->buildEquals($field, $value).$this::$close;
     }
 
     /**
-     * Sorts LDAP search results.
+     * Returns a query string for equals.
      *
-     * @param array $models
+     * Produces: (field=value)
      *
-     * @return array
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
      */
-    private function processSort(array $models = [])
+    private function buildEquals($field, $value)
     {
-        $collection = $this->newCollection($models);
+        return $this::$open.$field.Operator::$equals.$value.$this::$close;
+    }
 
-        $sort = [$this->sortByField => $this->sortByDirection];
+    /**
+     * Returns a query string for greater than or equals.
+     *
+     * Produces: (field>=value)
+     *
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
+     */
+    private function buildGreaterThanOrEquals($field, $value)
+    {
+        return $this::$open.$field.Operator::$greaterThanOrEqual.$value.$this::$close;
+    }
 
-        $criteria = (new Criteria())->orderBy($sort);
+    /**
+     * Returns a query string for less than or equals.
+     *
+     * Produces: (field<=value)
+     *
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
+     */
+    private function buildLessThanOrEquals($field, $value)
+    {
+        return $this::$open.$field.Operator::$lessThanOrEqual.$value.$this::$close;
+    }
 
-        return $collection->matching($criteria)->toArray();
+    /**
+     * Returns a query string for approximately equals.
+     *
+     * Produces: (field=value)
+     *
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
+     */
+    private function buildApproximatelyEquals($field, $value)
+    {
+        return $this::$open.$field.Operator::$approximateEqual.$value.$this::$close;
+    }
+
+    /**
+     * Returns a query string for starts with.
+     *
+     * Produces: (field=value*)
+     *
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
+     */
+    private function buildStartsWith($field, $value)
+    {
+        return $this::$open.$field.Operator::$equals.$value.Operator::$wildcard.$this::$close;
+    }
+
+    /**
+     * Returns a query string for ends with.
+     *
+     * Produces: (field=*value)
+     *
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
+     */
+    private function buildEndsWith($field, $value)
+    {
+        return $this::$open.$field.Operator::$equals.Operator::$wildcard.$value.$this::$close;
+    }
+
+    /**
+     * Returns a query string for contains.
+     *
+     * Produces: (field=*value*)
+     *
+     * @param string $field
+     * @param string $value
+     *
+     * @return string
+     */
+    private function buildContains($field, $value)
+    {
+        return $this::$open.$field.Operator::$equals.Operator::$wildcard.$value.Operator::$wildcard.$this::$close;
+    }
+
+    /**
+     * Returns a query string for a wildcard.
+     *
+     * Produces: (field=*)
+     *
+     * @param string $field
+     *
+     * @return string
+     */
+    private function buildWildcard($field)
+    {
+        return $this::$open.$field.Operator::$equals.Operator::$wildcard.$this::$close;
+    }
+
+    /**
+     * Wraps the inserted query inside an AND operator.
+     *
+     * Produces: (&query)
+     *
+     * @param string $query
+     *
+     * @return string
+     */
+    private function buildAnd($query)
+    {
+        return $this::$open.Operator::$and.$query.$this::$close;
+    }
+
+    /**
+     * Wraps the inserted query inside an OR operator.
+     *
+     * Produces: (|query)
+     *
+     * @param string $query
+     *
+     * @return string
+     */
+    private function buildOr($query)
+    {
+        return $this::$open.Operator::$or.$query.$this::$close;
     }
 
     /**
@@ -1128,7 +535,7 @@ class Builder
      */
     private function getOperator($operator)
     {
-        $operators = Operator::all();
+        $operators = $this->getOperators();
 
         $key = array_search(strtolower($operator), $operators);
 
@@ -1141,5 +548,133 @@ class Builder
         $message = "Operator: $operator cannot be used in an LDAP query. Available operators are: $operators";
 
         throw new InvalidQueryOperatorException($message);
+    }
+
+    /**
+     * Returns an array of available operators.
+     *
+     * @return array
+     */
+    private function getOperators()
+    {
+        return [
+            Operator::$wildcard,
+            Operator::$equals,
+            Operator::$doesNotEqual,
+            Operator::$greaterThanOrEqual,
+            Operator::$lessThanOrEqual,
+            Operator::$approximateEqual,
+            Operator::$startsWith,
+            Operator::$endsWith,
+            Operator::$contains,
+            Operator::$and,
+        ];
+    }
+
+    /**
+     * Returns an assembled query using the current object parameters.
+     *
+     * @return string
+     */
+    private function assembleQuery()
+    {
+        $this->assembleWheres();
+
+        $this->assembleOrWheres();
+
+        // Make sure we wrap the query in an 'and' if using multiple
+        // wheres or if we have any orWheres. For example:
+        // (&(cn=John*)(|(description=User*)))
+        if (count($this->getWheres()) > 1 || count($this->getOrWheres()) > 0) {
+            $this->setQuery($this->buildAnd($this->getQuery()));
+        }
+
+        return $this->query;
+    }
+
+    /**
+     * Assembles all where clauses in the current wheres property.
+     */
+    private function assembleWheres()
+    {
+        foreach ($this->wheres as $where) {
+            $this->addToQuery($this->assembleWhere($where));
+        }
+    }
+
+    /**
+     * Assembles all or where clauses in the current orWheres property.
+     */
+    private function assembleOrWheres()
+    {
+        $ors = '';
+
+        foreach ($this->orWheres as $where) {
+            $ors .= $this->assembleWhere($where);
+        }
+
+        /*
+         * Make sure we wrap the query in an 'and'
+         * if using multiple wheres. For example (&QUERY)
+         */
+        if (count($this->orWheres) > 0) {
+            $this->addToQuery($this->buildOr($ors));
+        }
+    }
+
+    /**
+     * Assembles a single where query based
+     * on its operator and returns it.
+     *
+     * @param array $where
+     *
+     * @return string|null
+     */
+    private function assembleWhere($where = [])
+    {
+        if (is_array($where)) {
+            switch ($where['operator']) {
+                case Operator::$equals:
+                    return $this->buildEquals($where['field'], $where['value']);
+                case Operator::$doesNotEqual:
+                    return $this->buildDoesNotEqual($where['field'], $where['value']);
+                case Operator::$greaterThanOrEqual:
+                    return $this->buildGreaterThanOrEquals($where['field'], $where['value']);
+                case Operator::$lessThanOrEqual:
+                    return $this->buildLessThanOrEquals($where['field'], $where['value']);
+                case Operator::$approximateEqual:
+                    return $this->buildApproximatelyEquals($where['field'], $where['value']);
+                case Operator::$startsWith:
+                    return $this->buildStartsWith($where['field'], $where['value']);
+                case Operator::$endsWith:
+                    return $this->buildEndsWith($where['field'], $where['value']);
+                case Operator::$contains:
+                    return $this->buildContains($where['field'], $where['value']);
+                case Operator::$wildcard:
+                    return $this->buildWildcard($where['field']);
+            }
+        }
+
+        return;
+    }
+
+    /**
+     * Adds the specified query onto the current query.
+     *
+     * @param string $query
+     */
+    private function addToQuery($query)
+    {
+        $this->query .= (string) $query;
+    }
+
+    /**
+     * Sets the current query property.
+     *
+     * @param string $query
+     */
+    private function setQuery($query)
+    {
+        $this->query = (string) $query;
     }
 }

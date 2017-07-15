@@ -190,13 +190,12 @@
                         <ul class="dropdown-menu">
                             <!-- The user image in the menu -->
                             <li class="user-header">
-                                <a id="image_view_update" class="users-list-name" href="{{route('user.profile.photo')}}"><img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="img-circle" style="width: 130px; height: 100px; border-radius: 50%; margin-right: 25px;" alt="User Image"/>
+                                <a id="image_view_update" class="users-list-name" href="{{route('user.profile.photo')}}"><img src="{{ asset('/img/profile_picture/photo/'.Auth::user()->avatar) }}" class="img-circle" style="width: 130px; height: 100px; border-radius: 50%; margin-right: 25px;" alt="User Image"/>
                                 </a>
 
                                 {{-- @cpnwaugha: c-e: removed <img src="{{ Gravatar::get(Auth::user()->email , 'medium') }}" class="img-circle" alt="User Image" /> --}}
 
                                 {{--<a class="users-list-name" href="">{!! link_to_route('admin.users.show', $user->full_name, [$user->id], []) !!}</a>--}}
-                                
                                 <p>
                                     {{ Auth::user()->full_name }}
                                     <small>Member since {{ Auth::user()->created_at->format("F, Y") }}</small>
@@ -217,26 +216,21 @@
                                     </div>
                                 </li>
                             @endif
-
                             <!-- Menu Footer-->
                             <!-- @cpnwaugha changed button default->color, and flat-raised-->
                             <li class="user-footer">
-
                                 @if ( Setting::get('app.user_profile_link') )
                                     <div class="pull-left">
                                         {!! link_to_route('user.profile', 'Profile', [], ['class' => "btn btn-info btn-raised"]) !!}
                                     </div>
                                 @endif
                                 <!-- @cpnwaugha: c-e work on this for profile photo updata -->
-                                
-
                                 <div class="pull-right">
                                     {!! link_to_route('logout', 'Sign out', [], ['class' => "btn btn-danger btn-raised"]) !!}
                                 </div>
                             </li>
                         </ul>
                     </li>
-
                     @if ( Setting::get('app.right_sidebar') )
                         <!-- Control Sidebar Toggle Button -->
                         <li>

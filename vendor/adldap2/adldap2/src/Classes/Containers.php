@@ -17,7 +17,7 @@ class Containers extends AbstractBase implements QueryableInterface, CreateableI
      */
     public function find($name, $fields = [])
     {
-        return $this->search()->findBy(ActiveDirectory::COMMON_NAME, $name, $fields);
+        return $this->search()->select($fields)->find($name);
     }
 
     /**
@@ -26,16 +26,15 @@ class Containers extends AbstractBase implements QueryableInterface, CreateableI
      * @param array  $fields
      * @param bool   $sorted
      * @param string $sortBy
-     * @param string $sortDirection
      *
      * @return array|bool
      */
-    public function all($fields = [], $sorted = true, $sortBy = ActiveDirectory::NAME, $sortDirection = 'asc')
+    public function all($fields = [], $sorted = true, $sortBy = 'name')
     {
         $search = $this->search();
 
         if ($sorted) {
-            $search->sortBy($sortBy, $sortDirection);
+            $search->sortBy($sortBy);
         }
 
         return $search->get();
@@ -44,13 +43,13 @@ class Containers extends AbstractBase implements QueryableInterface, CreateableI
     /**
      * Creates a new search limited to containers only.
      *
-     * @return \Adldap\Query\Builder
+     * @return Search
      */
     public function search()
     {
         return $this->getAdldap()
             ->search()
-            ->whereEquals(ActiveDirectory::OBJECT_CATEGORY, ActiveDirectory::OBJECT_CATEGORY_CONTAINER);
+            ->where(ActiveDirectory::OBJECT_CATEGORY, '=', ActiveDirectory::OBJECT_CATEGORY_CONTAINER);
     }
 
     /**
@@ -62,7 +61,7 @@ class Containers extends AbstractBase implements QueryableInterface, CreateableI
      */
     public function newInstance(array $attributes = [])
     {
-        return (new Container($attributes, $this->search()))
+        return (new Container($attributes, $this->getAdldap()))
             ->setAttribute(ActiveDirectory::OBJECT_CLASS, ActiveDirectory::ORGANIZATIONAL_UNIT_LONG);
     }
 

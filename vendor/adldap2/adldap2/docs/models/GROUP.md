@@ -4,33 +4,26 @@ The Computer model will be returned when an LDAP entry contains an object catego
 
 ##### Getting / setting the groups `member` attribute:
 
-```php
-$group->getMembers();
-
-$members = [
-    $user1->getDn(),
-    $user2->getDn(),
-];
-
-$group->setMembers($members);
-```
+    $group->getMembers();
+    
+    $members = [
+        $user1->getDn(),
+        $user2->getDn(),
+    ];
+    
+    $group->setMembers($members);
     
 ##### Adding / Removing a single member:
 
-```php
-$group->addMember($user);
-
-$group->removeMember($user);
-```
+    $group->addMember($user);
+    
+    $group->removeMember($user);
     
 ##### Removing all members:
 
-```php
-$group->removeMembers();
-```
+    $group->removeMembers();
     
 ##### Getting the groups `grouptype` attribute:
 
-```php
-$group->getGroupType();
-```
+    $group->getGroupType();
+

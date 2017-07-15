@@ -8,7 +8,9 @@ use Adldap\Schemas\ActiveDirectory;
 
 class Container extends Entry
 {
-    use HasDescriptionTrait, HasCriticalSystemObjectTrait;
+    use HasDescriptionTrait;
+
+    use HasCriticalSystemObjectTrait;
 
     /**
      * Returns the containers system flags integer.

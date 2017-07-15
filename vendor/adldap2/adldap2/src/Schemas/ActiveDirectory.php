@@ -42,7 +42,6 @@ class ActiveDirectory
     const FIRST_NAME = 'givenname';
     const GROUP_TYPE = 'grouptype';
     const HOME_MDB = 'homemdb';
-    const INFO = 'info';
     const INITIALS = 'initials';
     const INSTANCE_TYPE = 'instancetype';
     const IS_CRITICAL_SYSTEM_OBJECT = 'iscriticalsystemobject';
@@ -54,14 +53,12 @@ class ActiveDirectory
     const LOCALE = 'l';
     const LOCATION = 'location';
     const LOCKOUT_TIME = 'lockouttime';
-    const MANAGER = 'manager';
     const MAX_PASSWORD_AGE = 'maxpwdage';
     const MEMBER = 'member';
     const MEMBER_OF = 'memberof';
     const MESSAGE_TRACKING_ENABLED = 'messagetrackingenabled';
     const MS_EXCHANGE_SERVER = 'ms-exch-exchange-server';
     const NAME = 'name';
-    const NEVER_EXPIRES_DATE = '9223372036854775807';
     const OBJECT_CATEGORY = 'objectcategory';
     const OBJECT_CATEGORY_COMPUTER = 'computer';
     const OBJECT_CATEGORY_CONTAINER = 'container';
@@ -69,11 +66,9 @@ class ActiveDirectory
     const OBJECT_CATEGORY_EXCHANGE_SERVER = 'msExchExchangeServer';
     const OBJECT_CATEGORY_EXCHANGE_STORAGE_GROUP = 'msExchStorageGroup';
     const OBJECT_CATEGORY_GROUP = 'group';
-    const OBJECT_CATEGORY_ORGANIZATIONAL_UNIT = 'organizational-unit';
     const OBJECT_CATEGORY_PERSON = 'person';
     const OBJECT_CATEGORY_PRINTER = 'print-queue';
     const OBJECT_CLASS = 'objectclass';
-    const OBJECT_CLASS_PRINTER = 'printqueue';
     const OBJECT_GUID = 'objectguid';
     const OBJECT_SID = 'objectsid';
     const OPERATING_SYSTEM = 'operatingsystem';
@@ -82,10 +77,8 @@ class ActiveDirectory
     const ORGANIZATIONAL_PERSON = 'organizationalperson';
     const ORGANIZATIONAL_UNIT_LONG = 'organizationalunit';
     const ORGANIZATIONAL_UNIT_SHORT = 'ou';
-    const OTHER_MAILBOX = 'othermailbox';
     const PASSWORD_LAST_SET = 'pwdlastset';
     const PERSON = 'person';
-    const PERSONAL_TITLE = 'personaltitle';
     const PHYSICAL_DELIVERY_OFFICE_NAME = 'physicaldeliveryofficename';
     const PORT_NAME = 'portname';
     const POSTAL_CODE = 'postalcode';
@@ -107,7 +100,6 @@ class ActiveDirectory
     const PRIORITY = 'priority';
     const PROFILE_PATH = 'profilepath';
     const PROXY_ADDRESSES = 'proxyaddresses';
-    const SCHEMA_NAMING_CONTEXT = 'schemanamingcontext';
     const SCRIPT_PATH = 'scriptpath';
     const SERIAL_NUMBER = 'serialnumber';
     const SERVER_NAME = 'servername';
@@ -116,7 +108,6 @@ class ActiveDirectory
     const STREET_ADDRESS = 'streetaddress';
     const SYSTEM_FLAGS = 'systemflags';
     const TELEPHONE = 'telephonenumber';
-    const THUMBNAIL = 'thumbnailphoto';
     const TITLE = 'title';
     const TOP = 'top';
     const TRUE = 'TRUE';

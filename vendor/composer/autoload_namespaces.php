@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'YAAP\\Theme' => array($vendorDir . '/yaap/theme/src'),
-    'Psr\\Log\\' => array($vendorDir . '/psr/log'),
+    'SensioLabs\\Security' => array($vendorDir . '/sensiolabs/security-checker'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
     'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
@@ -22,10 +22,8 @@ return array(
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
-    'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Detection' => array($vendorDir . '/mobiledetect/mobiledetectlib/namespaced'),
-    'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
     'Baum' => array($vendorDir . '/baum/baum/src'),
     'Barryvdh' => array($vendorDir . '/barryvdh/reflection-docblock/src'),
 );

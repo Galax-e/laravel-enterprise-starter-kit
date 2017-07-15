@@ -2,87 +2,25 @@
 
 namespace Adldap\Models\Traits;
 
-use Adldap\Classes\Utilities;
-use Adldap\Models\AbstractModel;
 use Adldap\Models\Group;
 use Adldap\Schemas\ActiveDirectory;
 
 trait HasMemberOfTrait
 {
     /**
-     * Adds the current model to the specified group.
-     *
-     * @param string|Group $group
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function addGroup($group)
+    public function getGroups()
     {
-        if (is_string($group)) {
-            // If the group is a string, we'll assume the dev is passing
-            // in a DN string of the group. We'll try to locate it.
-            $query = $this->query->newInstance();
-
-            $group = $query->findByDn($group);
-        }
-
-        if ($group instanceof Group) {
-            // If the group is Group model instance, we can
-            // add the current models DN to the group.
-            return $group->addMember($this->getDn());
-        }
-
-        return false;
-    }
-
-    /**
-     * Removes the current model from the specified group.
-     *
-     * @param string|Group $group
-     *
-     * @return bool
-     */
-    public function removeGroup($group)
-    {
-        if (is_string($group)) {
-            // If the group is a string, we'll assume the dev is passing
-            // in a DN string of the group. We'll try to locate it.
-            $query = $this->query->newInstance();
-
-            $group = $query->findByDn($group);
-        }
-
-        if ($group instanceof Group) {
-            // If the group is Group model instance, we can
-            // remove the current models DN from the group.
-            return $group->removeMember($this->getDn());
-        }
-
-        return false;
+        return $this->getMemberOf();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getGroups($fields = [], $recursive = false)
+    public function setGroups(array $groups)
     {
-        $groups = $this->getMemberOf($fields);
-
-        if ($recursive === true) {
-            foreach ($groups as $group) {
-                $groups = array_merge($groups, $group->getGroups($fields, $recursive));
-            }
-        }
-
-        return $groups;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getGroupNames()
-    {
-        return $this->getMemberOfNames();
+        return $this->setMemberOf($groups);
     }
 
     /**
@@ -90,23 +28,19 @@ trait HasMemberOfTrait
      *
      * https://msdn.microsoft.com/en-us/library/ms677099(v=vs.85).aspx
      *
-     * @param array $fields
-     *
      * @return array
      */
-    public function getMemberOf($fields = [])
+    public function getMemberOf()
     {
         $groups = [];
 
         $dns = $this->getAttribute(ActiveDirectory::MEMBER_OF);
 
         if (is_array($dns)) {
-            foreach ($dns as $key => $dn) {
-                $query = $this->query->newInstance();
+            unset($dns['count']);
 
-                $groups[] = $query
-                    ->select($fields)
-                    ->findByDn($dn);
+            foreach ($dns as $key => $dn) {
+                $groups[] = $this->getAdldap()->search()->findByDn($dn);
             }
         }
 
@@ -114,27 +48,15 @@ trait HasMemberOfTrait
     }
 
     /**
-     * Returns the models memberOf names only.
+     * Sets the models's group DN's the entry is a member of.
      *
-     * @return array
+     * @param array $groups
+     *
+     * @return \Adldap\Models\Entry
      */
-    public function getMemberOfNames()
+    public function setMemberOf(array $groups)
     {
-        $names = [];
-
-        $dns = $this->getAttribute(ActiveDirectory::MEMBER_OF);
-
-        if (is_array($dns)) {
-            foreach ($dns as $dn) {
-                $exploded = Utilities::explodeDn($dn);
-
-                if (array_key_exists(0, $exploded)) {
-                    $names[] = $exploded[0];
-                }
-            }
-        }
-
-        return $names;
+        return $this->setAttribute(ActiveDirectory::MEMBER_OF, $groups);
     }
 
     /**
@@ -142,13 +64,12 @@ trait HasMemberOfTrait
      * is in the specified group.
      *
      * @param string|Group $group
-     * @param bool         $recursive
      *
      * @return bool
      */
-    public function inGroup($group, $recursive = false)
+    public function inGroup($group)
     {
-        $groups = $this->getGroups([], $recursive);
+        $groups = $this->getGroups();
 
         if ($group instanceof Group) {
             if (in_array($group, $groups)) {
@@ -156,7 +77,7 @@ trait HasMemberOfTrait
             }
         } elseif (is_string($group)) {
             foreach ($groups as $model) {
-                if ($model instanceof AbstractModel && $group == $model->getName()) {
+                if ($group == $model->getName()) {
                     return true;
                 }
             }

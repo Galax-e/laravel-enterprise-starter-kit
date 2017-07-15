@@ -6,16 +6,16 @@ use Adldap\Classes\Utilities;
 use Adldap\Exceptions\AdldapException;
 use Adldap\Exceptions\PasswordPolicyException;
 use Adldap\Exceptions\WrongPasswordException;
-use Adldap\Models\Traits\HasDescriptionTrait;
 use Adldap\Models\Traits\HasLastLogonAndLogOffTrait;
 use Adldap\Models\Traits\HasMemberOfTrait;
 use Adldap\Objects\AccountControl;
-use Adldap\Objects\BatchModification;
 use Adldap\Schemas\ActiveDirectory;
 
 class User extends Entry
 {
-    use HasDescriptionTrait, HasMemberOfTrait, HasLastLogonAndLogOffTrait;
+    use HasMemberOfTrait;
+
+    use HasLastLogonAndLogOffTrait;
 
     /**
      * Returns the users display name.
@@ -133,28 +133,6 @@ class User extends Entry
     public function setLastName($lastName)
     {
         return $this->setAttribute(ActiveDirectory::LAST_NAME, $lastName, 0);
-    }
-
-    /**
-     * Returns the users info.
-     *
-     * @return mixed
-     */
-    public function getInfo()
-    {
-        return $this->getAttribute(ActiveDirectory::INFO, 0);
-    }
-
-    /**
-     * Sets the users info.
-     *
-     * @param string $info
-     *
-     * @return User
-     */
-    public function setInfo($info)
-    {
-        return $this->setAttribute(ActiveDirectory::INFO, $info, 0);
     }
 
     /**
@@ -389,30 +367,6 @@ class User extends Entry
     }
 
     /**
-     * Returns the users other mailbox attribute.
-     *
-     * https://msdn.microsoft.com/en-us/library/ms679091(v=vs.85).aspx
-     *
-     * @return array
-     */
-    public function getOtherMailbox()
-    {
-        return $this->getAttribute(ActiveDirectory::OTHER_MAILBOX);
-    }
-
-    /**
-     * Sets the users other mailboxes.
-     *
-     * @param array $otherMailbox
-     *
-     * @return User
-     */
-    public function setOtherMailbox($otherMailbox = [])
-    {
-        return $this->setAttribute(ActiveDirectory::OTHER_MAILBOX, $otherMailbox);
-    }
-
-    /**
      * Returns the users mailbox store DN.
      *
      * https://msdn.microsoft.com/en-us/library/aa487565(v=exchg.65).aspx
@@ -449,18 +403,6 @@ class User extends Entry
     }
 
     /**
-     * Sets the users user principal name.
-     *
-     * @param string $userPrincipalName
-     *
-     * @return User
-     */
-    public function setUserPrincipalName($userPrincipalName)
-    {
-        return $this->setAttribute(ActiveDirectory::USER_PRINCIPAL_NAME, $userPrincipalName, 0);
-    }
-
-    /**
      * Returns the users proxy addresses.
      *
      * https://msdn.microsoft.com/en-us/library/ms679424(v=vs.85).aspx
@@ -473,38 +415,6 @@ class User extends Entry
     }
 
     /**
-     * Sets the users proxy addresses.
-     *
-     * This will remove all proxy addresses on the user and insert the specified addresses.
-     *
-     * https://msdn.microsoft.com/en-us/library/ms679424(v=vs.85).aspx
-     *
-     * @param array $addresses
-     *
-     * @return User
-     */
-    public function setProxyAddresses(array $addresses = [])
-    {
-        return $this->setAttribute(ActiveDirectory::PROXY_ADDRESSES, $addresses);
-    }
-
-    /**
-     * Add's a single proxy address to the user.
-     *
-     * @param string $address
-     *
-     * @return User
-     */
-    public function addProxyAddress($address)
-    {
-        $addresses = $this->getProxyAddresses();
-
-        $addresses[] = $address;
-
-        return $this->setAttribute(ActiveDirectory::PROXY_ADDRESSES, $addresses);
-    }
-
-    /**
      * Returns the users script path if the user has one.
      *
      * https://msdn.microsoft.com/en-us/library/ms679656(v=vs.85).aspx
@@ -514,18 +424,6 @@ class User extends Entry
     public function getScriptPath()
     {
         return $this->getAttribute(ActiveDirectory::SCRIPT_PATH, 0);
-    }
-
-    /**
-     * Sets the users script path.
-     *
-     * @param string $path
-     *
-     * @return User
-     */
-    public function setScriptPath($path)
-    {
-        return $this->setAttribute(ActiveDirectory::SCRIPT_PATH, $path, 0);
     }
 
     /**
@@ -601,18 +499,6 @@ class User extends Entry
     }
 
     /**
-     * Sets the users profile path.
-     *
-     * @param string $path
-     *
-     * @return User
-     */
-    public function setProfilePath($path)
-    {
-        return $this->setAttribute(ActiveDirectory::PROFILE_PATH, $path, 0);
-    }
-
-    /**
      * Returns the users legacy exchange distinguished name.
      *
      * @return string
@@ -633,22 +519,6 @@ class User extends Entry
     }
 
     /**
-     * Sets the users account expiry date.
-     *
-     * https://msdn.microsoft.com/en-us/library/ms675098(v=vs.85).aspx
-     *
-     * @param float $expiryTime
-     *
-     * @return User
-     */
-    public function setAccountExpiry($expiryTime)
-    {
-        $time = is_null($expiryTime) ? ActiveDirectory::NEVER_EXPIRES_DATE : (string) Utilities::convertUnixTimeToWindowsTime($expiryTime);
-
-        return $this->setAttribute(ActiveDirectory::ACCOUNT_EXPIRES, $time, 0);
-    }
-
-    /**
      * Returns an array of address book DNs
      * that the user is listed to be shown in.
      *
@@ -660,101 +530,31 @@ class User extends Entry
     }
 
     /**
-     * Returns the users thumbnail photo.
-     *
-     * @return mixed
-     */
-    public function getThumbnail()
-    {
-        return $this->getAttribute(ActiveDirectory::THUMBNAIL, 0);
-    }
-
-    /**
-     * Returns the users thumbnail photo base 64 encoded.
-     *
-     * @return string|null
-     */
-    public function getThumbnailEncoded()
-    {
-        $thumb = $this->getThumbnail();
-
-        if (!is_null($thumb)) {
-            return 'data:image/jpeg;base64,'.base64_encode($thumb);
-        }
-    }
-
-    /**
-     * Returns the distinguished name of the user who is the user's manager.
-     *
-     * @return string
-     */
-    public function getManager()
-    {
-        return $this->getAttribute(ActiveDirectory::MANAGER, 0);
-    }
-
-    /**
-     * Sets the distinguished name of the user who is the user's manager.
-     *
-     * @param string $managerDn
-     *
-     * @return User
-     */
-    public function setManager($managerDn)
-    {
-        return $this->setAttribute(ActiveDirectory::MANAGER, $managerDn, 0);
-    }
-
-    /**
-     * Return the employee ID.
-     *
-     * @return User
-     */
-    public function getEmployeeId()
-    {
-        return $this->getAttribute(ActiveDirectory::EMPLOYEE_ID, 0);
-    }
-
-    /**
-     * Sets the employee ID.
-     *
-     * @param string $employeeId
-     *
-     * @return User
-     */
-    public function setEmployeeId($employeeId)
-    {
-        return $this->setAttribute(ActiveDirectory::EMPLOYEE_ID, $employeeId, 0);
-    }
-
-    /**
      * Enables the current user.
      *
      * @throws AdldapException
      *
      * @return User
      */
-
-    /**
-     * Return the personal title.
-     *
-     * @return User
-     */
-    public function getPersonalTitle()
+    public function enable()
     {
-        return $this->getAttribute(ActiveDirectory::PERSONAL_TITLE, 0);
+        $this->enabled = 1;
+
+        return $this;
     }
 
     /**
-     * Sets the personal title.
+     * Disables the current user.
      *
-     * @param string $personalTitle
+     * @throws AdldapException
      *
      * @return User
      */
-    public function setPersonalTitle($personalTitle)
+    public function disable()
     {
-        return $this->setAttribute(ActiveDirectory::PERSONAL_TITLE, $personalTitle, 0);
+        $this->enabled = 0;
+
+        return $this;
     }
 
     /**
@@ -768,7 +568,7 @@ class User extends Entry
      */
     public function setPassword($password)
     {
-        $connection = $this->query->getConnection();
+        $connection = $this->getAdldap()->getConnection();
 
         if (!$connection->isUsingSSL() && !$connection->isUsingTLS()) {
             $message = 'SSL or TLS must be configured on your web server and enabled to set passwords.';
@@ -776,21 +576,36 @@ class User extends Entry
             throw new AdldapException($message);
         }
 
-        $modification = new BatchModification();
-        $modification->setAttribute(ActiveDirectory::UNICODE_PASSWORD);
-        $modification->setType(LDAP_MODIFY_BATCH_REPLACE);
-        $modification->setValues([Utilities::encodePassword($password)]);
+        $this->setModification(ActiveDirectory::UNICODE_PASSWORD, LDAP_MODIFY_BATCH_ADD, Utilities::encodePassword($password));
 
-        return $this->addModification($modification);
+        $result = $this->save();
+
+        if ($result === false) {
+            $err = $connection->errNo();
+
+            if ($err) {
+                $error = $connection->err2Str($err);
+
+                $msg = 'Error '.$err.': '.$error.'.';
+
+                if ($err == 53) {
+                    $msg .= ' Your password might not match the password policy.';
+                }
+
+                throw new AdldapException($msg);
+            } else {
+                return false;
+            }
+        }
+
+        return $result;
     }
 
     /**
      * Change the password of the current user. This must be performed over SSL.
-     *
-     * @param string $oldPassword      The new password
-     * @param string $newPassword      The old password
-     * @param bool   $replaceNotRemove Alternative password change method. Set to true if you're receiving 'CONSTRAINT'
-     *                                 errors.
+     * 
+     * @param string $oldPassword The new password
+     * @param string $newPassword The old password
      *
      * @throws AdldapException
      * @throws PasswordPolicyException
@@ -798,9 +613,9 @@ class User extends Entry
      *
      * @return bool
      */
-    public function changePassword($oldPassword, $newPassword, $replaceNotRemove = false)
+    public function changePassword($oldPassword, $newPassword)
     {
-        $connection = $this->query->getConnection();
+        $connection = $this->getAdldap()->getConnection();
 
         if (!$connection->isUsingSSL() && !$connection->isUsingTLS()) {
             $message = 'SSL or TLS must be configured on your web server and enabled to change passwords.';
@@ -810,29 +625,10 @@ class User extends Entry
 
         $attribute = ActiveDirectory::UNICODE_PASSWORD;
 
-        if ($replaceNotRemove === true) {
-            $replace = new BatchModification();
-            $replace->setAttribute($attribute);
-            $replace->setType(LDAP_MODIFY_BATCH_REPLACE);
-            $replace->setValues([Utilities::encodePassword($newPassword)]);
+        $this->setModification($attribute, LDAP_MODIFY_BATCH_REMOVE, Utilities::encodePassword($oldPassword));
+        $this->setModification($attribute, LDAP_MODIFY_BATCH_ADD, Utilities::encodePassword($newPassword));
 
-            $this->addModification($replace);
-        } else {
-            $remove = new BatchModification();
-            $remove->setAttribute($attribute);
-            $remove->setType(LDAP_MODIFY_BATCH_REMOVE);
-            $remove->setValues([Utilities::encodePassword($oldPassword)]);
-
-            $add = new BatchModification();
-            $add->setAttribute($attribute);
-            $add->setType(LDAP_MODIFY_BATCH_ADD);
-            $add->setValues([Utilities::encodePassword($newPassword)]);
-
-            $this->addModification($remove);
-            $this->addModification($add);
-        }
-
-        $result = $this->update();
+        $result = $this->save();
 
         if ($result === false) {
             $error = $connection->getExtendedError();
@@ -859,69 +655,5 @@ class User extends Entry
         }
 
         return $result;
-    }
-
-    /**
-     * Returns if the user is disabled.
-     *
-     * @return bool
-     */
-    public function isDisabled()
-    {
-        return ($this->getUserAccountControl() & AccountControl::ACCOUNTDISABLE) === AccountControl::ACCOUNTDISABLE;
-    }
-
-    /**
-     * Returns if the user is enabled.
-     *
-     * @return bool
-     */
-    public function isEnabled()
-    {
-        return !$this->isDisabled();
-    }
-
-    /**
-     * Return the expiration date of the user account.
-     *
-     * @return DateTime Expiration date or null if no expiration date
-     */
-    public function expirationDate()
-    {
-        $accountExpiry = $this->getAccountExpiry();
-        if ($accountExpiry == 0 || $accountExpiry == ActiveDirectory::NEVER_EXPIRES_DATE) {
-            return;
-        }
-        $unixTime = Utilities::convertWindowsTimeToUnixTime($accountExpiry);
-
-        return new \DateTime(date('Y-m-d H:i:s', $unixTime));
-    }
-
-    /**
-     * Return true if AD User is expired.
-     *
-     * @param DateTime $date Optional date
-     *
-     * @return bool Is AD user expired ?
-     */
-    public function isExpired(\DateTime $date = null)
-    {
-        if (!$date) {
-            $date = new \DateTime();
-        }
-
-        $expirationDate = $this->expirationDate();
-
-        return $expirationDate ? ($expirationDate <= $date) : false;
-    }
-
-    /**
-     * Return true if AD User is active (enabled & not expired).
-     *
-     * @return bool Is AD user active ?
-     */
-    public function isActive()
-    {
-        return $this->isEnabled() && !$this->isExpired();
     }
 }

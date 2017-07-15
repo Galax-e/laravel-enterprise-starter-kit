@@ -17,7 +17,7 @@ class Contacts extends AbstractBase implements QueryableInterface, CreateableInt
      */
     public function find($name, $fields = [])
     {
-        return $this->search()->findBy(ActiveDirectory::COMMON_NAME, $name, $fields);
+        return $this->search()->select($fields)->find($name);
     }
 
     /**
@@ -26,16 +26,15 @@ class Contacts extends AbstractBase implements QueryableInterface, CreateableInt
      * @param array     $fields
      * @param bool|true $sorted
      * @param string    $sortBy
-     * @param string    $sortDirection
      *
      * @return array|bool
      */
-    public function all($fields = [], $sorted = true, $sortBy = ActiveDirectory::COMMON_NAME, $sortDirection = 'asc')
+    public function all($fields = [], $sorted = true, $sortBy = 'cn')
     {
         $search = $this->search()->select($fields);
 
         if ($sorted) {
-            $search->sortBy($sortBy, $sortDirection);
+            $search->sortBy($sortBy);
         }
 
         return $search->get();
@@ -44,13 +43,13 @@ class Contacts extends AbstractBase implements QueryableInterface, CreateableInt
     /**
      * Creates a new search limited to contacts only.
      *
-     * @return \Adldap\Query\Builder
+     * @return Search
      */
     public function search()
     {
         return $this->getAdldap()
             ->search()
-            ->whereEquals(ActiveDirectory::OBJECT_CLASS, ActiveDirectory::CONTACT);
+            ->where(ActiveDirectory::OBJECT_CLASS, '=', ActiveDirectory::CONTACT);
     }
 
     /**
@@ -62,7 +61,7 @@ class Contacts extends AbstractBase implements QueryableInterface, CreateableInt
      */
     public function newInstance(array $attributes = [])
     {
-        return (new User($attributes, $this->search()))
+        return (new User($attributes, $this->getAdldap()))
             ->setAttribute(ActiveDirectory::OBJECT_CLASS, [
                 ActiveDirectory::TOP,
                 ActiveDirectory::PERSON,

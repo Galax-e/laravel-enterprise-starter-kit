@@ -19,7 +19,7 @@ class Groups extends AbstractBase implements QueryableInterface, CreateableInter
      */
     public function find($name, $fields = [])
     {
-        return $this->search()->findBy(ActiveDirectory::COMMON_NAME, $name, $fields);
+        return $this->search()->select($fields)->find($name);
     }
 
     /**
@@ -28,16 +28,15 @@ class Groups extends AbstractBase implements QueryableInterface, CreateableInter
      * @param array     $fields
      * @param bool|true $sorted
      * @param string    $sortBy
-     * @param string    $sortDirection
      *
      * @return array|bool
      */
-    public function all($fields = [], $sorted = true, $sortBy = ActiveDirectory::COMMON_NAME, $sortDirection = 'asc')
+    public function all($fields = [], $sorted = true, $sortBy = 'cn')
     {
         $search = $this->search()->select($fields);
 
         if ($sorted) {
-            $search->sortBy($sortBy, $sortDirection);
+            $search->sortBy($sortBy);
         }
 
         return $search->get();
@@ -46,13 +45,13 @@ class Groups extends AbstractBase implements QueryableInterface, CreateableInter
     /**
      * Creates a new search limited to contacts only.
      *
-     * @return \Adldap\Query\Builder
+     * @return Search
      */
     public function search()
     {
         return $this->getAdldap()
             ->search()
-            ->whereEquals(ActiveDirectory::OBJECT_CATEGORY, ActiveDirectory::OBJECT_CATEGORY_GROUP);
+            ->where(ActiveDirectory::OBJECT_CATEGORY, '=', ActiveDirectory::OBJECT_CATEGORY_GROUP);
     }
 
     /**
@@ -64,7 +63,7 @@ class Groups extends AbstractBase implements QueryableInterface, CreateableInter
      */
     public function newInstance(array $attributes = [])
     {
-        return (new Group($attributes, $this->search()))
+        return (new Group($attributes, $this->getAdldap()))
             ->setAttribute(ActiveDirectory::OBJECT_CLASS, [
                 ActiveDirectory::TOP,
                 ActiveDirectory::OBJECT_CATEGORY_GROUP,
@@ -88,8 +87,8 @@ class Groups extends AbstractBase implements QueryableInterface, CreateableInter
      *
      * http://support.microsoft.com/?kbid=321360.
      *
-     * @param string $group The name of the group
-     * @param string $user  The username of the user
+     * @param string $group
+     * @param string $user
      *
      * @return bool
      */
@@ -102,7 +101,7 @@ class Groups extends AbstractBase implements QueryableInterface, CreateableInter
         if ($group instanceof Group && $user instanceof User) {
             $sid = Utilities::binarySidToText($group->getSid());
 
-            $result = $this->getAdldap()->search()
+            $result = $this->adldap->search()
                     ->where(ActiveDirectory::OBJECT_SID, '=', $sid)
                     ->first();
 

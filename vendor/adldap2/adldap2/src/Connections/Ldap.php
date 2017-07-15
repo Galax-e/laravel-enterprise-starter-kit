@@ -237,39 +237,6 @@ class Ldap implements ConnectionInterface
     }
 
     /**
-     * Returns the next entry from the
-     * current connection.
-     *
-     * @param $entry
-     *
-     * @return resource
-     */
-    public function getNextEntry($entry)
-    {
-        if ($this->suppressErrors) {
-            return @ldap_next_entry($this->getConnection(), $entry);
-        }
-
-        return ldap_next_entry($this->getConnection(), $entry);
-    }
-
-    /**
-     * Retrieves the attributes from the specified ldap entry.
-     *
-     * @param $entry
-     *
-     * @return array
-     */
-    public function getAttributes($entry)
-    {
-        if ($this->suppressErrors) {
-            return @ldap_get_attributes($this->getConnection(), $entry);
-        }
-
-        return ldap_get_attributes($this->getConnection(), $entry);
-    }
-
-    /**
      * Returns the count of the returned entries
      * from the specified search results.
      *
@@ -383,11 +350,12 @@ class Ldap implements ConnectionInterface
             $protocol = $this::PROTOCOL_SSL;
         }
 
-        return $this->connection = ldap_connect($protocol.$hostname.':'.$port);
+        return $this->connection = ldap_connect($protocol.$hostname, $port);
     }
 
     /**
-     * Closes the current LDAP connection if it exists.
+     * Closes the current LDAP connection if
+     * it exists.
      *
      * @return bool
      */
@@ -395,7 +363,7 @@ class Ldap implements ConnectionInterface
     {
         $connection = $this->getConnection();
 
-        if (is_resource($connection)) {
+        if ($connection) {
             ldap_close($connection);
         }
 
@@ -487,10 +455,6 @@ class Ldap implements ConnectionInterface
      */
     public function bind($username, $password, $sasl = false)
     {
-        if ($this->isUsingTLS()) {
-            $this->startTLS();
-        }
-
         if ($sasl) {
             if ($this->suppressErrors) {
                 return $this->bound = @ldap_sasl_bind($this->getConnection(), null, null, 'GSSAPI');

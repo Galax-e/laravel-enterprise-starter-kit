@@ -22,7 +22,8 @@ class Exchange extends AbstractBase implements QueryableInterface
         if (is_string($namingContext)) {
             return $this->search()
                 ->setDn($namingContext)
-                ->findBy(ActiveDirectory::COMMON_NAME, $name, $fields);
+                ->select($fields)
+                ->find($name);
         }
 
         return false;
@@ -34,11 +35,10 @@ class Exchange extends AbstractBase implements QueryableInterface
      * @param array  $fields
      * @param bool   $sorted
      * @param string $sortBy
-     * @param string $sortDirection
      *
      * @return array|bool
      */
-    public function all($fields = [], $sorted = true, $sortBy = ActiveDirectory::COMMON_NAME, $sortDirection = 'asc')
+    public function all($fields = [], $sorted = true, $sortBy = 'cn')
     {
         $namingContext = $this->getConfigurationNamingContext();
 
@@ -48,7 +48,7 @@ class Exchange extends AbstractBase implements QueryableInterface
                 ->select($fields);
 
             if ($sorted) {
-                $search->sortBy($sortBy, $sortDirection);
+                $search->sortBy($sortBy);
             }
 
             return $search->get();
@@ -60,13 +60,13 @@ class Exchange extends AbstractBase implements QueryableInterface
     /**
      * Creates a new search limited to exchange servers only.
      *
-     * @return \Adldap\Query\Builder
+     * @return Search
      */
     public function search()
     {
         return $this->getAdldap()
             ->search()
-            ->whereEquals(ActiveDirectory::OBJECT_CATEGORY, ActiveDirectory::OBJECT_CATEGORY_EXCHANGE_SERVER);
+            ->where(ActiveDirectory::OBJECT_CATEGORY, '=', ActiveDirectory::OBJECT_CATEGORY_EXCHANGE_SERVER);
     }
 
     /**

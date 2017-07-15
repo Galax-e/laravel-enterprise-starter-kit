@@ -249,7 +249,7 @@ class JqGridJsonEncoder implements RequestedDataInterface {
 		{
 			$rows = $Repository->getRows($limit, $start, $sidx, $sord, $filters['rules'], $nodeId, $nodeLevel, $exporting);
 
-			$rows = self::utf8ize($rows);
+			//$rows = self::utf8ize($rows);
 
 			if($count < count($rows))
 			{
@@ -272,7 +272,7 @@ class JqGridJsonEncoder implements RequestedDataInterface {
 
 			if(method_exists($Repository, $method_name) )
 			{
-				$Repository->$method_name(
+				return $Repository->$method_name(
 					array_merge(
 						['rows'=> $rows],
 						['postedData'=> $postedData]

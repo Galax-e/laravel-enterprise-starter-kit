@@ -2,16 +2,14 @@
 
 namespace Adldap\Models;
 
+use ArrayAccess;
+use JsonSerializable;
+use Adldap\Adldap;
 use Adldap\Classes\Utilities;
 use Adldap\Exceptions\AdldapException;
 use Adldap\Exceptions\ModelNotFoundException;
-use Adldap\Objects\BatchModification;
 use Adldap\Objects\DistinguishedName;
-use Adldap\Query\Builder;
 use Adldap\Schemas\ActiveDirectory;
-use ArrayAccess;
-use DateTime;
-use JsonSerializable;
 
 abstract class AbstractModel implements ArrayAccess, JsonSerializable
 {
@@ -23,20 +21,11 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     public $exists = false;
 
     /**
-     * The default output date format for all time related methods.
-     *
-     * Default format is suited for MySQL timestamps.
-     *
-     * @var string
-     */
-    public $dateFormat = 'Y-m-d H:i:s';
-
-    /**
      * The current LDAP connection instance.
      *
-     * @var Builder
+     * @var Adldap
      */
-    protected $query;
+    protected $adldap;
 
     /**
      * Holds the current objects attributes.
@@ -62,14 +51,16 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     /**
      * Constructor.
      *
-     * @param array   $attributes
-     * @param Builder $builder
+     * @param array  $attributes
+     * @param Adldap $adldap
      */
-    public function __construct(array $attributes, Builder $builder)
+    public function __construct(array $attributes = [], Adldap $adldap)
     {
+        $this->syncOriginal();
+
         $this->fill($attributes);
 
-        $this->query = $builder;
+        $this->adldap = $adldap;
     }
 
     /**
@@ -153,19 +144,11 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
      */
     public function jsonSerialize()
     {
-        $attributes = $this->getAttributes();
-
-        // We need to remove the object SID and GUID from
-        // being serialized as these attributes contain
-        // characters that cannot be serialized.
-        unset($attributes[ActiveDirectory::OBJECT_SID]);
-        unset($attributes[ActiveDirectory::OBJECT_GUID]);
-
-        return $attributes;
+        return $this->getAttributes();
     }
 
     /**
-     * Synchronizes the original attributes with
+     * Syncs the original attributes with
      * the model's current attributes.
      *
      * @return $this
@@ -178,31 +161,10 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     }
 
     /**
-     * Re-sets the models raw attributes by looking up the
-     * current models DN in AD.
-     *
-     * @return bool
-     */
-    public function syncRaw()
-    {
-        $query = $this->query->newInstance();
-
-        $model = $query->findByDn($this->getDn());
-
-        if ($model instanceof $this) {
-            $this->setRawAttributes($model->getAttributes());
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Retrieves the specified key from the attribute array.
      *
-     * If a sub-key is specified, it will try and
-     * retrieve it from the parent keys array.
+     * If a sub-key is specified, it will try
+     * and retrieve it from the parent keys array.
      *
      * @param int|string $key
      * @param int|string $subKey
@@ -220,6 +182,8 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
                 return $this->attributes[$key][$subKey];
             }
         }
+
+        return;
     }
 
     /**
@@ -277,37 +241,13 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
      */
     public function setRawAttributes(array $attributes = [])
     {
-        $this->attributes = $this->filterRawAttributes($attributes);
+        $this->attributes = $attributes;
+
+        $this->exists = true;
 
         $this->syncOriginal();
 
-        // Set exists to true since raw attributes are only
-        // set in the case of attributes being loaded by
-        // query results.
-        $this->exists = true;
-
         return $this;
-    }
-
-    /**
-     * Filters the count key recursively from raw LDAP attributes.
-     *
-     * @param array  $attributes
-     * @param string $key
-     *
-     * @return array
-     */
-    public function filterRawAttributes(array $attributes = [], $key = 'count')
-    {
-        unset($attributes[$key]);
-
-        foreach ($attributes as &$value) {
-            if (is_array($value)) {
-                $value = $this->filterRawAttributes($value, $key);
-            }
-        }
-
-        return $attributes;
     }
 
     /**
@@ -323,7 +263,7 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     {
         if (array_key_exists($key, $this->attributes)) {
             // If a sub key is given, we'll check if it
-            // exists in the nested attribute array.
+            // exists in the nested attribute array
             if (!is_null($subKey)) {
                 if (is_array($this->attributes[$key]) && array_key_exists($subKey, $this->attributes[$key])) {
                     return true;
@@ -350,98 +290,68 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     }
 
     /**
-     * Get the attributes that have been changed since last sync.
-     *
-     * @return array
-     */
-    public function getDirty()
-    {
-        $dirty = [];
-
-        foreach ($this->attributes as $key => $value) {
-            if (!array_key_exists($key, $this->original)) {
-                $dirty[$key] = $value;
-            } elseif ($value !== $this->original[$key] &&
-                !$this->originalIsNumericallyEquivalent($key)) {
-                $dirty[$key] = $value;
-            }
-        }
-
-        return $dirty;
-    }
-
-    /**
-     * Sets and returns the models modifications.
+     * Returns the objects modifications.
      *
      * @return array
      */
     public function getModifications()
     {
-        $dirty = $this->getDirty();
+        foreach ($this->attributes as $key => $value) {
+            // If the key still exists inside the original attributes,
+            // the developer is modifying an attribute.
+            if (array_key_exists($key, $this->original)) {
+                if (is_array($value)) {
+                    if (count(array_diff($value, $this->original[$key])) > 0) {
+                        // Make sure we remove the count key as we don't
+                        // want to push that attribute into AD
+                        unset($value['count']);
 
-        foreach ($dirty as $attribute => $values) {
-            if (!is_array($values)) {
-                // Make sure values is always an array.
-                $values = [$values];
+                        // If the value of the set attribute is an array and the differences
+                        // are greater than zero, we'll replace the attribute.
+                        $this->setModification($key, LDAP_MODIFY_BATCH_REPLACE, $value);
+                    }
+                } elseif ($value !== $this->original[$key]) {
+                    if (is_null($value)) {
+                        // If the value is set to null, then we'll
+                        // assume they want the attribute removed
+                        $this->setModification($key, LDAP_MODIFY_BATCH_REMOVE, $value);
+                    } else {
+                        // If the value doesn't equal it's original, we'll replace it.
+                        $this->setModification($key, LDAP_MODIFY_BATCH_REPLACE, $value);
+                    }
+                }
+            } else {
+                // The value doesn't exist at all, we'll add it.
+                $this->setModification($key, LDAP_MODIFY_BATCH_ADD, $value);
             }
-
-            $modification = new BatchModification();
-
-            if (array_key_exists($attribute, $this->original)) {
-                $modification->setOriginal($this->original[$attribute]);
-            }
-
-            $modification->setAttribute($attribute);
-            $modification->setValues($values);
-            $modification->build();
-
-            $this->addModification($modification);
         }
 
         return $this->modifications;
     }
 
     /**
-     * Sets the models modifications array.
+     * Sets a modification in the objects modifications array.
      *
-     * @param array $modifications
-     *
-     * @return $this
-     */
-    public function setModifications(array $modifications = [])
-    {
-        $this->modifications = $modifications;
-
-        return $this;
-    }
-
-    /**
-     * Adds a modification to the models modifications array.
-     *
-     * @param BatchModification $modification
+     * @param int|string $key
+     * @param int        $type
+     * @param mixed      $values
      *
      * @return $this
      */
-    public function addModification(BatchModification $modification)
+    public function setModification($key, $type, $values)
     {
-        $batch = $modification->get();
-
-        if (is_array($batch)) {
-            $this->modifications[] = $batch;
+        // We need to make sure the values given are always in an array.
+        if (!is_array($values)) {
+            $values = [$values];
         }
 
-        return $this;
-    }
+        $this->modifications[] = [
+            'attrib'  => $key,
+            'modtype' => $type,
+            'values'  => $values,
+        ];
 
-    /**
-     * Returns true / false if the current model is writeable
-     * by checking its instance type integer.
-     *
-     * @return bool
-     */
-    public function isWriteable()
-    {
-        return (int) $this->getInstanceType() === 4;
+        return $this;
     }
 
     /**
@@ -529,7 +439,7 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     }
 
     /**
-     * Returns the model's `whenCreated` time.
+     * Returns the model's `when created` time.
      *
      * https://msdn.microsoft.com/en-us/library/ms680924(v=vs.85).aspx
      *
@@ -541,29 +451,7 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     }
 
     /**
-     * Returns the created at time in a mysql formatted date.
-     *
-     * @return string
-     */
-    public function getCreatedAtDate()
-    {
-        $timestamp = $this->getCreatedAtTimestamp();
-
-        return (new DateTime())->setTimestamp($timestamp)->format($this->dateFormat);
-    }
-
-    /**
-     * Returns the created at time in a unix timestamp format.
-     *
-     * @return float
-     */
-    public function getCreatedAtTimestamp()
-    {
-        return DateTime::createFromFormat('YmdHis.0Z', $this->getCreatedAt())->getTimestamp();
-    }
-
-    /**
-     * Returns the model's `whenChanged` time.
+     * Returns the model's `when changed` time.
      *
      * https://msdn.microsoft.com/en-us/library/ms680921(v=vs.85).aspx
      *
@@ -575,28 +463,6 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
     }
 
     /**
-     * Returns the updated at time in a mysql formatted date.
-     *
-     * @return string
-     */
-    public function getUpdatedAtDate()
-    {
-        $timestamp = $this->getUpdatedAtTimestamp();
-
-        return (new DateTime())->setTimestamp($timestamp)->format($this->dateFormat);
-    }
-
-    /**
-     * Returns the updated at time in a unix timestamp format.
-     *
-     * @return float
-     */
-    public function getUpdatedAtTimestamp()
-    {
-        return DateTime::createFromFormat('YmdHis.0Z', $this->getUpdatedAt())->getTimestamp();
-    }
-
-    /**
      * Returns the Container of the current Model.
      *
      * https://msdn.microsoft.com/en-us/library/ms679012(v=vs.85).aspx
@@ -605,7 +471,7 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
      */
     public function getObjectClass()
     {
-        return $this->query->findByDn($this->getObjectCategoryDn());
+        return $this->getAdldap()->search()->findByDn($this->getObjectCategoryDn());
     }
 
     /**
@@ -620,6 +486,8 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
         if (is_array($category) && array_key_exists(0, $category)) {
             return $category[0];
         }
+
+        return;
     }
 
     /**
@@ -796,21 +664,17 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
         $dn = $this->getDn();
 
         if (count($modifications) > 0) {
-            $updated = $this->query->getConnection()->modifyBatch($dn, $modifications);
+            $modified = $this->getAdldap()->getConnection()->modifyBatch($dn, $modifications);
 
-            if ($updated) {
-                $this->syncRaw();
-
-                return true;
+            if($modified) {
+                return $this->getAdldap()->search()->findByDn($dn);
             }
 
-            // Modification failed, return false.
             return false;
         }
 
         // We need to return true here because modify batch will
         // return false if no modifications are made
-        // but this may not always be the case.
         return true;
     }
 
@@ -824,10 +688,10 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
      */
     public function createAttribute($attribute, $value)
     {
-        if ($this->exists) {
+        if($this->exists) {
             $add = [$attribute => $value];
 
-            return $this->query->getConnection()->modAdd($this->getDn(), $add);
+            return $this->getAdldap()->getConnection()->modAdd($this->getDn(), $add);
         }
 
         return false;
@@ -848,39 +712,10 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
         // as it's inserted independently.
         unset($attributes['dn']);
 
-        $created = $this->query->getConnection()->add($dn, $attributes);
+        $added = $this->getAdldap()->getConnection()->add($dn, $attributes);
 
-        if ($created) {
-            $this->syncRaw();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Updates the specified attribute with the specified value.
-     *
-     * @param string $attribute
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    public function updateAttribute($attribute, $value)
-    {
-        if ($this->exists) {
-            $modify = [$attribute => $value];
-
-            $updated = $this->query->getConnection()->modReplace($this->getDn(), $modify);
-
-            if ($updated) {
-                // If the models attribute was successfully updated, we'll
-                // resynchronize the models raw attributes.
-                $this->syncRaw();
-
-                return true;
-            }
+        if($added) {
+            return $this->getAdldap()->search()->findByDn($dn);
         }
 
         return false;
@@ -895,20 +730,12 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
      */
     public function deleteAttribute($attribute)
     {
-        if ($this->exists) {
+        if($this->exists) {
             // We need to pass in an empty array as the value
             // for the attribute so AD knows to remove it.
             $remove = [$attribute => []];
 
-            $deleted = $this->query->getConnection()->modDelete($this->getDn(), $remove);
-
-            if ($deleted) {
-                // If the models attribute was successfully deleted, we'll
-                // resynchronize the models raw attributes.
-                $this->syncRaw();
-
-                return true;
-            }
+            return $this->getAdldap()->getConnection()->modDelete($this->getDn(), $remove);
         }
 
         return false;
@@ -939,47 +766,17 @@ abstract class AbstractModel implements ArrayAccess, JsonSerializable
             throw new AdldapException($message);
         }
 
-        $deleted = $this->query->getConnection()->delete($dn);
-
-        if ($deleted) {
-            // We'll set the exists property to false on delete
-            // so the dev can run create operations.
-            $this->exists = false;
-
-            return true;
-        }
-
-        return false;
+        return $this->getAdldap()->getConnection()->delete($dn);
     }
 
     /**
-     * Moves the current model to a new RDN and new parent.
+     * Returns the current Adldap instance.
      *
-     * @param string     $rdn
-     * @param string     $newParentDn
-     * @param bool|false $deleteOldRdn
-     *
-     * @return bool
+     * @return Adldap
      */
-    public function move($rdn, $newParentDn, $deleteOldRdn = false)
+    public function getAdldap()
     {
-        return $this->query->getConnection()->rename($this->getDn(), $rdn, $newParentDn, $deleteOldRdn);
-    }
-
-    /**
-     * Determine if the new and old values for a given key are numerically equivalent.
-     *
-     * @param string $key
-     *
-     * @return bool
-     */
-    protected function originalIsNumericallyEquivalent($key)
-    {
-        $current = $this->attributes[$key];
-
-        $original = $this->original[$key];
-
-        return is_numeric($current) && is_numeric($original) && strcmp((string) $current, (string) $original) === 0;
+        return $this->adldap;
     }
 
     /**

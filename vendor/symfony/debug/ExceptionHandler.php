@@ -56,7 +56,7 @@ class ExceptionHandler
      * @param string|null $charset        The charset used by exception messages
      * @param string|null $fileLinkFormat The IDE link template
      *
-     * @return ExceptionHandler The registered exception handler
+     * @return static
      */
     public static function register($debug = true, $charset = null, $fileLinkFormat = null)
     {
@@ -94,7 +94,7 @@ class ExceptionHandler
      *
      * @param string $format The format for links to source files
      *
-     * @return string The previous file link format.
+     * @return string The previous file link format
      */
     public function setFileLinkFormat($format)
     {
@@ -319,6 +319,7 @@ EOF;
                 border-bottom:1px solid #ccc;
                 border-right:1px solid #ccc;
                 border-left:1px solid #ccc;
+                word-wrap: break-word;
             }
             .sf-reset .block_exception { background-color:#ddd; color: #333; padding:20px;
                 -webkit-border-top-left-radius: 16px;
@@ -433,7 +434,7 @@ EOF;
     {
         @trigger_error('The '.__METHOD__.' method is deprecated since version 2.7 and will be removed in 3.0.', E_USER_DEPRECATED);
 
-        return htmlspecialchars($str, ENT_QUOTES | (PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), 'UTF-8');
+        return htmlspecialchars($str, ENT_QUOTES | (\PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), 'UTF-8');
     }
 
     /**
@@ -441,7 +442,7 @@ EOF;
      */
     private function escapeHtml($str)
     {
-        return htmlspecialchars($str, ENT_QUOTES | (PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), $this->charset);
+        return htmlspecialchars($str, ENT_QUOTES | (\PHP_VERSION_ID >= 50400 ? ENT_SUBSTITUTE : 0), $this->charset);
     }
 
     /**

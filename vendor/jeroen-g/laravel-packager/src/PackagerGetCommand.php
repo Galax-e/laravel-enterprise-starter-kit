@@ -63,7 +63,7 @@ class PackagerGetCommand extends Command
         // Common variables
         $origin = rtrim(strtolower($this->argument('url')), '/').'/archive/'.$this->option('branch').'.zip';
         $pieces = explode('/', $origin);
-        if (is_null($this->argument('vendor')) or is_null($this->argument('name'))) {
+        if (is_null($this->argument('vendor')) || is_null($this->argument('name'))) {
             $vendor = $pieces[3];
             $name = $pieces[4];
         } else {
@@ -113,5 +113,8 @@ class PackagerGetCommand extends Command
         $this->info('Package created successfully!');
         $this->output->newLine(2);
         $bar = null;
+
+        // Composer dump-autoload to identify new MyPackageServiceProvider
+        $this->helper->dumpAutoloads();
     }
 }

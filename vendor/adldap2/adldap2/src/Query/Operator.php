@@ -2,21 +2,17 @@
 
 namespace Adldap\Query;
 
+/**
+ * Class Operator.
+ */
 class Operator
 {
     /**
-     * The 'has' wildcard operator.
+     * The wildcard operator.
      *
      * @var string
      */
-    public static $has = '*';
-
-    /**
-     * The custom `notHas` operator.
-     *
-     * @var string
-     */
-    public static $notHas = '!*';
+    public static $wildcard = '*';
 
     /**
      * The equals operator.
@@ -37,21 +33,35 @@ class Operator
      *
      * @var string
      */
-    public static $greaterThanOrEquals = '>=';
+    public static $greaterThanOrEqual = '>=';
 
     /**
      * The less than or equal to operator.
      *
      * @var string
      */
-    public static $lessThanOrEquals = '<=';
+    public static $lessThanOrEqual = '<=';
 
     /**
      * The approximately equal to operator.
      *
      * @var string
      */
-    public static $approximatelyEquals = '~=';
+    public static $approximateEqual = '~=';
+
+    /**
+     * The and operator.
+     *
+     * @var string
+     */
+    public static $and = '&';
+
+    /**
+     * The or operator.
+     *
+     * @var string
+     */
+    public static $or = '|';
 
     /**
      * The custom starts with operator.
@@ -61,13 +71,6 @@ class Operator
     public static $startsWith = 'starts_with';
 
     /**
-     * The custom not starts with operator.
-     *
-     * @var string
-     */
-    public static $notStartsWith = 'not_starts_with';
-
-    /**
      * The custom ends with operator.
      *
      * @var string
@@ -75,35 +78,9 @@ class Operator
     public static $endsWith = 'ends_with';
 
     /**
-     * The custom not ends with operator.
-     *
-     * @var string
-     */
-    public static $notEndsWith = 'not_ends_with';
-
-    /**
      * The custom contains operator.
      *
      * @var string
      */
     public static $contains = 'contains';
-
-    /**
-     * The custom not contains operator.
-     *
-     * @var string
-     */
-    public static $notContains = 'not_contains';
-
-    /**
-     * Returns all available operators.
-     *
-     * @return array
-     */
-    public static function all()
-    {
-        $class = new \ReflectionClass(new static());
-
-        return $class->getStaticProperties();
-    }
 }

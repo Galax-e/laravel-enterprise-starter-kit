@@ -182,7 +182,7 @@ class Utilities
 
         $subauth = [];
 
-        for ($x = 0; $x < $subcount; $x++) {
+        for ($x = 0;$x < $subcount; $x++) {
             $subauth[$x] = hexdec(self::littleEndian(substr($hex_sid, 16 + ($x * 8), 8)));
 
             $result .= '-'.$subauth[$x];
@@ -219,7 +219,7 @@ class Utilities
      */
     public static function encodePassword($password)
     {
-        return iconv('UTF-8', 'UTF-16LE', '"'.$password.'"');
+        return iconv("UTF-8", "UTF-16LE", '"' . $password . '"');
     }
 
     /**
@@ -233,18 +233,6 @@ class Utilities
     public static function convertWindowsTimeToUnixTime($windowsTime)
     {
         return round($windowsTime / 10000000) - 11644473600;
-    }
-
-    /**
-     * Convert a Unix timestamp to Windows timestamp.
-     *
-     * @param float $unixTime
-     *
-     * @return float
-     */
-    public static function convertUnixTimeToWindowsTime($unixTime)
-    {
-        return ($unixTime + 11644473600) * 10000000;
     }
 
     /**

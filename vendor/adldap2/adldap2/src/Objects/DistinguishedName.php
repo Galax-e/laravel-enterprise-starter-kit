@@ -197,45 +197,15 @@ class DistinguishedName
      *
      * @return string
      */
-    public function assemble()
+    private function assemble()
     {
-        $cns = $this->assembleCns();
+        $cns = $this->assembleRdns(ActiveDirectory::COMMON_NAME, $this->commonNames);
 
-        $ous = $this->assembleOus();
+        $ous = $this->assembleRdns(ActiveDirectory::ORGANIZATIONAL_UNIT_SHORT, $this->organizationUnits);
 
-        $dcs = $this->assembleDcs();
+        $dcs = $this->assembleRdns(ActiveDirectory::DOMAIN_COMPONENT, $this->domainComponents);
 
         return implode(',', array_filter([$cns, $ous, $dcs]));
-    }
-
-    /**
-     * Assembles the common names in the Distinguished name.
-     *
-     * @return null|string
-     */
-    public function assembleCns()
-    {
-        return $this->assembleRdns(ActiveDirectory::COMMON_NAME, $this->commonNames);
-    }
-
-    /**
-     * Assembles the organizational units in the Distinguished Name.
-     *
-     * @return null|string
-     */
-    public function assembleOus()
-    {
-        return $this->assembleRdns(ActiveDirectory::ORGANIZATIONAL_UNIT_SHORT, $this->organizationUnits);
-    }
-
-    /**
-     * Assembles the domain components in the Distinguished Name.
-     *
-     * @return null|string
-     */
-    public function assembleDcs()
-    {
-        return $this->assembleRdns(ActiveDirectory::DOMAIN_COMPONENT, $this->domainComponents);
     }
 
     /**
@@ -246,16 +216,18 @@ class DistinguishedName
      *
      * @return null|string
      */
-    protected function assembleRdns($attribute, array $values = [])
+    private function assembleRdns($attribute, array $values = [])
     {
         if (count($values) > 0) {
             $values = array_reverse($values);
 
             $values = array_map(function ($value) use ($attribute) {
-                return sprintf('%s=%s', $attribute, Utilities::escape($value, '', 2));
+                return $attribute.'='.Utilities::escape($value, '', 2);
             }, $values);
 
             return implode(',', $values);
         }
+
+        return;
     }
 }

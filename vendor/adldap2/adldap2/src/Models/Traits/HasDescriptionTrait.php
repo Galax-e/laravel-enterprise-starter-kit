@@ -25,7 +25,7 @@ trait HasDescriptionTrait
      *
      * @return $this
      */
-    public function setDescription($description)
+    public function setEmails($description)
     {
         return $this->setAttribute(ActiveDirectory::DESCRIPTION, $description, 0);
     }

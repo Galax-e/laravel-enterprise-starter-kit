@@ -9,5 +9,4 @@ namespace Adldap\Models;
  */
 class Entry extends AbstractModel
 {
-    //
 }

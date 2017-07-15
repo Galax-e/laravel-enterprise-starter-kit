@@ -18,12 +18,6 @@ You can also sort your results:
     
     $servers = $ad->exchange()->all($fields, $sorted, $sortBy, $sortDirection);
 
-### Search
-
-To search for exchange servers, use the `search()` method:
-
-    $servers = $ad->exchange()->search()->whereStartsWith('cn', 'MAIL01')->get();
-
 ### Find
 
 To retrieve information on an exchange server, use the `find()` method:
@@ -31,7 +25,3 @@ To retrieve information on an exchange server, use the `find()` method:
     $serverName = 'EXCH-CORP';
     
     $server = $ad->exchange()->find($serverName);
-
-### Storage Groups
-
-### Storage Databases
