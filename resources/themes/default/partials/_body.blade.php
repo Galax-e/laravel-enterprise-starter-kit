@@ -104,7 +104,7 @@ desired effect
                </div>
            </div>
            <div class="box-footer clearfix">
-             <button id='requestFileBtn' class="pull-right btn btn-default" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+             <button id='requestFileBtn' type="button" class="pull-right btn btn-cyan" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
            </div>
          </form>        
          </div>
@@ -137,7 +137,7 @@ desired effect
                 </div>
             </div>
             <div class="box-footer clearfix">
-                <button id="createPinBtn" class="pull-right btn btn-default" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+                <button id="createPinBtn" type="button" class="pull-right btn btn-purple" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
             </div>
         </form>             
         </div>    
