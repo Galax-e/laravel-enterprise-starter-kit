@@ -66,330 +66,348 @@
 
   <script type="text/javascript" src="{{ asset("bower_components/admin-lte/plugins/moment/moment.min.js") }}"></script>
   
-    <div class='row'>
+
+	<div class="content-wrapper">
+
+	<section class="content">
+
+  <div class='row'>
   
-  <div class='col-md-3 pull-left'> <!-- left hand div -->
-	  <!-- USERS LIST -->
-	<div class="box box-primary"> <!-- department div-->
-	  <div class="box-header with-border">
-		  <!-- @cpnwaugha: c-e: here we will allow users see the other users in their department
-			and admin and registry see all the users that are in the system.
-		  -->
-		   {{--@unless(Auth::user()->isRoot()) --}}
-		    <div><h3 class="box-title">Dept: {{ (Auth::user()->department ?? "ICT") }}</h3></div>
-		   {{--@endunless --}}
-            <div class="box-tools pull-right">
-                {{-- auto fetch the users in the department--}}
-                <span class="label label-primary"><label id='users_online'>17 </label>users online</span> {{-- The span is to be auto generated --}}
-                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                {{-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> --}}
-            </div>
-	  </div><!-- /.box-header -->
-	  <div class="box-body no-padding">
-		<ul class="users-list clearfix">
-		  @foreach($users as $user)
-			@if($user->department == Auth::user()->department)
-			  <li>
-				{{--<img src="{{ Gravatar::get($user->email) }}" class="user-image" alt="User Image"/> --}}
-				<img src="img/profile_picture/photo/{{ $user->avatar }}" class="offline" style="width: 52px; height: 52px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-				<a class="users-list-name" href="">{!! link_to_route('admin.users.show', $user->full_name, [$user->id], []) !!}</a>
-				{{-- <span class="users-list-date">{{ $user->created_at }}</span> --}}
-			  </li>
-			@endif
-		  @endforeach
-		</ul><!-- /.users-list -->
-	  </div><!-- /.box-body -->
-	  <div class="box-footer text-center">
-		  <a href="javascript::viewall" class="uppercase">View All Users</a>
-	  </div><!-- /.box-footer -->
-	</div>
-	<!-- BROWSER USAGE -->
-		<!-- TO DO List -->
-		<div id="activity-timeline" class="box box-primary">
-			<div class="box-header">
-				<i class="ion ion-clipboard"></i>
-				<h3 class="box-title">Activity Timeline</h3>
-				<div class="box-tools pull-right">
-					<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-					{{-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> --}}
-				</div>
-			</div><!-- /.box-header -->
-			<div class="box-body">
-			  <ul class="todo-list">
-				@foreach($activities as $activity)
-				  @if($activity->activity_by == Auth::user()->email || Auth::user()->username)
-				  <li>                     
-					<small>{{ $activity->activity }}
-					<i class="fa fa-clock-o"></i>
-					<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small>
-				  </li>           
-				  @endif
-				@endforeach
-			  </ul>
-			</div><!-- /.box-body -->
-			<div class="box-footer text-center">
-				<a href="viewall" class="uppercase">View All Activity</a>
-			</div><!-- /.box-footer -->
-		</div><!-- /.box -->        
-	</div><!-- /.col  end left div -->
-
-    <!--<div class='row pull-right'> -->
-	<div class='col-md-9  pull-right'> <!-- right hand div -->
-    
-		<?php $loopindex = 0; ?>
-		
-		@foreach($folders as $folder)
-
-		<?php $loopindex++; ?>
-		<div class='container-fluid'> <!-- external panel -->
-		  <div class="col-md-9"> <!-- pull right col-md-9 div for pdf view + comment + forward, and file activity -->
-			
-				<!-- SERVER HEALTH REPORT -->
-				<!-- MAP & BOX PANE {{ substr($user->fold_name, 3) }} -->
-			  <div class="box box-primary"> <!-- div for pdf view -->
-					<div class="box-body no-padding">
-					  <div class="mailbox-read-info">
-						<h3>File Name: <b>{{ $folder->name }}</b></h3>
-						<h5>From: {{ $folder->folder_by }} <i class="fa fa-user"></i> <span id="read-time" class="mailbox-read-time pull-right">{{ date('F d, Y', strtotime($folder->created_at)) }}</span></h5>
-					  </div><!-- /.mailbox-read-info getFullNameAttribute() pdf header -->
-					 
-					  <div class="mailbox-read-message">        
-						<object data="/docs/files/1/{{ $folder->name }}/{{ $folder->latest_doc }}" type="application/pdf" style="width: 100%" height="450">
-						  <!-- support older browsers -->
-						  <!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
-						  <!-- For those without native support, no pdf plugin, or no js -->
-						  <p>It appears you do not have PDF support in this web browser. <a href="/docs/files{{ $folder->name }}/{{ $folder->latest_doc }}" target="_blank">Click here to download the document.</a></p>
-						</object>
-					 
-					  </div><!-- /.mailbox-read-message -->
-					</div><!-- /.box-body first pdf view-->
-					<div class="box-footer">
-					  <ul class="mailbox-attachments clearfix">
-						@foreach($files as $file)
-						  @if($file->folder_id == $folder->id)
-							<li>
-							  <a href="/docs/files{{ $folder->name }}/{{ $file->name }}" class="mailbox-attachment-name"></a>
-							  <span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i>
-							  </span>
-							  <div class="mailbox-attachment-info">
-								<i class="fa fa-paperclip"></i> {{ $file->name }}<br/> <!-- </a> -->
-								<span class="mailbox-attachment-size">
-								  {{ $file->created_at }}
-								  <a href="#" class="btn btn-default btn-xs pull-right">{{--<i class="fa fa-cloud-download"></i>--}}</a>
-								</span>
-							  </div>
-							</li>
-						  @endif
+		<div class='col-md-4'> <!-- left hand div -->
+			<!-- USERS LIST -->
+			<div class="box box-primary"> <!-- department div-->
+				<div class="box-header with-border">
+					<!-- @cpnwaugha: c-e: here we will allow users see the other users in their department
+					and admin and registry see all the users that are in the system.
+					-->
+					{{--@unless(Auth::user()->isRoot()) --}}
+					<div><h3 class="box-title">Dept: {{ (Auth::user()->department ?? "ICT") }}</h3></div>
+					{{--@endunless --}}
+					<div class="box-tools pull-right">
+							{{-- auto fetch the users in the department--}}
+							<span class="label label-primary"><label id='users_online'>17 </label>users online</span> {{-- The span is to be auto generated --}}
+							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+							{{-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> --}}
+					</div><!-- /.box-tool -->
+				</div><!-- /.box-header -->
+				<div class="box-body no-padding">
+					<ul class="users-list clearfix">
+						@foreach($users as $user)
+							@if($user->department == Auth::user()->department)
+								<li>
+									{{--<img src="{{ Gravatar::get($user->email) }}" class="user-image" alt="User Image"/> --}}
+									<img src="{{asset("/img/profile_picture/photo/".$user->avatar) }}" class="offline" style="width: 52px; height: 52px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+									<a class="users-list-name" href="">{!! link_to_route('admin.users.show', $user->full_name, [$user->id], []) !!}</a>
+									{{-- <span class="users-list-date">{{ $user->created_at }}</span> --}}
+								</li>
+							@endif
 						@endforeach
-					  </ul>
-					</div> <!-- end box-footer for other pdfs attachment -->
-				
-					<div class="box"> <!-- div for comment header-->
-						<div class="box-header"> 
-						  <i class="fa fa-paperclip"></i>
-						  <div class="browse_text">Attach new File:</div>
-						</div>
-						<div class="box-body"> 
-						  <center>
-								<div style="width:350px" align="center">
-									<div id='preview'></div>    
-									<form id="image_upload_form" method="post" enctype="multipart/form-data" action='file-upload/image_upload.php' autocomplete="off">
-										<div class="file_input_container">
-											<div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" /></div>
-										</div><br clear="all">
-									</form>
-								</div>
-							</center>
-						</div>
-						<div class="box-footer" id="chat-box">
-							<!-- chat item -->
-							<!-- chat item -->
-							<i class="fa fa-comments-o"></i>
-							<h3 class="box-title">Comments</h3>
-						</div> <!-- end of attach file -->
-					</div>
-			
-				
-				  <!-- chat item -->
-				<div class='chat'>
-					<div id="reload_comment{{$loopindex}}" class="divcomment">	<!-- comment on file -->
-					  @foreach($comments as $comment)
-						@if($comment->folder_id == $folder->id)
-						  <div class="item">
-						  <!-- @cpnwaugha: c-e: Fetching the user's image. Change to fetch uploaded image -->
-						  {{--<img src="{{ Gravatar::get(Auth::user()->email), 'tiny'}}" class="offline" alt="User Image"/>--}}
-						  <img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-						  <!--<img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" alt="user image" class="offline"/>-->
-						  <p class="message">
-							<a href="#" class="name"> <!-- @cpnwaugha: c-e: comments to have date and time -->
-							<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> {{ date('M d, Y', strtotime($comment->created_at)) }}</small> 
-							{{ $comment->comment_by }}
-							</a>
-							{{ $comment->comment }}
-						  </p>
-						  </div>
-						@endif
-					  @endforeach
-					</div> 
-				</div> <!-- end div comment -->
-
-				<script>
-				  $(function(){
-
-					$.ajaxSetup({
-					  headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
-					});
-			
-					$(document).on('click', "button#submitPostBtn{{$loopindex}}", function(e){
-					  e.preventDefault();
-					  e.stopPropagation();
-
-					  var folder_id = $("#folder_id{{$loopindex}}").val();
-					  var comment_by= $("#comment_by{{$loopindex}}").val();
-					  var activity  = $("#activity{{$loopindex}}").val();
-					  var comment   = $("#comment{{$loopindex}}").val();
-					  var formData  = $("#commentForm{{$loopindex}}").serialize();
-					  var data = formData; // {comment: comment, comment_by: comment_by, folder_id: folder_id, activity: activity, '_token': $('input[name=_token]').val()};
-
-					  $("#comment{{$loopindex}}").val('');
-
-					  created_at = moment().format('ll'); //moment().startOf('hour').fromNow();  // an hour ago
-							
-					  var renderComment = `
-						<div class="item">
-						  <img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-						  <p class="message">
-							<a href="#" class="name"> 
-							<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> ${created_at}</small> 
-							${comment_by }
-							</a>
-							${comment}
-						  </p>
-						</div>
-					  `;
-					  
-					  $("#reload_comment{{$loopindex}}").append(renderComment); 
-
-					  $.ajax({
-						  url:"ajaxcomment",
-						  method:"GET",
-						  dataType:"json",
-						  data: data,
-						  success:function(returnData)
-						  {
-							console.log('Good, comment added to database.');
-						  },
-						  error:function()
-						  {
-							console.log('Bad, not connected');
-						  }
-					  });
-
-					  $.toast({
-							heading: 'File comment',
-							text: 'New comment added to file',
-							icon: 'success',
-							bgColor: '#E01A31',
-							hideAfter: 5000,
-							showHideTransition: 'slide',
-							loader: false,        // Change it to false to disable loader
-							loaderBg: '#9EC600'  // To change the background
-						});
-					});
-				  })
-			  </script>
-		  <!--</div> --><!-- end div chat-box -->
-
-			<div><!-- div comment: Form to receive user's comment.-->
-				<form action="comment" id="commentForm{{$loopindex}}" class='commentFormClass' method="post" enctype="multipart/form-data">
-				  <input type="hidden" id="comment_by{{$loopindex}}" name="comment_by" value="{{ Auth::user()->email }}">
-				  <input type="hidden" id="folder_id{{$loopindex}}" name="folder_id" value="{{ $folder->id }}">
-				  <input type="hidden" id="activity{{$loopindex}}" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Comment on {{ substr($folder->name, 3) }}">
-				  <input type="hidden" name="_token" value="{{ csrf_token() }}">
-				  <div class="box-footer">
-					<div class="input-group">
-					  <input class="form-control" id="comment{{$loopindex}}" name="comment" placeholder="Type message..."/>
-					  <div class="input-group-btn">
-						  <button id="submitPostBtn{{$loopindex}}" class="btn btn-primary commentrefresh"><i class="fa fa-plus"> Post</i></button>
-					  </div>
-					</div>
-				  </div>
-				</form>
-			</div> <!-- end div -->
-		
-			<div class="box-footer"> <!--div forward file -->
-			  <form action = "/update" method = "post">
-				<input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
-				<div class="form-group">
-				   <label><b>Enter Recipient Email:</b></label>               
-				  <div class="input-group">
-					<input type="hidden" name="comment_by" value="{{ Auth::user()->email }}">
-					<input type="hidden" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Forward this file: {{ substr($folder->name, 3) }} to ">
-					<input type="hidden" name="fold_name" value="{{ $folder->name }}">  
-					
-					{{-- <div class="form-group pmd-textfield pmd-textfield-floating-label">
-					  <label>Enter Recipient Email:</label>         
-					  <input id="" class="form-control" name="share-input" placeholder="Recipient Email...">
-					</div> --}}
-
-					<div class="form-group pmd-textfield pmd-textfield-floating-label">       
-					 <select id="forward_to_user" class="select-with-search form-control select2" name="share-input" placeholder="Recipient Email..."></select>
-				   </div> 
-					  <div class="input-group-btn">
-						<button id='forwardBtn' class="btn btn-success"><i class="fa fa-share"></i> Forward</button>
-					  </div>
-				  </div>                   
-				</div>
-			  </form>
-			</div><!-- /.box-footer --> <!--div forward file -->
-				  
-			</div> <!-- div for pdf view -->	  <!-- Main content -->
-		
-		  <!-- PROJECT STATUS -->
-		</div><!-- /.col md-->
-		
-		<div class='col-md-3'>
+					</ul><!-- /.users-list -->
+				</div><!-- /.box-body -->
+				<div class="box-footer text-center">
+					<a href="javascript::viewall" class="uppercase">View All Users</a>
+				</div><!-- /.box-footer -->
+			</div>
+			<!-- BROWSER USAGE -->
+			<!-- TO DO List -->
 			<div id="activity-timeline" class="box box-primary">
 				<div class="box-header">
-				  <i class="fa fa-folder-open-o"></i>
-				  <h3 class="box-title">File Movement</h3>
-				  <div class="box-tools pull-right">
-					<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-				  </div>
+					<i class="ion ion-clipboard"></i>
+					<h3 class="box-title">Activity Timeline</h3>
+					<div class="box-tools pull-right">
+						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+						{{-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> --}}
+					</div>
 				</div><!-- /.box-header -->
 				<div class="box-body">
-				  <ul class="todo-list">
+					<ul class="todo-list">
 					@foreach($activities as $activity)
-						@if($activity->folder_id == $folder->id)
-							<li> 
-								{{ $activity->activity }}                    
-								<small class="label label-info"> 
-								<i class="fa fa-clock-o"></i>
-								<b>{{ date('F d, Y', strtotime( $activity->created_at )) }}</b></small>
-							</li>             
+						@if($activity->activity_by == Auth::user()->email || Auth::user()->username)
+						<li>                     
+						<small>{{ $activity->activity }}
+						<i class="fa fa-clock-o"></i>
+						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small>
+						</li>           
 						@endif
 					@endforeach
-				  </ul>
+					</ul>
 				</div><!-- /.box-body -->
+				<div class="box-footer text-center">
+					<a href="viewall" class="uppercase">View All Activity</a>
+				</div><!-- /.box-footer -->
 			</div><!-- /.box -->        
-		</div><!-- /.col -->
-	</div><!-- /.container fluid -->
-	@endforeach
-		
-    </div> <!-- end right div -->
- </div><!-- /.row -->
+		</div><!-- /.col  end left div -->
 
-    {{-- <script>
-    // Work on this later. Fix like on Linked in
-    // http://jsfiddle.net/FDv2J/1913/
-    // https://css-tricks.com/scroll-fix-content/
-    // https://forums.digitalpoint.com/threads/stop-scrolling-div-before-footer.2751269/
-      // $(document).scroll(function(){
-      //   $('.main-header').css('position', 'fixed');
-      // }).mouseup(function(){
-      //   $('.navbar').css('position', 'absolute');
-      // }).keyup(function(){
-      //   $('.navbar').css('position', 'relative');
-      // });     
-   //</script> --}}
+    <!--<div class='row pull-right'> -->
+		<div class='col-md-8'> <!-- right hand div -->
+			
+			<?php $loopindex = 0; ?>
+
+			@if(!$folders)
+				<!-- Default box -->
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title"><span class="label label-info"><label>Empty</label></span></h3>
+
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+											title="Collapse">
+								<i class="fa fa-minus"></i></button>
+							<button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+								<i class="fa fa-times"></i></button>
+						</div>
+					</div>
+					<div class="box-body">
+						<label><b>No Folder on Desk</b></label>
+					</div>
+					<!-- /.box-body -->
+					{{--  <div class="box-footer">
+						Footer
+					</div>  --}}
+					<!-- /.box-footer-->
+				</div>
+				<!-- /.box -->
+			@endif
+			
+			@foreach($folders as $folder)
+
+			<?php $loopindex++; ?>
+			<div class='container-fluid'> <!-- external panel -->
+				<div class="col-md-9"> <!-- pull right col-md-9 div for pdf view + comment + forward, and file activity -->
+				
+					<!-- SERVER HEALTH REPORT -->
+					<!-- MAP & BOX PANE {{ substr($user->fold_name, 3) }} -->
+					<div class="box box-primary"> <!-- div for pdf view -->
+						<div class="box-body no-padding">
+							<div class="mailbox-read-info">
+								<h3>File Name: <b>{{ $folder->name }}</b></h3>
+								<h5>From: {{ $folder->folder_by }} <i class="fa fa-user"></i> <span id="read-time" class="mailbox-read-time pull-right">{{ date('F d, Y', strtotime($folder->created_at)) }}</span></h5>
+							</div><!-- /.mailbox-read-info getFullNameAttribute() pdf header -->
+						
+							<div class="mailbox-read-message">        
+								<object data="{{ asset("/docs/files/1/".$folder->name."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">
+									<!-- support older browsers -->
+									<!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
+									<!-- For those without native support, no pdf plugin, or no js -->
+									<p>It appears you do not have PDF support in this web browser. 
+									<a href="{{ asset("/docs/files".$folder->name."/".$folder->latest_doc) }}" target="_blank">Click here to download the document.</a></p>
+								</object>
+							</div><!-- /.mailbox-read-message -->
+						</div><!-- /.box-body first pdf view-->
+						
+						<div class="box-footer">
+							<ul class="mailbox-attachments clearfix">
+							@foreach($files as $file)
+								@if($file->folder_id == $folder->id)
+								<li>
+									<a href="{{ asset("/docs/files".$folder->name."/".$folder->latest_doc) }}" class="mailbox-attachment-name"></a>
+									<span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i>
+									</span>
+									<div class="mailbox-attachment-info">
+										<i class="fa fa-paperclip"></i> {{ $file->name }}<br/> <!-- </a> -->
+										<span class="mailbox-attachment-size">
+											{{ $file->created_at }}
+											<a href="#" class="btn btn-default btn-xs pull-right">{{--<i class="fa fa-cloud-download"></i>--}}</a>
+										</span>
+									</div>
+								</li>
+								@endif
+							@endforeach
+							</ul>
+						</div> <!-- end box-footer for other pdfs attachment -->
+					
+						<div class="box"> <!-- div for comment header-->
+							<div class="box-header"> 
+								<i class="fa fa-paperclip"></i>
+								<div class="browse_text">Attach new File:</div>
+							</div>
+							<div class="box-body"> 
+								<center>
+									<div style="width:350px" align="center">
+										<div id='preview'></div>    
+										<form id="image_upload_form" method="post" enctype="multipart/form-data" action='file-upload/image_upload.php' autocomplete="off">
+											<div class="file_input_container">
+												<div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" /></div>
+											</div><br clear="all">
+										</form>
+									</div>
+								</center>
+							</div>
+
+							<div class="box-footer" id="chat-box">
+								<!-- chat item -->
+								<!-- chat item -->
+								<i class="fa fa-comments-o"></i>
+								<h3 class="box-title">Comments</h3>
+							</div> <!-- end of attach file -->
+						</div>  <!-- end box -->
+				
+					
+						<!-- chat item -->
+					<div class='chat'>
+						<div id="reload_comment{{$loopindex}}" class="divcomment">	<!-- comment on file -->
+							@foreach($comments as $comment)
+							@if($comment->folder_id == $folder->id)
+								<div class="item">
+									<!-- @cpnwaugha: c-e: Fetching the user's image. Change to fetch uploaded image -->
+									{{--<img src="{{ Gravatar::get(Auth::user()->email), 'tiny'}}" class="offline" alt="User Image"/>--}}
+									<img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+									<!--<img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" alt="user image" class="offline"/>-->
+									<p class="message">
+										<a href="#" class="name"> <!-- @cpnwaugha: c-e: comments to have date and time -->
+											<small class="text-muted pull-right">
+												<i class="fa fa-clock-o"></i> {{ date('M d, Y', strtotime($comment->created_at)) }}
+											</small> 
+											{{ $comment->comment_by }}
+										</a>
+										{{ $comment->comment }}
+									</p>
+								</div>
+							@endif
+							@endforeach
+						</div> 
+					</div> <!-- end div comment -->
+
+					<script>
+						$(function(){
+
+						$.ajaxSetup({
+							headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+						});
+				
+						$(document).on('click', "button#submitPostBtn{{$loopindex}}", function(e){
+							e.preventDefault();
+							e.stopPropagation();
+
+							var folder_id = $("#folder_id{{$loopindex}}").val();
+							var comment_by= $("#comment_by{{$loopindex}}").val();
+							var activity  = $("#activity{{$loopindex}}").val();
+							var comment   = $("#comment{{$loopindex}}").val();
+							var formData  = $("#commentForm{{$loopindex}}").serialize();
+							var data = formData; // {comment: comment, comment_by: comment_by, folder_id: folder_id, activity: activity, '_token': $('input[name=_token]').val()};
+
+							$("#comment{{$loopindex}}").val('');
+
+							created_at = moment().format('ll'); //moment().startOf('hour').fromNow();  // an hour ago
+								
+							var renderComment = `
+							<div class="item">
+								<img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+								<p class="message">
+								<a href="#" class="name"> 
+								<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> ${created_at}</small> 
+								${comment_by }
+								</a>
+								${comment}
+								</p>
+							</div>
+							`;
+							
+							$("#reload_comment{{$loopindex}}").append(renderComment); 
+
+							$.ajax({
+								url:"ajaxcomment",
+								method:"GET",
+								dataType:"json",
+								data: data,
+								success:function(returnData)
+								{
+								console.log('Good, comment added to database.');
+								},
+								error:function()
+								{
+								console.log('Bad, not connected');
+								}
+							});
+
+							$.toast({
+								heading: 'File comment',
+								text: 'New comment added to file',
+								icon: 'success',
+								bgColor: '#E01A31',
+								hideAfter: 5000,
+								showHideTransition: 'slide',
+								loader: false,        // Change it to false to disable loader
+								loaderBg: '#9EC600'  // To change the background
+							});
+						});
+						})
+					</script>
+				<!--</div> --><!-- end div chat-box -->
+
+				<div><!-- div comment: Form to receive user's comment.-->
+					<form action="comment" id="commentForm{{$loopindex}}" class='commentFormClass' method="post" enctype="multipart/form-data">
+						<input type="hidden" id="comment_by{{$loopindex}}" name="comment_by" value="{{ Auth::user()->email }}">
+						<input type="hidden" id="folder_id{{$loopindex}}" name="folder_id" value="{{ $folder->id }}">
+						<input type="hidden" id="activity{{$loopindex}}" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Comment on {{ substr($folder->name, 3) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token() }}">
+						<div class="box-footer">
+						<div class="input-group">
+							<input class="form-control" id="comment{{$loopindex}}" name="comment" placeholder="Type message..."/>
+							<div class="input-group-btn">
+								<button id="submitPostBtn{{$loopindex}}" class="btn btn-primary commentrefresh"><i class="fa fa-plus"> Post</i></button>
+							</div>
+						</div>
+						</div>
+					</form>
+				</div> <!-- end div -->
+			
+				<div class="box-footer"> <!--div forward file -->
+					<form action = "/update" method = "post">
+					<input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
+					<div class="form-group">
+						<label><b>Enter Recipient Email:</b></label>               
+						<div class="input-group">
+						<input type="hidden" name="comment_by" value="{{ Auth::user()->email }}">
+						<input type="hidden" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Forwarded this file: {{ substr($folder->name, 3) }} to ">
+						<input type="hidden" name="fold_name" value="{{ $folder->name }}">  
+
+						<div class="form-group pmd-textfield pmd-textfield-floating-label">       
+						<select id="forward_to_user" class="select-with-search form-control select2" name="share-input" placeholder="Recipient Email..."></select>
+						</div> 
+							<div class="input-group-btn">
+							<button id='forwardBtn' class="btn btn-success"><i class="fa fa-share"></i> Forward</button>
+							</div>
+						</div>                   
+					</div>
+					</form>
+				</div><!-- /.box-footer --> <!--div forward file -->
+						
+				</div> <!-- div for pdf view -->	  <!-- Main content -->
+			
+				<!-- PROJECT STATUS -->
+			</div><!-- /.col md-->
+			
+			<div class='col-md-3'>
+				<div id="activity-timeline" class="box box-primary">
+					<div class="box-header">
+						<i class="fa fa-folder-open-o"></i>
+						<h3 class="box-title">File Movement</h3>
+						<div class="box-tools pull-right">
+						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+						</div>
+					</div><!-- /.box-header -->
+					<div class="box-body">
+						<ul class="todo-list">
+						@foreach($activities as $activity)
+							@if($activity->folder_id == $folder->id)
+								<li> 
+									{{ $activity->activity }}                    
+									<small class="label label-info"> 
+									<i class="fa fa-clock-o"></i>
+									<b>{{ date('F d, Y', strtotime( $activity->created_at )) }}</b></small>
+								</li>             
+							@endif
+						@endforeach
+						</ul>
+					</div><!-- /.box-body -->
+				</div><!-- /.box -->        
+			</div><!-- /.col -->
+		</div><!-- /.container fluid -->
+		@endforeach
+			
+			</div> <!-- end right div -->
+ 	</div><!-- /.row -->
+</section><!-- content -->
+</div> <!-- content-wrapper -->
 @endsection

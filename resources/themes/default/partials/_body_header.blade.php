@@ -116,7 +116,7 @@
                                         <?php $folder_requests = Illuminate\Support\Facades\DB::select('select * from folder_requests order by created_at desc limit 5'); ?>
                                         
                                          @foreach($folder_requests as $folder_request)
-                                         <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@email.com')->first();
+                                         <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@hallowgate.com')->first();
                                                         
                                                         $temp = array();
                                                         foreach($user as $field => $val ){
@@ -124,7 +124,7 @@
                                                         }  ?>
                                             <li><!-- start notification -->
                                                 <a href="viewallrequest">
-                                                    <i class="fa fa-user text-red"></i><b>{{$user->first_name}} {{$user->last_name}}</b> | {{$folder_request->foldername}}
+                                                    <i class="fa fa-user text-red"></i><b>{{$user->first_name}} {{$user->last_name}}</b> | {{$folder_request->folder_name}}
                                                 </a>
                                             </li><!-- end notification -->
                                              @endforeach

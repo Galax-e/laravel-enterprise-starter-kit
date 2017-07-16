@@ -97,14 +97,14 @@ desired effect
              {{ csrf_field() }}
              <div class="box-body">
                <div class="form-group">
-                 <input type="text" class="form-control" id="foldername" name="foldername" placeholder="File No/ Name"/>
+                 <input type="text" class="form-control" id="name" name="name" placeholder="File No/ Name"/>
                </div>
                <div>
-                 <textarea class="textarea" name="desc" id="desc" placeholder="Full Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                 <textarea class="textarea" name="desc" id="desc" placeholder="Enter a description about the folder or file ..." style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                </div>
            </div>
            <div class="box-footer clearfix">
-             <button id='requestFileBtn' type="button" class="pull-right btn btn-cyan" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+             <button id='requestFileBtn' type="button" class="pull-right btn btn-primary btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
            </div>
          </form>        
          </div>
@@ -122,7 +122,7 @@ desired effect
             <div class="box box-info">
             <div class="box-header">
                 <i class="fa fa-key"></i>
-                <h3 class="box-title">Create/ Change PIN</h3>
+                <h3 class="box-title">Create/Change PIN</h3>
                 <!-- tools box -->
                 <div class="pull-right box-tools">
             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button></div><!-- /. tools -->
@@ -137,7 +137,7 @@ desired effect
                 </div>
             </div>
             <div class="box-footer clearfix">
-                <button id="createPinBtn" type="button" class="pull-right btn btn-purple" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+                <button id="createPinBtn" type="button" class="pull-right btn btn-info btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
             </div>
         </form>             
         </div>    
@@ -145,6 +145,37 @@ desired effect
     </div>
     </div>
 
+    <!-- pin verification -->
+    <div class="modal fade" id="createPinModal" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+    
+        <!-- Modal content-->
+        <div class="modal-content">      
+            
+            <div class="box box-info">
+                <div class="box-header">
+                    <i class="fa fa-key"></i>
+                    <h3 class="box-title">Enter your PIN</h3>
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
+                    </div><!-- /. tools -->
+                </div> <!-- /. box-header -->
+            </div>        
+            <form method="post" id="verify_pin_form" action="verifypinform">
+                {{ csrf_field() }}
+                <div class="box-body">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="pin_verification" name="pin_verification" placeholder="Enter your PIN"/>
+                    </div>
+                </div>
+                <div class="box-footer clearfix">
+                    <button id="verifPinBtn" type="button" class="pull-right btn btn-info btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+                </div>
+            </form>             
+        </div> <!-- modal-content -->    
+    </div>
+    </div>
 
     <!-- @cpnwaugha: c-e needed to bring in all the pretty adminLTE functions-->
     <!--FastClick -->

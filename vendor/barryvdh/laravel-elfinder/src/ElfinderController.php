@@ -27,9 +27,14 @@ class ElfinderController extends Controller
 
     public function showIndex()
     {
+        $getviewvars = $this->getViewVars();
+
+        $getviewvars['page_title'] = 'Registry';
+        $getviewvars['page_description'] = 'File Manager';
+
         return $this->app['view']
             ->make($this->package . '::elfinder')
-            ->with($this->getViewVars());
+            ->with($getviewvars);
     }
 
     public function showTinyMCE()

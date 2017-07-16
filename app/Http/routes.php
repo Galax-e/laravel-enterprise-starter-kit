@@ -12,10 +12,7 @@
 |
 */
 
-Route::get('read', 'FilesController@read');
-Route::post('comment', 'FilesController@comment');
-Route::get('commentrefresh', ['as' => 'commentrefresh', 'uses' => 'DashboardController@commentRefresh']);
-Route::get('ajaxcomment', ['as' => 'ajaxcomment', 'uses' => 'FilesController@ajaxComment']);
+
 
 Route::get('dataphp', ['as' => 'dataphp', 'uses' => 'MemoController@dataphp']);
 
@@ -23,16 +20,8 @@ Route::get('show-message/{id}','FilesController@show_message');
 Route::post('edit/{id}','FilesController@edit');
 Route::get('edit-records','FilesController@index');
 
-Route::post('newdocument','FileManagement\UploadController@upload');
-Route::post('newfolder','FileManagement\UploadController@newfolder');
 Route::post('update','FilesController@update'); // remove the id
 Route::post('share/{id}','FilesController@share');
-
-Route::post('requestform','FilesController@requestform');
-Route::post('ajaxfolderrequest', ['as'=>'ajaxfolderrequest', 'uses'=>'FilesController@ajaxFolderRequest']);
-
-Route::post('storepinform','FilesController@storepinform');
-
 
 Route::get('/error',function(){
    abort(503);
@@ -67,12 +56,6 @@ Route::get( '/',          ['as' => 'backslash',   'uses' => 'HomeController@inde
 Route::get( 'home',       ['as' => 'home',        'uses' => 'HomeController@index']);
 Route::get( 'welcome',    ['as' => 'welcome',     'uses' => 'HomeController@welcome']);
 
-// Custom routes to test feeds
-Route::get( 'news/feed',  ['as' => 'feed',        'uses' => 'News\NewsController@newsfeed']);
-Route::get( 'news/stream',['as' => 'newsstream',  'uses' => 'News\NewsController@newsstream']);
-
-
-
 // Routes in this group must be authorized.
 Route::group(['middleware' => 'authorize'], function () {
     // Application routes...
@@ -98,10 +81,19 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::get( 'memo_seen',  ['as' => 'memo_seen',   'uses' => 'MemoNotificationController@notificationseen']);
     Route::get( 'request_file_seen',  ['as' => 'request_file_seen',   'uses' => 'RequestFileNotificationController@notificationseen']);
     
-    Route::get( 'scandir',    ['as' => 'scandir',    'uses' => 'FileManagement\SearchFolderController@scanDirectory']);
-    
     Route::get(   'user/profile/photo',   ['as' => 'user.profile.photo',       'uses' => 'UsersController@profilePhoto']);
     Route::patch( 'user/profile/photo',   ['as' => 'user.profile.photo.patch', 'uses' => 'UsersController@profilePhotoUpdate']);
+
+    // other routers
+    Route::get('read', 'FilesController@read');
+    Route::post('comment', 'FilesController@comment');
+    Route::get('commentrefresh', ['as' => 'commentrefresh', 'uses' => 'DashboardController@commentRefresh']);
+    Route::get('ajaxcomment', ['as' => 'ajaxcomment', 'uses' => 'FilesController@ajaxComment']);
+
+    Route::post('requestform','FilesController@requestform');
+    Route::post('ajaxfolderrequest', ['as'=>'ajaxfolderrequest', 'uses'=>'FilesController@ajaxFolderRequest']);
+    Route::post('storepinform','FilesController@storepinform');
+
 
     // Site administration section
     Route::group(['prefix' => 'admin'], function () {

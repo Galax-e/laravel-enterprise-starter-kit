@@ -6,18 +6,18 @@ use App\Message;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Redis;
+//use Redis;
 use DB;
 use Auth;
 
 class MessageController extends Controller
 {
     //
-    protected $redis;
+    //protected $redis;
 
     function __construct()
     {
-        $this->redis = Redis::connection();
+        //$this->redis = Redis::connection();
     }
 
     public function index(Request $request){
@@ -57,8 +57,8 @@ class MessageController extends Controller
             $pm->read = 1;
             $pm->save();
 
-            $redis = Redis::connection();
-            $redis->publish('messageRead', $pm);
+            //$redis = Redis::connection();
+            //$redis->publish('messageRead', $pm);
             \Log::info('123');
         }
 
@@ -78,8 +78,8 @@ class MessageController extends Controller
         $pm = Message::create($attributes);
         $data = Message::where('id', $pm->id)->first();
 
-        $redis = Redis::connection();
-        $redis->publish('message', $data);
+        //$redis = Redis::connection();
+        //$redis->publish('message', $data);
 
         return response(['data' => $data], 201);
     }

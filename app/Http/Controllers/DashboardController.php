@@ -62,7 +62,6 @@ class DashboardController extends Controller
         session(['crumbtrail.leaf' => 'users']);
     }
 
-
     public function index()
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
@@ -71,15 +70,14 @@ class DashboardController extends Controller
         $page_description = "Your Desk"; // trans('admin/users/general.page.index.description'); // "List of users";
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
-		$user_id = Auth::user()->email;
+		$user_email = Auth::user()->email;
 
 		$activity = '%Forward%';
 		
 		//$folder = Folder::all();	
 		$activities = DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$activity]);
 
-
-		$folders = DB::select('select * from folders where folder_to = ?',[$user_id]);
+		$folders = DB::select('select * from folders where folder_to = ?', [$user_email]);
 		$files = DB::select('select * from documents');
 		$comments = DB::select('select * from comments');
         return view('dashboard', compact('users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities'));

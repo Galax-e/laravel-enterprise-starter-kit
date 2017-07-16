@@ -21,6 +21,7 @@
                    //console.log('Working, data.count is: '+ notif_count);
 
                    if(notif_count === 0){
+                       $('#folder_notif').html('');
                        $('#folder_notif').removeClass('label-danger');
                        $('#folder_notif_icon').removeClass('fa-folder-open-o').addClass('fa-folder-o');
                        temp_fn = 0;
@@ -53,6 +54,8 @@
                    
                    // console.log('Working, data.count is: '+ memo_count);
                    if(memo_count === 0){
+                       $('#memo_notif').html('');
+                       $('#inbox_left').html('');
                        $('#memo_notif').removeClass('label-success');
                        $('#inbox_left').removeClass('label-primary');
                        temp_mn = 0;
@@ -88,6 +91,7 @@
                    //console.log('Working, data.count is: '+ notif_count);
 
                    if(file_request_count === 0){
+                       $('#request_file_notif').html('');
                        $('#request_file_notif').removeClass('label-warning');
                        $('#request_file_notif_icon').removeClass('fa-bell-o').addClass('fa-bell-slash-o');
                        temp_rfn = 0;
@@ -195,9 +199,9 @@
             e.stopPropagation();
             $('#requestFileModal').modal('hide');
 
-            var foldername = $('#foldername').val();
+            var name = $('#name').val();
             var desc = $('#desc').val();
-            var data = {foldername: foldername, desc: desc, '_token': $('input[name=_token]').val()};
+            var data = {name: name, desc: desc, '_token': $('input[name=_token]').val()};
 
             $.ajax({
                url:"ajaxfolderrequest",

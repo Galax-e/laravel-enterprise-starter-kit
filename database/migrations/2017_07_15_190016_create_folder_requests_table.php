@@ -14,15 +14,16 @@ class CreateFolderRequestsTable extends Migration
     {
         Schema::create('folder_requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('folder_id');
+            $table->integer('folder_id')->nullable();
 
-            $table->foreign('folder_id')->references('id')->on('folders')
-            ->onUpdate('cascade')->onDelete('cascade');
+            //$table->foreign('folder_id')->references('id')->on('folders')
+            //->onUpdate('cascade')->onDelete('cascade');
 
             $table->string('from');
-            $table->string('name');
-            $table->string('desc');
-            $table->string('registry');
+            $table->string('folder_name');
+            $table->string('folder_desc');
+			$table->boolean('treated')->default(0);
+            $table->integer('receiver_role')->default(2);
             $table->timestamps();
         });
     }
