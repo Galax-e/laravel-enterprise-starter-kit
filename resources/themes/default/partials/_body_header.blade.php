@@ -48,12 +48,12 @@
                                <i id="" class="fa fa-file"></i>
                            </a>
                        </li>                        
-                       <li class="">
+                       {{--  <li class="">
                            <!-- Create Pin button -->
                             <a href="#" class="btn btn-block btn-success" title="Create Pin" data-toggle="modal" data-target="#createPinModal">
                                <i class="fa fa-key"></i>
                            </a>
-                       </li>
+                       </li>  --}}
 
                         <li class="dropdown messages-menu">
                             <!-- Menu toggle button -->
