@@ -56,15 +56,19 @@
                    if(memo_count === 0){
                        $('#memo_notif').html('');
                        $('#inbox_left').html('');
+                       $('#inbox_on_mailbox').html('');
                        $('#memo_notif').removeClass('label-success');
                        $('#inbox_left').removeClass('label-primary');
+                       $('#inbox_on_mailbox').removeClass('bg-red');
                        temp_mn = 0;
                    }
                    else{
                        $('#memo_notif').html(memo_count);
                        $('#inbox_left').html(memo_count);
+                       $('#inbox_on_mailbox').html(memo_count);
                        $('#memo_notif').addClass('label-success');
                        $('#inbox_left').addClass('label-primary');
+                       $('#inbox_on_mailbox').addClass('bg-red');
 
                        // call notification
                        count = memo_count;

@@ -90,8 +90,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
        <!-- AdminLTE Select2 -->
       <script src="{{asset("/bower_components/admin-lte/select2/dist/js/select2.full.min.js")}}"></script>
 
-      <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/jquery.dataTables.js') }}"></script>
+      <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
       <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/dataTables.material.min.js') }}"></script>
+      <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+      
 
       <!-- Colorbox -->
       <script type="text/javascript" src="{{ asset ("/assets/colorbox/jquery.colorbox-min.js") }}"></script>

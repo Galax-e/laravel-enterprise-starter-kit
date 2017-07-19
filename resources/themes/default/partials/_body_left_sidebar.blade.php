@@ -61,6 +61,14 @@
                     <ul class="treeview-menu">
                         <li><a href="index.html"><i class="fa fa-exchange"></i> My Activities</a></li>
                         <li><a href="index.html"><i class="fa fa-exchange"></i> Position Activities</a></li>
+                        <li>
+                            <a href="{{url('inbox')}}">
+                                <i class="fa fa-envelope-o"></i><span> Mailbox</span>
+                                <span class="pull-right-container">
+                                    <small id="inbox_on_mailbox" class="label pull-right bg-red"></small>
+                                </span>
+                            </a>
+                        </li>
                         <li class="">
                             <a href="#" data-toggle="modal" data-target="#createPinModal">
                                <i class="fa fa-key"></i> Change Pin
@@ -69,76 +77,31 @@
                         <li class=""><a href="index2.html"><i class="fa fa-file-o"></i> Request Folder</a></li>
                     </ul>
                 </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa  fa-envelope-o"></i> <span>Mailbox</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                            <small class="label pull-right bg-red">5</small>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="{{url('compose')}}">
-                                <i class="fa fa-edit"></i><span> Compose</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="pages/forms/advanced.html">
-                                <i class="fa fa-inbox"></i><span> Inbox</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-red">5</small>
-                                </span>                                
-                            </a>
-                        </li>
-                        <li>
-                            <a href="pages/forms/advanced.html">
-                                <i class="fa fa-envelope-square"></i><span> Sent</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-green">12</small>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="pages/forms/advanced.html">
-                                <i class="fa fa-database"></i><span> Draft</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-yellow">16</small>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="pages/forms/advanced.html">
-                                <i class="fa fa-trash-o"></i><span> Trash</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-blue">21</small>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-files-o"></i>
-                        <span>Registry</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                            <span class="label label-primary pull-right">4</span>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="pages/layout/top-nav.html">
-                                <i class="fa fa-files-o"></i><span> Folder Requests</span>
-                                <span class="pull-right-container">
-                                    <small class="label pull-right bg-blue">4</small>
-                                </span>
-                            </a>
-                        </li>
-                        <li><a href="{{ url('admin/registry') }}"><i class="fa fa-folder"></i> File Manager</a></li>
-                        <li><a href="pages/layout/fixed.html"><i class="fa fa-share-square-o"></i> Shared</a></li>
-                    </ul>
-                </li>
+                
+                @if(Auth::user()->roles->count() > 1)
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-files-o"></i>
+                            <span>Registry</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                                <span class="label label-primary pull-right">4</span>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="pages/layout/top-nav.html">
+                                    <i class="fa fa-files-o"></i><span> Folder Requests</span>
+                                    <span class="pull-right-container">
+                                        <small class="label pull-right bg-blue">4</small>
+                                    </span>
+                                </a>
+                            </li>
+                            <li><a href="{{ url('admin/registry') }}"><i class="fa fa-folder"></i> File Manager</a></li>
+                            <li><a href="pages/layout/fixed.html"><i class="fa fa-share-square-o"></i> Shared</a></li>
+                        </ul>
+                    </li>
+                @endif
             </ul>
         @endif
 

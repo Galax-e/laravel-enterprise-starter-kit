@@ -162,7 +162,7 @@ class DashboardController extends Controller
 
 		//$folder = Folder::all();	
 		$activity = DB::table('activities')->where('activity_by', $user_id)->orderBy('created_at', 'DESC')->paginate(12);
-        return view('viewall', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
+        return view('views.actions.activity.viewall', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
     }
 
 	public function viewallrequest()

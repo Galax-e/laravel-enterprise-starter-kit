@@ -72,7 +72,7 @@
                                                 <a href="read_memo/{{ $memo->id }}">
                                                     <div class="pull-left">
                                                         <!-- User Image -->
-                                                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@email.com')->first();
+                                                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $memo->emailfrom)->first();
                                                         
                                                         $temp = array();
                                                         foreach($user as $field => $val ){
@@ -85,7 +85,8 @@
                                                     <!-- Message title and timestamp -->
                                                     <h4>
                                                         {{ $user_name }}
-                                                        <small><i class="fa fa-clock-o"></i> {{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
+                                                        <small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
+                                                        <i class="fa fa-clock-o pull-right"></i>
                                                     </h4>
                                                     <!-- The message -->
                                                     <p>{{ $memo->subject}}</p>

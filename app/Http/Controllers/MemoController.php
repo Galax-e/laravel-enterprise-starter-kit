@@ -63,7 +63,7 @@ class MemoController extends Controller
         $user_id = Auth::user()->email;
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
-        return view('views.compose', compact('users', 'page_title', 'page_description'));
+        return view('views.mailbox.compose', compact('users', 'page_title', 'page_description'));
     }
     
     
@@ -77,7 +77,7 @@ class MemoController extends Controller
         $user_id = Auth::user()->email;
         $memos = DB::table('memos')->where('emailto', $user_id)->orderBy('created_at', 'DESC')->paginate(4);  
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
-        return view('inbox', compact('users', 'page_title', 'page_description', 'memos'));
+        return view('views.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
     }
     
     public function read_memo($id) {
