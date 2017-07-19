@@ -69,7 +69,7 @@
                                         <?php $useremail = Auth::user()->email; $memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto = ? order by created_at desc limit 5', [$useremail]); ?>
                                         @foreach($memos as $memo)
                                             <li><!-- start message -->
-                                                <a href="read_memo/{{ $memo->id }}">
+                                                <a href="{{url('read_memo/'.$memo->id) }}">
                                                     <div class="pull-left">
                                                         <!-- User Image -->
                                                         <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $memo->emailfrom)->first();
@@ -100,7 +100,7 @@
                         </li><!-- /.messages-menu -->
                         <!-- Notifications Menu -->
 
-                         @if(Auth::user()->isRoot())
+                         @if(Auth::user()->roles->count() > 1)
                             <li class="dropdown notifications-menu">
                                 <!-- Menu toggle button -->
                                 <a href="#" id="request_file_toggle" class="dropdown-toggle" data-toggle="dropdown">

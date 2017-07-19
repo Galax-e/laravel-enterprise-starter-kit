@@ -85,7 +85,7 @@
 					{{--@endunless --}}
 					<div class="box-tools pull-right">
 							{{-- auto fetch the users in the department--}}
-							<span class="label label-primary"><label id='users_online'>17 </label>users online</span> {{-- The span is to be auto generated --}}
+							<span class="label label-primary"><label id='users_online'>{{ $dept_size }} </label>&nbsp; users online</span> {{-- The span is to be auto generated --}}
 							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 							{{-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> --}}
 					</div><!-- /.box-tool -->
@@ -94,6 +94,9 @@
 					<ul class="users-list clearfix">
 						@foreach($users as $user)
 							@if($user->department == Auth::user()->department)
+								@if($user->email == Auth::user()->email)
+									@continue
+								@endif
 								<li>
 									{{--<img src="{{ Gravatar::get($user->email) }}" class="user-image" alt="User Image"/> --}}
 									<img src="{{asset("/img/profile_picture/photo/".$user->avatar) }}" class="offline" style="width: 52px; height: 52px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>

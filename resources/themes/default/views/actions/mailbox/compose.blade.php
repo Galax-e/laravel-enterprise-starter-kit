@@ -29,7 +29,7 @@
     <section class="content">
       <div class="row">
         <div class="col-md-3">
-          @include('views.mailbox.left_mail_menu')
+          @include('views.actions.mailbox.left_mail_menu')
         </div><!-- /.col -->
         
         <div class="col-md-9">

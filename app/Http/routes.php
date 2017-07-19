@@ -59,16 +59,16 @@ Route::get( 'welcome',    ['as' => 'welcome',     'uses' => 'HomeController@welc
 // Routes in this group must be authorized.
 Route::group(['middleware' => 'authorize'], function () {
     // Application routes...
-    Route::get(   'compose',      ['as' => 'compose',          'uses' => 'MemoController@compose']);
+    Route::get(   'compose',        ['as' => 'compose',          'uses' => 'MemoController@compose']);
 	Route::get(   'dashboard',      ['as' => 'dashboard',          'uses' => 'DashboardController@index']);
-	Route::get(   'inbox',      ['as' => 'inbox',          'uses' => 'MemoController@inbox']);
-    Route::get(   'read_memo/{id}',      ['as' => 'read_memo/{id}',          'uses' => 'MemoController@read_memo']);
-	Route::get(   'session',      ['as' => 'session',          'uses' => 'DashboardController@session']);
-	Route::post(   'store',      ['as' => 'store',          'uses' => 'DashboardController@store']);
-    Route::get(   'viewall',      ['as' => 'viewall',          'uses' => 'DashboardController@viewall']);
-    Route::get(   'viewallrequest',      ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
-	Route::post(   'store-session',      ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
-	Route::post(   'store_memo',      ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
+	Route::get(   'inbox',          ['as' => 'inbox',          'uses' => 'MemoController@inbox']);
+    Route::get(   'read_memo/{id}', ['as' => 'read_memo/{id}',          'uses' => 'MemoController@read_memo']);
+	Route::get(   'session',        ['as' => 'session',          'uses' => 'DashboardController@session']);
+	Route::post(  'store',          ['as' => 'store',          'uses' => 'DashboardController@store']);
+    Route::get(   'viewall',        ['as' => 'viewall',          'uses' => 'DashboardController@viewall']);
+    Route::get(   'viewallrequest', ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
+	Route::post(  'store-session',  ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
+	Route::post(  'store_memo',     ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
     Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
     Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
 

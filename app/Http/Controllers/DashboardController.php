@@ -80,7 +80,12 @@ class DashboardController extends Controller
 		$folders = DB::select('select * from folders where folder_to = ?', [$user_email]);
 		$files = DB::select('select * from documents');
 		$comments = DB::select('select * from comments');
-        return view('dashboard', compact('users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities'));
+		
+		// return the count of the number of people in the department
+		$dept_size = DB::select('select * from users where department =?', [Auth::user()->department]);
+		$dept_size = count($dept_size);
+
+        return view('dashboard', compact('users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size'));
     }
 
 	public function commentRefresh(){
@@ -184,7 +189,7 @@ class DashboardController extends Controller
 		$labels = array('label-warning', 'label-info');
 		//$folder = Folder::all();	
 		$activity = DB::table('activities')->where('activity_by', $user_id)->orderBy('created_at', 'DESC')->paginate(12);
-        return view('viewallrequest', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity','folder_requests','labels'));
+        return view('views.actions.activity.viewallrequests', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity','folder_requests','labels'));
     }
 
 	
