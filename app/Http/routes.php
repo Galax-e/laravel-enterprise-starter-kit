@@ -20,8 +20,6 @@ Route::get('show-message/{id}','FilesController@show_message');
 Route::post('edit/{id}','FilesController@edit');
 Route::get('edit-records','FilesController@index');
 
-Route::post('update','FilesController@update'); // remove the id
-Route::post('share/{id}','FilesController@share');
 
 Route::get('/error',function(){
    abort(503);
@@ -93,6 +91,9 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::post('requestform','FilesController@requestform');
     Route::post('ajaxfolderrequest', ['as'=>'ajaxfolderrequest', 'uses'=>'FilesController@ajaxFolderRequest']);
     Route::post('storepinform','FilesController@storepinform');
+
+    Route::post('forward',['as'=>'forward', 'uses'=>'FilesController@forward']); // remove the id
+    Route::post('share/{id}','FilesController@share');
 
 
     // Site administration section

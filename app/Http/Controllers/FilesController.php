@@ -179,7 +179,7 @@ class FilesController extends Controller {
 			return 'test';*/
     }
 	
-	public function update(Request $request)
+	public function forward(Request $request)
     {
 
 		// retrieve the folder handle and save.
@@ -203,12 +203,12 @@ class FilesController extends Controller {
 		$receiver_email=  $receiver_user['email'];
 
 		$folder_to = $receiver_email; // $temp;
-        DB::update('update folders set folder_to = ? where fold_name = ?',[$folder_to, $fold_name]);
+        DB::update('update folders set folder_to = ? where name = ?', [$folder_to, $fold_name]);
        
         
         // create activity for sharing the folder
         $activity = new Activity;
-        $shareInput = $receiver_email;
+        $shareInput = $receiver_user['first_name'].', '.$receiver_user['last_name'];
         $activity->activity_by= Input::get('comment_by');
         $activity->folder_id= Input::get('fold_name');
 		//$activity->fileinfo= Input::get('fileinfo');

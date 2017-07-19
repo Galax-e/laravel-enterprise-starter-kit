@@ -67,13 +67,13 @@
   <script type="text/javascript" src="{{ asset("bower_components/admin-lte/plugins/moment/moment.min.js") }}"></script>
   
 
-	<div class="content-wrapper">
+	{{--  <div class="content-wrapper">  --}}
 
 	<section class="content">
 
   <div class='row'>
   
-		<div class='col-md-4'> <!-- left hand div -->
+		<div class='col-md-3'> <!-- left hand div -->
 			<!-- USERS LIST -->
 			<div class="box box-primary"> <!-- department div-->
 				<div class="box-header with-border">
@@ -142,7 +142,7 @@
 		</div><!-- /.col  end left div -->
 
     <!--<div class='row pull-right'> -->
-		<div class='col-md-8'> <!-- right hand div -->
+		<div class='col-md-9'> <!-- right hand div -->
 			
 			<?php $loopindex = 0; ?>
 
@@ -188,7 +188,8 @@
 							</div><!-- /.mailbox-read-info getFullNameAttribute() pdf header -->
 						
 							<div class="mailbox-read-message">        
-								<object data="{{ asset("/docs/files/1/".$folder->name."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">
+								{{--  <object data="{{ asset("/docs/files/1/".$folder->name."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">  --}}
+								<object data="{{ asset("/files/FirstFolder/SharpBrochure.pdf") }}" type="application/pdf" style="width: 100%" height="450">
 									<!-- support older browsers -->
 									<!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
 									<!-- For those without native support, no pdf plugin, or no js -->
@@ -241,7 +242,7 @@
 								<!-- chat item -->
 								<!-- chat item -->
 								<i class="fa fa-comments-o"></i>
-								<h3 class="box-title">Comments</h3>
+								<h3 class="box-title"><small>Comments</small></h3>
 							</div> <!-- end of attach file -->
 						</div>  <!-- end box -->
 				
@@ -252,7 +253,6 @@
 							@foreach($comments as $comment)
 							@if($comment->folder_id == $folder->id)
 								<div class="item">
-									<!-- @cpnwaugha: c-e: Fetching the user's image. Change to fetch uploaded image -->
 									{{--<img src="{{ Gravatar::get(Auth::user()->email), 'tiny'}}" class="offline" alt="User Image"/>--}}
 									<img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
 									<!--<img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" alt="user image" class="offline"/>-->
@@ -356,7 +356,7 @@
 				</div> <!-- end div -->
 			
 				<div class="box-footer"> <!--div forward file -->
-					<form action = "/update" method = "post">
+					<form action="{{route('forward')}}" method = "post">
 					<input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
 					<div class="form-group">
 						<label><b>Enter Recipient Email:</b></label>               
@@ -412,5 +412,5 @@
 			</div> <!-- end right div -->
  	</div><!-- /.row -->
 </section><!-- content -->
-</div> <!-- content-wrapper -->
+<!-- </div> -->
 @endsection
