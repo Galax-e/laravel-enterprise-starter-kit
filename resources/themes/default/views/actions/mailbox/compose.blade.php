@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.special_master')
 
 @section('head_extra')
     <!-- jVectorMap 1.2.2 -->

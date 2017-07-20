@@ -59,8 +59,13 @@
                     
                         <div class="box-footer">
                             <div class="btn-group mailbox-controls with-border pull-right">
-                                <button class="btn btn-danger btn-raised"><i class="fa fa-trash-o"></i> Delete</button>
-                                <button class="btn btn-primary btn-raised"><i class="fa fa-print"></i> Print</button>
+<script>
+function myFunction() {
+    window.print();
+}
+</script>
+                               
+                                <button onclick="myFunction()" class="btn btn-primary btn-raised"><i class="fa fa-print"></i> Print</button>
                             </div>
                         </div><!-- /.box-footer -->
                     </div><!-- /. box -->

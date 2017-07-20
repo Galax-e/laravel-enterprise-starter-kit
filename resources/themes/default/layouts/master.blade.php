@@ -6,7 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>{{ Setting::get('app.short_name') }} | {{ $page_title or "Page Title" }}</title>
+    <title>{{ Setting::get('app.short_name') }} | {{ $page_title or "Registry" }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Set a meta reference to the CSRF token for use in AJAX request -->
@@ -28,35 +28,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Colorbox -->
     <link href="{{ asset("/assets/colorbox/example1/colorbox.css") }}" rel="stylesheet" type="text/css" />
-
-    <!-- @cpnwaugha jQuery Toast -->
-    <link href="{{ asset("/bower_components/admin-lte/dist/css/jquery.toast.css") }}" rel="stylesheet" type="text/css" />
-
-    <!-- Select2 css -->
-    {{--  <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/propellerkit/components/select2/css/select2.min.css") }}">
-    <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/propellerkit/components/select2/css/select2-bootstrap.css") }}" >
-
-    <!-- Propeller typography -->
-    <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/propellerkit/assets/css/typography.css") }}">  --}}
-
-    <!-- AdminLTE select2 -->
-    <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/select2/dist/css/select2.min.css") }}" >
-
-
-    <!-- MUI -->
-    <link href="{{ asset("/bower_components/admin-lte/mui/css/mui.min.css") }}" rel="stylesheet" type="text/css" />
-
-    <script src="{{ asset("/bower_components/admin-lte/mui/js/mui.min.js") }}"></script>
-
-    <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/propellerkit/components/select2/css/pmd-select2.css") }}" >
-    <link rel="stylesheet" type="text/css" href="{{asset('/bower_components/admin-lte/plugins/datatables/jquery.dataTables.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{asset('/bower_components/admin-lte/plugins/datatables/material.min.css') }}"> 
-    <link rel="stylesheet" type="text/css" href="{{asset('/bower_components/admin-lte/plugins/datatables/dataTables.material.min.css') }}">  
-
     <!-- Application CSS-->
     <link href="{{ asset(elixir('css/all.css')) }}" rel="stylesheet" type="text/css" />
 
-    
+    <!-- elFinder CSS (REQUIRED) -->
+    <link rel="stylesheet" type="text/css" href="{{ asset("/packages/barryvdh/elfinder/css/elfinder.min.css") }}" >
+    <link rel="stylesheet" type="text/css" href="{{ asset("/packages/barryvdh/elfinder/css/theme.css") }}" >
+
+
     <!-- Head -->
     @include('partials._head')
 
@@ -90,10 +69,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
        <!-- AdminLTE Select2 -->
       <script src="{{asset("/bower_components/admin-lte/select2/dist/js/select2.full.min.js")}}"></script>
 
-      <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+      <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/jquery.dataTables.js') }}"></script>
       <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/dataTables.material.min.js') }}"></script>
-      <script type="text/javascript" src="{{ asset('/bower_components/admin-lte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
-      
 
       <!-- Colorbox -->
       <script type="text/javascript" src="{{ asset ("/assets/colorbox/jquery.colorbox-min.js") }}"></script>
@@ -113,8 +90,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Optional header section  -->
       @yield('head_extra')
 
+      <!-- Elfinder Header scripts -->
+      @yield('after_scripts')
+      
   </head>
-
   <!-- Body -->
   @include('partials._body')
 

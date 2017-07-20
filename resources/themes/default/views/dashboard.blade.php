@@ -85,7 +85,7 @@
 					{{--@endunless --}}
 					<div class="box-tools pull-right">
 							{{-- auto fetch the users in the department--}}
-							<span class="label label-primary"><label id='users_online'>{{ $dept_size }} </label>&nbsp; users online</span> {{-- The span is to be auto generated --}}
+							<span class="label label-primary"><label id='users_online'>{{ $dept_size }} </label>&nbsp; user(s)</span> {{-- The span is to be auto generated --}}
 							<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 							{{-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> --}}
 					</div><!-- /.box-tool -->
@@ -108,7 +108,7 @@
 					</ul><!-- /.users-list -->
 				</div><!-- /.box-body -->
 				<div class="box-footer text-center">
-					<a href="javascript::viewall" class="uppercase">View All Users</a>
+					<a href="viewallcontacts" class="uppercase">View All Users</a>
 				</div><!-- /.box-footer -->
 			</div>
 			<!-- BROWSER USAGE -->
@@ -126,9 +126,19 @@
 					<ul class="todo-list">
 					@foreach($activities as $activity)
 						@if($activity->activity_by == Auth::user()->email || Auth::user()->username)
-						<li>                     
-						<small>{{ $activity->activity }}
-						<i class="fa fa-clock-o"></i>
+						<li>   
+						 <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $activity->activity_by)->first();
+	                    
+	                    $temp = array();
+	                    foreach($user as $field => $val ){
+	                        $temp[$field] = $val;
+	                    }
+	                    
+	                    $user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];  ?>
+
+
+						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 30px;" alt="User Image"/>  &nbsp; &nbsp;{{ $activity->folder_id }}
+						</small><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small>
 						</li>           
 						@endif
@@ -179,7 +189,7 @@
 				<div class="col-md-9"> <!-- pull right col-md-9 div for pdf view + comment + forward, and file activity -->
 				
 					<!-- SERVER HEALTH REPORT -->
-					<!-- MAP & BOX PANE {{ substr($user->fold_name, 3) }} -->
+					
 					<div class="box box-primary"> <!-- div for pdf view -->
 						<div class="box-body no-padding">
 							<div class="mailbox-read-info">
@@ -221,11 +231,8 @@
 						</div> <!-- end box-footer for other pdfs attachment -->
 					
 						<div class="box"> <!-- div for comment header-->
-							<div class="box-header"> 
-								<i class="fa fa-paperclip"></i>
-								<div class="browse_text">Attach new File:</div>
-							</div>
-							<div class="box-body"> 
+
+							<div class="box-footer" id="chat-box">
 								<center>
 									<div style="width:350px" align="center">
 										<div id='preview'></div>    
@@ -236,13 +243,8 @@
 										</form>
 									</div>
 								</center>
-							</div>
-
-							<div class="box-footer" id="chat-box">
-								<!-- chat item -->
-								<!-- chat item -->
-								<i class="fa fa-comments-o"></i>
-								<h3 class="box-title"><small>Comments</small></h3>
+								
+								<h3 class="box-title"><small><i class="fa fa-comments-o"></i> Comments</small></h3>
 							</div> <!-- end of attach file -->
 						</div>  <!-- end box -->
 				
@@ -362,8 +364,9 @@
 						<label><b>Enter Recipient Email:</b></label>               
 						<div class="input-group">
 						<input type="hidden" name="comment_by" value="{{ Auth::user()->email }}">
-						<input type="hidden" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Forwarded this file: {{ substr($folder->name, 3) }} to ">
+						<input type="hidden" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Forwarded this file: {{ $folder->name }} to ">
 						<input type="hidden" name="fold_name" value="{{ $folder->name }}">  
+						<input type="hidden" name="fileinfo" value="{{ $folder->name }} | {{ $folder->desc }}"> 
 
 						<div class="form-group pmd-textfield pmd-textfield-floating-label">       
 						<select id="forward_to_user" class="select-with-search form-control select2" name="share-input" placeholder="Recipient Email..."></select>

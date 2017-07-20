@@ -59,8 +59,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="index.html"><i class="fa fa-exchange"></i> My Activities</a></li>
-                        <li><a href="index.html"><i class="fa fa-exchange"></i> Position Activities</a></li>
+                        <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> My Activities</a></li>
+                        <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> Position Activities</a></li>
                         <li>
                             <a href="{{url('inbox')}}">
                                 <i class="fa fa-envelope-o"></i><span> Mailbox</span>
@@ -74,7 +74,7 @@
                                <i class="fa fa-key"></i> Change Pin
                             </a>
                         </li>
-                        <li class=""><a href="index2.html"><i class="fa fa-file-o"></i> Request Folder</a></li>
+                        <li class=""><a href="#" data-toggle="modal" data-target="#requestFileModal"><i class="fa fa-file-o"></i> Request Folder</a></li>
                     </ul>
                 </li>
                 
@@ -90,7 +90,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
-                                <a href="pages/layout/top-nav.html">
+                                <a href="{{ url('/viewallrequest') }}">
                                     <i class="fa fa-files-o"></i><span> Folder Requests</span>
                                     <span class="pull-right-container">
                                         <small class="label pull-right bg-blue">4</small>

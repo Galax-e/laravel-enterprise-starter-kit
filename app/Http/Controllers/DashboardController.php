@@ -42,6 +42,7 @@ use App\Folder;
 use App\Activity;
 use App\Document;
 use App\MemoNotification;
+use App\folder_request;
 
 use Illuminate\Support\Facades\Input;
 
@@ -86,6 +87,15 @@ class DashboardController extends Controller
 		$dept_size = count($dept_size);
 
         return view('dashboard', compact('users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size'));
+    }
+    
+    public function viewallcontacts()
+    {
+        $page_title = "Users | All Contact"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_description = "All contact based on Department"; // trans('admin/users/general.page.index.description'); // "List of users";
+        $user_id = Auth::user()->email;
+		$users = DB::select('select * from users'); 
+		return view('user.allcontact', compact('users', 'page_title', 'page_description'));
     }
 
 	public function commentRefresh(){
@@ -170,7 +180,43 @@ class DashboardController extends Controller
         return view('views.actions.activity.viewall', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
     }
 
-	public function viewallrequest()
+    public function searchactivity()
+    {
+        Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
+
+        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+
+        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+		$user_id = Auth::user()->email;
+		$user_id2 = 'root';		
+		$act = '%Forward%';
+		$search = Input::get('search');
+		
+		$search = '%'.$search.'%';
+		
+		//$folder = Folder::all();	
+		$folderactivity = DB::table('activities')->where('activity', 'like', $act)->orderBy('created_at', 'DESC')->paginate(5);
+
+		//$folder = Folder::all();	
+		$activity = DB::table('activities')->where('activity_by', $user_id)->where('activity', 'like', $search)->orderBy('created_at', 'DESC')->paginate(12);
+        return view('actions.activity.viewall', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
+    }
+
+	public function searchcontact()
+    {
+         $page_title = "Users | All Contact"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_description = "All contact based on Department"; // trans('admin/users/general.page.index.description'); // "List of users";
+        $user_id = Auth::user()->email;
+		$users = DB::select('select * from users'); 
+		$search = Input::get('search'); 
+		$search = '%'.$search.'%';
+		$users = DB::table('users')->where('first_name', 'like', $search)->orderBy('created_at', 'DESC')->paginate(12);
+
+        return view('user.allcontact', compact('users', 'page_title', 'page_description'));
+    }
+
+    public function viewallrequest()
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
@@ -188,11 +234,11 @@ class DashboardController extends Controller
 		$folder_requests = DB::table('folder_requests')->orderBy('created_at', 'DESC')->paginate(20);
 		$labels = array('label-warning', 'label-info');
 		//$folder = Folder::all();	
+		$request_count = folder_request::all()->count();
+		$completedrequest_count = folder_request::where('treated', '=', 1)->count();
 		$activity = DB::table('activities')->where('activity_by', $user_id)->orderBy('created_at', 'DESC')->paginate(12);
-        return view('views.actions.activity.viewallrequests', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity','folder_requests','labels'));
+        return view('actions.activity.viewallrequest', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity','folder_requests','labels', 'request_count', 'completedrequest_count'));
     }
-
-	
 	
 	public function store_session()
     {  

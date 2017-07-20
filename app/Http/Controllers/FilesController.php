@@ -211,7 +211,7 @@ class FilesController extends Controller {
         $shareInput = $receiver_user['first_name'].', '.$receiver_user['last_name'];
         $activity->activity_by= Input::get('comment_by');
         $activity->folder_id= Input::get('fold_name');
-		//$activity->fileinfo= Input::get('fileinfo');
+		$activity->fileinfo= Input::get('fileinfo');
         $activity->activity= Input::get('activity'). $shareInput;
         $activity->save();        // create a notification and save to database
       
