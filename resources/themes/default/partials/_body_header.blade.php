@@ -85,8 +85,8 @@
                                                     <!-- Message title and timestamp -->
                                                     <h4>
                                                         {{ $user_name }}
-                                                        <small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
-                                                        <i class="fa fa-clock-o pull-right"></i>
+                                                        {{--<small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
+                                                        <i class="fa fa-clock-o pull-right"></i>--}}
                                                     </h4>
                                                     <!-- The message -->
                                                     <p>{{ $memo->subject}}</p>
@@ -235,7 +235,7 @@
                     @if ( Setting::get('app.right_sidebar') )
                         <!-- Control Sidebar Toggle Button -->
                         <li>
-                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                           
                         </li>
                     @endif
                 @else
