@@ -124,10 +124,10 @@
        setInterval(function(){
            pageRefresh(); // refresh page every sec.       
         }, 1000);        // for forward button.
-       $('#forwardBtn').on('click', function(e){            //e.preventDefault();
+       //$('#forwardBtn').on('click', function(e){            //e.preventDefault();
            //e.stopPropagation();
            //console.log('Working');
-       });
+       //});
 
        $('#notif_toggle').on("click", function(){
            $.ajax({
@@ -136,8 +136,7 @@
                dataType:"json",
                success:function(data)
                {
-                   // var data_length = Object.keys(data).length;  // doesn't support old IE browsers
-                   // console.log("connection to notification seen, successful");
+                   
                },
                error:function(){
                    console.log('error, connecting to notification controller ');
@@ -178,7 +177,7 @@
        function desktopNotification(heading='New event', message='You have a new folder on your desk', count=0){
            // show desktop notification
            if(count >= 1){
-                $beep = new Audio('beep.ogg');
+                $beep = new Audio('assets/audio/beep.ogg');
                 $playAudio = function() {
                     $beep && $beep.play();
                 };
@@ -231,6 +230,10 @@
                 height: '60px',
                 opacity: 1
             }).fadeOut(3000);
+       });
+
+       $('#createPinBtn').on('click', function(){
+            $('#createPinModal').modal('hide');
        });
 
        $('#createPinBtn').on('click', function(){

@@ -551,6 +551,7 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
         'AddEmailVerification' => __DIR__ . '/../..' . '/database/migrations/2016_09_07_182002_AddEmailVerification.php',
         'AddEnabledFieldToAuthorizationTables' => __DIR__ . '/../..' . '/database/migrations/2015_07_07_170139_add_enabled_field_to_authorization_tables.php',
         'AddNotifyToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_040142_add_notify_to_users_table.php',
+        'AddPinToUsers' => __DIR__ . '/../..' . '/database/migrations/2017_07_21_075433_add_pin_to_users.php',
         'AddUserDataAndUrlToLernTables' => __DIR__ . '/../..' . '/database/migrations/2016_03_27_000000_add_user_data_and_url_to_lern_tables.php',
         'CreateActivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_01_223323_create_activities_table.php',
         'CreateAuditTable' => __DIR__ . '/../..' . '/database/migrations/2015_10_25_162237_CreateAuditTable.php',

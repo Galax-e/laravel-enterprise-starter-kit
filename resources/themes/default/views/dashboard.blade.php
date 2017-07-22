@@ -16,6 +16,8 @@
     .box-footer{
       
     }
+	.item{margin-top: 0.1em !important; margin-bottom: 0.1em !important;}
+	.message{font-family: "Times New Roman", Times, serif; font-size: 15px;}
     .mailbox-attachment-icon{
       width:200px !important;
       height:105px !important;
@@ -222,11 +224,9 @@
 					
 						<div class="box"> <!-- div for comment header-->
 							<div class="box-header"> 
-								<i class="fa fa-paperclip"></i>
-								<div class="browse_text">Attach new File:</div>
-							</div>
-							<div class="box-body"> 
-								<center>
+								{{--  <i class="fa fa-paperclip"></i>
+								<span class="browse_text">Attach new File:</span>  --}}
+								<center class="text-center">
 									<div style="width:350px" align="center">
 										<div id='preview'></div>    
 										<form id="image_upload_form" method="post" enctype="multipart/form-data" action='file-upload/image_upload.php' autocomplete="off">
@@ -237,18 +237,17 @@
 									</div>
 								</center>
 							</div>
-
-							<div class="box-footer" id="chat-box">
-								<!-- chat item -->
-								<!-- chat item -->
-								<i class="fa fa-comments-o"></i>
-								<h3 class="box-title"><small>Comments</small></h3>
-							</div> <!-- end of attach file -->
+							<div class="box-footer">
+								<ul class="list-inline">
+									<li class="pull-left">
+										<a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
+									(5)</a></li>
+								</ul>
+							</div>
 						</div>  <!-- end box -->
-				
 					
-						<!-- chat item -->
-					<div class='chat'>
+					<!-- chat item -->
+					<div class='chat'>					
 						<div id="reload_comment{{$loopindex}}" class="divcomment">	<!-- comment on file -->
 							@foreach($comments as $comment)
 							@if($comment->folder_id == $folder->id)
@@ -274,66 +273,160 @@
 					<script>
 						$(function(){
 
-						$.ajaxSetup({
-							headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
-						});
-				
-						$(document).on('click', "button#submitPostBtn{{$loopindex}}", function(e){
-							e.preventDefault();
-							e.stopPropagation();
+							$.ajaxSetup({
+								headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+							});
 
-							var folder_id = $("#folder_id{{$loopindex}}").val();
-							var comment_by= $("#comment_by{{$loopindex}}").val();
-							var activity  = $("#activity{{$loopindex}}").val();
-							var comment   = $("#comment{{$loopindex}}").val();
-							var formData  = $("#commentForm{{$loopindex}}").serialize();
-							var data = formData; // {comment: comment, comment_by: comment_by, folder_id: folder_id, activity: activity, '_token': $('input[name=_token]').val()};
+							// posting comments...
+							$(document).on('click', "button#submitPostBtn{{$loopindex}}", function(e){
+								e.preventDefault();
+								e.stopPropagation();
 
-							$("#comment{{$loopindex}}").val('');
-
-							created_at = moment().format('ll'); //moment().startOf('hour').fromNow();  // an hour ago
-								
-							var renderComment = `
-							<div class="item">
-								<img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-								<p class="message">
-								<a href="#" class="name"> 
-								<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> ${created_at}</small> 
-								${comment_by }
-								</a>
-								${comment}
-								</p>
-							</div>
-							`;
-							
-							$("#reload_comment{{$loopindex}}").append(renderComment); 
-
-							$.ajax({
-								url:"ajaxcomment",
-								method:"GET",
-								dataType:"json",
-								data: data,
-								success:function(returnData)
-								{
-								console.log('Good, comment added to database.');
-								},
-								error:function()
-								{
-								console.log('Bad, not connected');
+								if ($("#comment{{$loopindex}}").val() == ''){
+									alert('Comment cannot be empty');
+									return;
 								}
+								$('#postPinModal').modal('show');
+								// when you click on the modal send button...
+								$("#postPinBtn").on('click', function(e){
+									e.preventDefault();
+									e.stopPropagation();
+									$('#postPinModal').modal('hide');
+
+									var postPinForm = $('#post_pin_form').serialize();
+									$('#post_pin_input').val(''); // cancel the value in the input field
+
+									var data = postPinForm;
+
+									$.ajax({
+										url:"authpin",
+										method:"GET",
+										dataType:"text",
+										data: data
+									}).done(function(returnVal){
+										if(returnVal == "true"){
+											console.log('good, right pin');											
+											var formData  = $("#commentForm{{$loopindex}}").serialize();
+											postCommentForm(formData);
+										}else{
+											console.log('bad, wrong pin.');
+										}
+									}).fail(function(){
+										console.log('No connection to pin controller');
+									});
+								});
 							});
 
-							$.toast({
-								heading: 'File comment',
-								text: 'New comment added to file',
-								icon: 'success',
-								bgColor: '#E01A31',
-								hideAfter: 5000,
-								showHideTransition: 'slide',
-								loader: false,        // Change it to false to disable loader
-								loaderBg: '#9EC600'  // To change the background
-							});
-						});
+							// forwarding new files...
+							$(document).on('click', "button#forwardBtn{{$loopindex}}", function(e){
+								e.preventDefault();
+								e.stopPropagation();
+								$('#forwardPinModal').modal('show');
+
+								$("#forwardPinBtn").on('click', function(e){
+									e.preventDefault();
+									e.stopPropagation();
+									$('#forwardPinModal').modal('hide');
+
+									var forwardPinForm = $('#forward_pin_form').serialize();
+									$('#forward_pin_input').val('');
+
+									var data = forwardPinForm;
+
+									$.ajax({
+										url:"authpin",
+										method:"GET",
+										dataType:"text",
+										data: data
+									}).done(function(returnVal){
+										console.log(returnVal);
+										if(returnVal == "true"){
+											console.log('good, right pin');											
+											var formData  = $("#forwardForm{{$loopindex}}").serialize();
+											forwardForm(formData);
+										}else{
+											console.log('bad, wrong pin.');
+										}
+									}).fail(function(returnData){
+										console.log('No connection to pin controller');
+									});
+								});
+							});		
+
+							function postCommentForm(formData){
+
+								var folder_id = $("#folder_id{{$loopindex}}").val();
+								var comment_by= $("#comment_by{{$loopindex}}").val();
+								var activity  = $("#activity{{$loopindex}}").val();
+								var comment   = $("#comment{{$loopindex}}").val();
+								var data = formData; // {comment: comment, comment_by: comment_by, folder_id: folder_id, activity: activity, '_token': $('input[name=_token]').val()};
+								$("#comment{{$loopindex}}").val('');
+								created_at = moment().format('ll'); //moment().startOf('hour').fromNow();  // an hour ago
+									
+								var renderComment = `
+								<div class="item">
+									<img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+									<p class="message">
+									<a href="#" class="name"> 
+									<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> ${created_at}</small> 
+									${comment_by }
+									</a>
+									${comment}
+									</p>
+								</div>
+								`;
+								
+								$("#reload_comment{{$loopindex}}").append(renderComment); 
+
+								$.ajax({
+									url:"ajaxcomment",
+									method:"GET",
+									dataType:"json",
+									data: data
+								}).done(function(returnData){
+									console.log('Good, comment added to database.');
+								}).fail(function(returnData){
+									console.log('Bad, not connected');
+								});
+
+								$.toast({
+									heading: 'New Comment',
+									text: 'Comment added to Folder',
+									icon: 'success',
+									//bgColor: '#E01A31',
+									hideAfter: 5000,
+									showHideTransition: 'slide',
+									loader: false,        // Change it to false to disable loader
+									loaderBg: '#9EC600'  // To change the background
+								});
+							};
+
+							// foward the folder
+							function forwardForm(formData){
+
+								var data = formData;
+								$.ajax({
+									url:"forward",
+									method:"POST",
+									dataType:"json",
+									data: data
+								}).done(function(returnData){
+									console.log('Good, folder forward successful.');
+								}).fail(function(returnData){
+									console.log('Bad, not connected');
+								});
+
+								$.toast({
+									heading: 'Folder Forwarded',
+									text: 'Folder forwarded from Your Desk',
+									icon: 'success',
+									// bgColor: '#E01A31',
+									hideAfter: 5000,
+									showHideTransition: 'slide',
+									loader: false,        // Change it to false to disable loader
+									loaderBg: '#9EC600'  // To change the background
+								});
+							}
 						})
 					</script>
 				<!--</div> --><!-- end div chat-box -->
@@ -345,34 +438,37 @@
 						<input type="hidden" id="activity{{$loopindex}}" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Comment on {{ substr($folder->name, 3) }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="box-footer">
-						<div class="input-group">
-							<input class="form-control" id="comment{{$loopindex}}" name="comment" placeholder="Type message..."/>
-							<div class="input-group-btn">
-								<button id="submitPostBtn{{$loopindex}}" class="btn btn-primary commentrefresh"><i class="fa fa-plus"> Post</i></button>
+							<div class="input-group">
+								<input class="form-control" id="comment{{$loopindex}}" name="comment" placeholder="Type message..."/>
+								<div class="input-group-btn">
+									<button id="submitPostBtn{{$loopindex}}" class="btn btn-primary commentrefresh"><i class="fa fa-plus"> Post</i></button>
+								</div>
 							</div>
-						</div>
 						</div>
 					</form>
 				</div> <!-- end div -->
 			
-				<div class="box-footer"> <!--div forward file -->
-					<form action="{{route('forward')}}" method = "post">
-					<input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
-					<div class="form-group">
-						<label><b>Enter Recipient Email:</b></label>               
-						<div class="input-group">
+				<div class=""> <!--div forward file -->
+					<form action="{{route('forward')}}" id="forwardForm{{$loopindex}}"  method="post">
+						<input type = "hidden" name="_token" value="<?php echo csrf_token(); ?>">
 						<input type="hidden" name="comment_by" value="{{ Auth::user()->email }}">
 						<input type="hidden" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Forwarded this file: {{ substr($folder->name, 3) }} to ">
-						<input type="hidden" name="fold_name" value="{{ $folder->name }}">  
-
-						<div class="form-group pmd-textfield pmd-textfield-floating-label">       
-						<select id="forward_to_user" class="select-with-search form-control select2" name="share-input" placeholder="Recipient Email..."></select>
-						</div> 
-							<div class="input-group-btn">
-							<button id='forwardBtn' class="btn btn-success"><i class="fa fa-share"></i> Forward</button>
+						<input type="hidden" name="fold_name" value="{{ $folder->name }}">
+						
+						 
+						<div class="box-footer">
+							<div style="margin-left:5px"><label><b>Enter Recipient Email:</b></label></div>
+							<div class="form-group">														              
+								<div class="input-group">					 
+									<div class="pmd-textfield pmd-textfield-floating-label img-responsive">       
+										<select id="forward_to_user" class="form-control select-with-search select2" name="share-input" placeholder="Recipient Email..."></select>
+									</div> 
+									<div class="input-group-btn">
+										<button id='forwardBtn{{$loopindex}}' class="btn btn-success"><i class="fa fa-share"></i> Forward</button>
+									</div>
+								</div>                   
 							</div>
-						</div>                   
-					</div>
+						</div>
 					</form>
 				</div><!-- /.box-footer --> <!--div forward file -->
 						
