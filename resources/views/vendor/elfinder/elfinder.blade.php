@@ -3,7 +3,7 @@
 @section('after_scripts')
 
     <!-- elFinder JS (REQUIRED) -->
-    <script src="<?= asset($dir.'/js/elfinder.min.js') ?>"></script>
+    <script src="<?= asset($dir.'/js/elfinder.full.js') ?>"></script>
 
     <?php if($locale){ ?>
     <!-- elFinder translation (OPTIONAL) -->
