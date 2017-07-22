@@ -35,14 +35,16 @@
 
         @if ( Setting::get('app.search_box') )
             <!-- search form (Optional) -->
-            <form action="#" method="get" class="sidebar-form">
+            <form action="searchactivity" method="post" class="sidebar-form">
+            {{ csrf_field() }}
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="Search..."/>
+                     <input type="text" name="search" class="form-control input-sm" placeholder="Search..."/>
                   <span class="input-group-btn">
                     <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
                   </span>
                 </div>
             </form>
+             
             <!-- /.search form -->
         @endif
 
@@ -59,8 +61,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="index.html"><i class="fa fa-exchange"></i> My Activities</a></li>
-                        <li><a href="index.html"><i class="fa fa-exchange"></i> Position Activities</a></li>
+                        <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> My Activities</a></li>
+                        <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> Position Activities</a></li>
                         <li>
                             <a href="{{url('inbox')}}">
                                 <i class="fa fa-envelope-o"></i><span> Mailbox</span>
@@ -74,7 +76,7 @@
                                <i class="fa fa-key"></i> Change Pin
                             </a>
                         </li>
-                        <li class=""><a href="index2.html"><i class="fa fa-file-o"></i> Request Folder</a></li>
+                        <li class=""><a href="#" data-toggle="modal" data-target="#requestFileModal"><i class="fa fa-file-o"></i> Request Folder</a></li>
                     </ul>
                 </li>
                 
@@ -90,7 +92,7 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
-                                <a href="pages/layout/top-nav.html">
+                                <a href="{{ url('/viewallrequest') }}">
                                     <i class="fa fa-files-o"></i><span> Folder Requests</span>
                                     <span class="pull-right-container">
                                         <small class="label pull-right bg-blue">4</small>

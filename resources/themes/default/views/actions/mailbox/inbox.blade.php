@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.special_master')
 
 @section('head_extra')
     <!-- jVectorMap 1.2.2 -->
@@ -52,7 +52,7 @@
             @foreach($memos as $memo)
             <tr>
                 <td>{{ $memo->emailfrom }}</td>
-                <td><b>{{ $memo->subject }}</b> | {{ substr($memo->message, 3, -6) }}</td>
+                <td><a href="read_memo/{{ $memo->id }}"><b>{{ str_limit($memo->subject, 25) }} </b></a> | {{ str_limit(substr($memo->message, 3, -6), 70) }}</td>
                 <td>{{ date('F d, Y', strtotime($memo->created_at)) }}</td>
             </tr>
             @endforeach

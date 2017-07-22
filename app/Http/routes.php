@@ -62,11 +62,16 @@ Route::group(['middleware' => 'authorize'], function () {
 	Route::get(   'inbox',          ['as' => 'inbox',          'uses' => 'MemoController@inbox']);
     Route::get(   'read_memo/{id}', ['as' => 'read_memo/{id}',          'uses' => 'MemoController@read_memo']);
 	Route::get(   'session',        ['as' => 'session',          'uses' => 'DashboardController@session']);
+    Route::post(   'searchactivity',      ['as' => 'searchactivity',          'uses' => 'DashboardController@searchactivity']);
+    Route::post(   'searchcontact',      ['as' => 'searchcontact',          'uses' => 'DashboardController@searchcontact']);
 	Route::post(  'store',          ['as' => 'store',          'uses' => 'DashboardController@store']);
     Route::get(   'viewall',        ['as' => 'viewall',          'uses' => 'DashboardController@viewall']);
+    Route::get(   'viewallcontacts',        ['as' => 'viewallcontacts',          'uses' => 'DashboardController@viewallcontacts']);
     Route::get(   'viewallrequest', ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
 	Route::post(  'store-session',  ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
 	Route::post(  'store_memo',     ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
+    Route::post(  'insert',     ['as' => 'insert',          'uses' => 'DashboardController@insert']);
+    Route::post(  'attachment',     ['as' => 'attachment',          'uses' => 'DashboardController@attachment']);
     Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
     Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
 
