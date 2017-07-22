@@ -11,7 +11,7 @@
 
   <style type="text/css">
     #read-time{
-      color:  tomato;
+        color: tomato;
     }
     .box-footer{
       

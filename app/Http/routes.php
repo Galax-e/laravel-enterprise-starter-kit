@@ -93,6 +93,8 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::get('commentrefresh', ['as' => 'commentrefresh', 'uses' => 'DashboardController@commentRefresh']);
     Route::get('ajaxcomment', ['as' => 'ajaxcomment', 'uses' => 'FilesController@ajaxComment']);
 
+    Route::get('authpin', ['as' => 'authpin', 'uses' => 'FilesController@authenticatePin']);
+
     Route::post('requestform','FilesController@requestform');
     Route::post('ajaxfolderrequest', ['as'=>'ajaxfolderrequest', 'uses'=>'FilesController@ajaxFolderRequest']);
     Route::post('storepinform','FilesController@storepinform');

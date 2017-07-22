@@ -227,7 +227,8 @@ class FilesController extends Controller {
 		
 		//return 'session';
         Flash::success('File has been sent to '. $first_name . ', '. $last_name);
-        return redirect()->back()->with('Dashboard up-to-date');
+        //return redirect()->back()->with('Dashboard up-to-date');
+		return response()->json(['message'=>'Success']);
     }
 	
 	
@@ -337,6 +338,7 @@ class FilesController extends Controller {
 
 
 	public function storepinform(){
+		
 		$pin = Input::get('new_pin');
 		$id = Auth::user()->id;
 		if (Input::get('new_pin') == Input::get('confirmpin')){
@@ -355,6 +357,36 @@ class FilesController extends Controller {
 			Flash::Error('PIN does not match');
 			return redirect()->back()->with('LOL');
 		}
+	}
+
+	public function authenticatePin(){
+		// fetch the values from the comment form.
+
+		$user = Auth::user();
+		$currentPin = $user->pin;
+
+		$postPinToAuth = request('post_pin_input');
+
+		if($postPinToAuth){
+			if($currentPin == strval($postPinToAuth)){
+				return "true";
+			}else{
+				Flash::Error('Wrong Pin');
+				return "false";
+			}
+		}
+		
+		$forwardPinToAuth = request('forward_pin_input');
+
+		if($forwardPinToAuth){
+			if($currentPin == strval($forwardPinToAuth)){
+				return "true";
+			}else{
+				Flash::Error('Wrong Pin');
+				return "false";
+			}
+		}
+		
 	}
 
 }

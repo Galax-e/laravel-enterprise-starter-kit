@@ -146,8 +146,8 @@ desired effect
     </div>
     </div>
 
-    <!-- pin verification -->
-    <div class="modal fade" id="createPinModal" role="dialog">
+    <!-- post comment pin verification -->
+    <div class="modal fade" id="postPinModal" role="dialog">
     <div class="modal-dialog" style="width: 400px;">
     
         <!-- Modal content-->
@@ -163,20 +163,53 @@ desired effect
                     </div><!-- /. tools -->
                 </div> <!-- /. box-header -->
             </div>        
-            <form method="post" id="verify_pin_form" action="verifypinform">
+            <form method="post" id="post_pin_form" action="postpinform">
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="pin_verification" name="pin_verification" placeholder="Enter your PIN"/>
+                        <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" placeholder="Enter your PIN" autofocus required/>
                     </div>
                 </div>
                 <div class="box-footer clearfix">
-                    <button id="verifPinBtn" type="button" class="pull-right btn btn-info btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+                    <button id="postPinBtn" type="button" class="pull-right btn btn-info btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
                 </div>
             </form>             
         </div> <!-- modal-content -->    
     </div>
     </div>
+
+    <!-- forward pin verification -->
+    <div class="modal fade" id="forwardPinModal" role="dialog">
+    <div class="modal-dialog" style="width: 400px;">
+    
+        <!-- Modal content-->
+        <div class="modal-content">      
+            
+            <div class="box box-info">
+                <div class="box-header">
+                    <i class="fa fa-key"></i>
+                    <h3 class="box-title">Enter your PIN</h3>
+                    <!-- tools box -->
+                    <div class="pull-right box-tools">
+                        <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
+                    </div><!-- /. tools -->
+                </div> <!-- /. box-header -->
+            </div>        
+            <form method="post" id="forward_pin_form" action="forwardpinform">
+                {{ csrf_field() }}
+                <div class="box-body">
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="forward_pin_input" name="forward_pin_input" placeholder="Enter your PIN" autofocus required/>
+                    </div>
+                </div>
+                <div class="box-footer clearfix">
+                    <button id="forwardPinBtn" type="button" class="pull-right btn btn-info btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+                </div>
+            </form>             
+        </div> <!-- modal-content -->    
+    </div>
+    </div>
+
 
     <!-- @cpnwaugha: c-e needed to bring in all the pretty adminLTE functions-->
     <!--FastClick -->
