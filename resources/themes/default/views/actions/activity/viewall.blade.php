@@ -105,12 +105,30 @@
                        '.Str_limit($activity_by->comment, 250).'
                     </div>
                     <div class="timeline-footer">
-                      <a class="btn btn-primary btn-xs">Read more</a>
+                      
                     </div>
                   </div>
                 </li>';
                   }
 
+                  elseif (strpos($activity_by->activity, 'mail') !== false) {
+                echo '
+                <li>
+                  <i class="fa fa-envelope bg-blue"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> '.date('H:i A | F d, Y', strtotime($activity_by->created_at )).'</span>
+                    <h3 class="timeline-header"><a href="#">'.Auth::user()->first_name.' '.Auth::user()->last_name.'</a> '.$activity_by->activity.'</h3>
+                    <div class="timeline-body">
+                       <b>'.Str_limit($activity_by->comment, 250).'</b>, '.Str_limit($activity_by->memo, 250).'
+                    </div>
+                    <div class="timeline-footer">
+                      
+                    </div>
+                  </div>
+                </li>';
+                  }
+
+        
                 elseif (strpos($activity_by->activity, 'login') !== false) {
                 echo '
                 <li>
@@ -122,10 +140,34 @@
                 </li>';
                   }
 
+                  elseif (strpos($activity_by->activity, 'PIN') !== false) {
+                echo '
+                <li>
+                  <i class="fa fa-key bg-black"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> '.date('H:i A | F d, Y', strtotime($activity_by->created_at )).'</span>
+                    <h3 class="timeline-header no-border"><a href="#">'.Auth::user()->first_name.' '.Auth::user()->last_name.'</a> '.$activity_by->activity.'</h3>
+                  </div>
+                </li>';
+                  }
+
 
 
 
                elseif (strpos($activity_by->activity, 'Forward') !== false) {
+                echo '
+                <li>
+                  <i class="fa fa-folder bg-purple"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> '.date('H:i A | F d, Y', strtotime($activity_by->created_at )).'</span>
+                    <h3 class="timeline-header"><a href="#">'.Auth::user()->first_name.' '.Auth::user()->last_name.'</a> '.$activity_by->activity.'</h3>
+                    <div class="timeline-body">
+                      <img src="'.asset('/img/folder.png').'" width="150" alt="folder" class="margin" /><b>'.$activity_by->fileinfo.'</b>
+                    </div>
+                  </div>
+                </li>';
+                  }
+                  elseif (strpos($activity_by->activity, 'Requested') !== false) {
                 echo '
                 <li>
                   <i class="fa fa-folder bg-purple"></i>

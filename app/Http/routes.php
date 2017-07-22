@@ -70,6 +70,8 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::get(   'viewallrequest', ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
 	Route::post(  'store-session',  ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
 	Route::post(  'store_memo',     ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
+    Route::post(  'insert',     ['as' => 'insert',          'uses' => 'DashboardController@insert']);
+    Route::post(  'attachment',     ['as' => 'attachment',          'uses' => 'DashboardController@attachment']);
     Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
     Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
 

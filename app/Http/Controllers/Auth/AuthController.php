@@ -100,6 +100,7 @@ class AuthController extends Controller
                 Audit::log(Auth::user()->id, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-success', ['username' => $user->username]));
 		$user2 = new activity;
 		$user2->activity_by= $user->username;
+        $user->activity_by_post = Auth::user()->position;
 		$user2->activity= 'Successful login';
 		$user2->save();
 		

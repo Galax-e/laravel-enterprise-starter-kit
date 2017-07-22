@@ -43,6 +43,7 @@ class FilesController extends Controller {
 
 		$user2 = new Activity;
 		$user2->activity_by= Input::get('comment_by');
+		$user->activity_by_post = Auth::user()->position;
 		$user2->folder_id= Input::get('folder_id');
 		$forward_activity= Input::get('forward_activity');
 		$user2->activity = $forward_activity.$folder_to;
@@ -115,6 +116,7 @@ class FilesController extends Controller {
 		
 		$activity = new Activity;
 		$activity->activity_by= Input::get('comment_by');
+		$user->activity_by_post = Auth::user()->position;
 		$activity->folder_id= Input::get('folder_id');
 		$activity->activity= Input::get('activity');
 		$activity->comment= Input::get('comment');
@@ -317,6 +319,13 @@ class FilesController extends Controller {
 		$folder_req->folder_id = $folder_request_id;
 		$folder_req->save();
 
+			$user = new Activity;
+	        $user->activity_by = Auth::user()->email;
+	        $user->activity_by_post = Auth::user()->position;
+	        $user->activity = 'Requested for file';
+	        $user->fileinfo = request('name').' | '.request('desc');
+	        $user->save();
+
 		RequestFileNotification::create(['folder_request_id'=>$folder_request_id, 'sender_id'=>$sender_id, 'receiver_roles'=> 2]);  
 
 		Flash::success('Your Request for File has been sent to Registry');
@@ -328,20 +337,23 @@ class FilesController extends Controller {
 
 
 	public function storepinform(){
+		$pin = Input::get('new_pin');
+		$id = Auth::user()->id;
 		if (Input::get('new_pin') == Input::get('confirmpin')){
-			$user = new pin;
-			$user->user= Input::get('user');
-			$user->old_pin= Input::get('old_pin');
-			$user->new_pin= Input::get('new_pin');
-			$user->save();
+			DB::update('update users set pin = ? where id = ?',[$pin,$id]);
+
+			$user = new Activity;
+	        $user->activity_by = Auth::user()->email;
+	        $user->activity_by_post = Auth::user()->position;
+	        $user->activity = 'Change PIN';
+	        $user->save();
 
 			Flash::success('Please keep your PIN from third party');
 			return redirect()->back()->with('PIN Changed');
 		}
 		else{
-			Flash::Error('Password No match in pigin');
+			Flash::Error('PIN does not match');
 			return redirect()->back()->with('LOL');
-
 		}
 	}
 

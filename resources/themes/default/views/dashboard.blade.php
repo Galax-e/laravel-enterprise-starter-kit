@@ -210,7 +210,7 @@
 						</div><!-- /.box-body first pdf view-->
 						
 						<div class="box-footer">
-							<ul class="mailbox-attachments clearfix">
+							<ul id="attachfile{{$loopindex}}" class="mailbox-attachments clearfix">
 							@foreach($files as $file)
 								@if($file->folder_id == $folder->id)
 								<li>
@@ -229,6 +229,40 @@
 							@endforeach
 							</ul>
 						</div> <!-- end box-footer for other pdfs attachment -->
+
+						@include('views.attachment_libs')
+						<!-- tesying file attachment -->					
+
+						<div class="container">
+
+							<form method="post" name="upload_form" id="upload_form" enctype="multipart/form-data" action="attachment">
+								<input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">   
+								<input type = "hidden" id="attachfolder_id{{$loopindex}}" name = "folder_id" value = "{{ $folder->id }}"> 
+							    <label>Attach files</label>
+								<br><br>
+							    <input type="file" name="upload_images[]" id="image_file" multiple >
+							    <div class="file_uploading hidden">
+							        <label>&nbsp;</label>
+							        <img src="{{asset("assets/attachment/img/uploading.gif")}}" alt="Uploading......"/>
+							    </div>
+							</form>
+							<!-- <div id="uploaded_images_preview"></div> -->
+
+						</div>
+
+						<div class="row">
+							<div class="gallery">
+								<?php
+								if(!empty($uploaded_images)){ 
+									foreach($uploaded_images as $image){ ?>
+									<ul>
+										<li >
+											<img class="images" src="<?php echo $image; ?>" alt="">
+										</li>
+									</ul>
+								<?php }	}?>
+							</div>
+						</div>
 					
 						<div class="box"> <!-- div for comment header-->
 

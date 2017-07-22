@@ -139,7 +139,6 @@ class DashboardController extends Controller
 			$receiver_user = $temp_arr;  // receiver user. It's now easy to get the fields
 			
 			$receiver_email=  $receiver_user['email'];
-
 			$memo->emailto = $receiver_email;
 			$memo->subject = Input::get('subject');
 			$memo->message = Input::get('message');
@@ -149,6 +148,15 @@ class DashboardController extends Controller
 			$memo_id = 1;
 			$sender_id = Auth::user()->id;
 			$receiver_id =  $receiver_user['id'];
+
+			$user = new Activity;
+	        $user->activity_by = Input::get('emailfrom');
+	        $user->activity_by_post = Auth::user()->position;
+	        $user->activity = 'Sends mail to: '.Input::get('email_name');
+	        $user->activity_to= $receiver_email;
+	        $user->comment= Input::get('subject');
+	        $user->memo= Input::get('message');
+	        $user->save();
 			
 			// create notification
 			MemoNotification::create(['memo_id'=>$memo_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);
@@ -159,7 +167,18 @@ class DashboardController extends Controller
     }
 
 
-	public function viewall()
+	public function insert()
+    {
+        $id = request('id');
+        $handleremail = request('handleremail');
+        $treated = 1;
+        DB::update('update folder_requests set treated = ?, request_handler = ? where id = ?', [$treated, $handleremail, $id]);
+
+        return 'true';
+
+    }
+
+    public function viewall()
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
@@ -168,6 +187,7 @@ class DashboardController extends Controller
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
 		$user_id = Auth::user()->email;
+		$user_position = Auth::user()->position;
 		$user_id2 = 'root';
 		
 		$act = '%Forward%';
@@ -176,7 +196,7 @@ class DashboardController extends Controller
 		$folderactivity = DB::table('activities')->where('activity', 'like', $act)->orderBy('created_at', 'DESC')->paginate(5);
 
 		//$folder = Folder::all();	
-		$activity = DB::table('activities')->where('activity_by', $user_id)->orderBy('created_at', 'DESC')->paginate(12);
+		$activity = DB::table('activities')->where('activity_by', $user_id)->orwhere('activity_by_post', $user_position)->orderBy('created_at', 'DESC')->paginate(12);
         return view('views.actions.activity.viewall', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
     }
 
@@ -306,4 +326,31 @@ class DashboardController extends Controller
 		document::create(Request::all());
 		return 'test';*/
     }	
+
+    public function attachment(){
+    	//include_once("db_connect.php");
+		$uploaded_images = array();
+		foreach($_FILES['upload_images']['name'] as $key=>$val){        
+		    $upload_dir = "attachment_file/";
+		    $upload_file = $upload_dir.$_FILES['upload_images']['name'][$key];
+			$filename = $_FILES['upload_images']['name'][$key];
+		    if(move_uploaded_file($_FILES['upload_images']['tmp_name'][$key],$upload_file)){
+		        $uploaded_images[] = $upload_file;
+
+				// db params
+				$attach = new Document;
+				$attach->name = $filename;
+				$attach->file_by = Auth::user()->email;
+				$attach->folder_id = Input::get('folder_id');
+
+				$uploaded_images[] = $upload_file;// [$upload_file, $filename];
+
+				$attach->save();
+
+		    }
+		}
+		//return response()->json($uploaded_images);
+		Flash::success('New file attached flash');
+		return redirect()->back()->with('New file attached');
+    }
 }

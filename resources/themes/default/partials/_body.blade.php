@@ -18,7 +18,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="skin-blue sidebar-mini">
+<body class="skin-blue sidebar-collapse sidebar-mini">
 
     <!-- Main body content -->
     @include('partials._body_content')
@@ -104,7 +104,7 @@ desired effect
                </div>
            </div>
            <div class="box-footer clearfix">
-             <button id='requestFileBtn' type="button" class="pull-right btn btn-primary btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+             <button id='requestFileBtn' type="submit" class="pull-right btn btn-primary btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
            </div>
          </form>        
          </div>
@@ -126,18 +126,19 @@ desired effect
                 <!-- tools box -->
                 <div class="pull-right box-tools">
             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button></div><!-- /. tools -->
-            </div>        <form method="post" id="pin_form" action="storepinform">
+            </div>        
+        <form method="post" action="storepinform">
             {{ csrf_field() }}
             <div class="box-body">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="new_pin" name="new_pin" placeholder="New PIN"/>
+                    <input type="password" class="form-control" id="new_pin" name="new_pin" placeholder="New PIN"/>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="confirmpin" name="confirmpin" placeholder="confirm PIN"/>
+                    <input type="password" class="form-control" id="confirmpin" name="confirmpin" placeholder="confirm PIN"/>
                 </div>
             </div>
             <div class="box-footer clearfix">
-                <button id="createPinBtn" type="button" class="pull-right btn btn-info btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
+                <button id="createPinBtn" type="submit" class="pull-right btn btn-info btn-raised" name="post" id="post">Send <i class="fa fa-arrow-circle-right"></i></button>
             </div>
         </form>             
         </div>    

@@ -114,7 +114,7 @@
                                         <!-- Inner Menu: contains the notifications -->
                                         
                                         <ul class="menu">
-                                        <?php $folder_requests = Illuminate\Support\Facades\DB::select('select * from folder_requests order by created_at desc limit 5'); ?>
+                                        <?php $folder_requests = Illuminate\Support\Facades\DB::select('select * from folder_requests where treated = ? order by created_at desc limit 5',[0]); ?>
                                         
                                          @foreach($folder_requests as $folder_request)
                                          <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@hallowgate.com')->first();
