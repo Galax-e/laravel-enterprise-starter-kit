@@ -60,27 +60,42 @@
                   <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
                 </div>
               </div>
-            </form>
-            <div class="box-header"> 
 
+              <div class="form-group">
+                <textarea id="compose-textarea" class="form-control" name="message" placeholder="Message" style="height: 300px">
+                  
+                </textarea>
+              </div>
+			  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+              <div class="pull-right">
+                <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
+              </div>
+              	</form>
+                <div class="box-header">              
+                        <script type="text/javascript" src="scripts3/jquery.min.js"></script>
+                        <script type="text/javascript" src="scripts3/jquery.form.js"></script>
+                        <script type="text/javascript" src="scripts3/upload.js"></script>
               {{--  @include('views.attachment_libs')  --}}
-
-              <link type="text/css" rel="stylesheet" href="style.css" />     
-              <center>
                 <div style="width:350px" align="center">
-                  <div id='preview'></div>    
-                  <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
-                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                  <div class="browse_text">Attach File/Image:</div>
-                  <div class="file_input_container">
-                    <div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" />
-                    </div>
-                  </div>
-                  <br clear="all">
-                  </form>
-                </div> <!-- center-->
-              </center>                                         
-            </div> <!-- /.box-header -->
+                    <div id='preview'></div>    
+                    <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <div class="browse_text">Attach File/Image:</div>
+
+                        <div class="file_input_container">
+                            <div class="upload_button"><div class="btn btn-default btn-file">
+                              <i class="fa fa-paperclip"></i> Attachment
+                              <input type="file" name="photo" id="photo" class="file_input" />
+                            </div>
+                            <p class="help-block">Max. 32MB</p></div>
+                        </div><br clear="all">
+                    </form>
+                </div>
+                                                        
+              </div>
+            </div><!-- /.box-footer -->
           </div><!-- /. box -->
         </div><!-- /.col -->
       </div><!-- /.row -->
