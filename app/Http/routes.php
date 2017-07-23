@@ -97,7 +97,7 @@ Route::group(['middleware' => 'authorize'], function () {
 
     Route::post('requestform','FilesController@requestform');
     Route::post('ajaxfolderrequest', ['as'=>'ajaxfolderrequest', 'uses'=>'FilesController@ajaxFolderRequest']);
-    Route::post('storepinform','FilesController@storepinform');
+    Route::post('storepinform', ['as'=>'storepinform', 'uses'=>'FilesController@storepinform']);
 
     Route::post('forward',['as'=>'forward', 'uses'=>'FilesController@forward']); // remove the id
     Route::post('share/{id}','FilesController@share');

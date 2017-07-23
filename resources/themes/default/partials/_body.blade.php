@@ -131,10 +131,13 @@ desired effect
             {{ csrf_field() }}
             <div class="box-body">
                 <div class="form-group">
-                    <input type="password" class="form-control" id="new_pin" name="new_pin" placeholder="New PIN"/>
+                    <input type="password" class="form-control" id="current_pin" name="current_pin" placeholder="Current PIN" pattern=".{4,4}" required />
                 </div>
                 <div class="form-group">
-                    <input type="password" class="form-control" id="confirmpin" name="confirmpin" placeholder="confirm PIN"/>
+                    <input type="password" class="form-control" id="new_pin" name="new_pin" placeholder="New PIN" pattern=".{4,4}" required/>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="confirmpin" name="confirmpin" placeholder="confirm PIN" pattern=".{4,4}" required/>
                 </div>
             </div>
             <div class="box-footer clearfix">
@@ -167,7 +170,7 @@ desired effect
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" placeholder="Enter your PIN" autofocus required/>
+                        <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" required/>
                     </div>
                 </div>
                 <div class="box-footer clearfix">
@@ -199,7 +202,7 @@ desired effect
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <input type="password" class="form-control" id="forward_pin_input" name="forward_pin_input" placeholder="Enter your PIN" autofocus required/>
+                        <input type="password" class="form-control" id="forward_pin_input" name="forward_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" required />
                     </div>
                 </div>
                 <div class="box-footer clearfix">
