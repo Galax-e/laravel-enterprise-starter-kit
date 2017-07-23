@@ -19,7 +19,6 @@
     .mailbox-attachment-icon{
       width:200px !important;
       height:105px !important;
-      background-color: #efe;
     }
     .mailbox-attachment-info{
       width: 200px !important;
@@ -167,6 +166,31 @@
                   </div>
                 </li>';
                   }
+
+                  elseif (strpos($activity_by->activity, 'Document') !== false) {
+                echo '
+                <li>
+                  <i class="fa fa-file bg-purple"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> '.date('H:i A | F d, Y', strtotime($activity_by->created_at )).'</span>
+                    <h3 class="timeline-header"><a href="#">'.Auth::user()->first_name.' '.Auth::user()->last_name.'</a> '.$activity_by->activity.'</h3>
+                    <div class="timeline-body">
+                     <ul class="mailbox-attachments clearfix">
+                
+                      <li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+                        <div class="mailbox-attachment-info">
+                          <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$activity_by->fileinfo.'</a>
+                              <span class="mailbox-attachment-size">'
+                                .date('H:i A | F d, Y', strtotime($activity_by->created_at )).'
+                              </span>
+                        </div>
+                 </li></ul></div>
+                  </div>
+                </li>
+                ';
+                  }
+
+
                   elseif (strpos($activity_by->activity, 'Requested') !== false) {
                 echo '
                 <li>

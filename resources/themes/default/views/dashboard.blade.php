@@ -295,8 +295,7 @@
 							<div class="box-footer">
 								<ul class="list-inline">
 									<li class="pull-left">
-										<a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-									(5)</a></li>
+										<a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments</a></li>
 								</ul>
 							</div>
 						</div>  <!-- end box -->

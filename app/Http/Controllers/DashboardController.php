@@ -380,7 +380,8 @@ class DashboardController extends Controller
 					$activity->activity_by= Auth::user()->email;
 					$activity->activity_by_post = Auth::user()->position;
 					$activity->folder_id= Input::get('folder_id');
-					$activity->activity= Auth::user()->email.' Added new Document';
+					$activity->fileinfo= $image_name;
+					$activity->activity= ' Added new Document';
 					$activity->save();
                     	if($ext !== "pdf"){
                     	echo'
