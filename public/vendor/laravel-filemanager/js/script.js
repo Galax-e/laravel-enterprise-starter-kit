@@ -97,7 +97,6 @@ $('#upload-btn').click(function() {
 // enter function for search button click
 function loadSearchItems(callback) {
 
-
     keyword = $('#keyword').val();
     // if keyword is empty, dont search
     if (keyword.length === 0) {
@@ -150,6 +149,13 @@ $(document).on('click', '.file-item', function(e) {
 });
 
 $(document).on('click', '.folder-item', function(e) {
+    var searchView = $('#searchView').attr( "name" );
+
+    if (searchView == 'searchView'){
+      show_list = 0;
+      console.log('working searchview');
+    }
+
     goTo($(this).data('id'));
 });
 
