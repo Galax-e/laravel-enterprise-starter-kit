@@ -30,8 +30,9 @@ class UploadController extends LfmController
         $new_folder = new Folder;
         $new_folder->folder_no          = Input::get('folder_no');
 
+        $new_folder->path               = parent::getInternalPath(parent::getCurrentPath()).'/'.$new_folder->folder_no;
+        
         $new_folder->name               = Input::get('fold_name');
-        $new_folder->path               = parent::getInternalPath(parent::getCurrentPath()).'/'.$new_folder->name;
         $new_folder->desc               = Input::get('add_folder_description');
         $new_folder->registry           = 'registry@hallowgate.com';
         $new_folder->folder_by          = Auth::user()->email;
@@ -58,35 +59,50 @@ class UploadController extends LfmController
             } elseif ($new_filename == 'invalid') {
                 array_push($error_bag, $response);
             }
-	
-			
+
             $new_file_path = parent::getCurrentPath($new_filename);
+            $parent_path = parent::getInternalPath(dirname($new_file_path));
+
+            // get a handle the parent folder and id
+            $folder = DB::select('select id from folders where path=?', [$parent_path]);
+            $folder_id = 0;
+            foreach($folder as $fid){
+                $folder_id = ((array) $fid)["id"];
+            }
+
             $new_document = new Document;
-            $new_document->folder_id= Input::get('working_dir');
+            $new_document->folder_id = $folder_id; //Input::get('working_dir');
             $new_document->file_by= Auth::user()->email;
+
             if (Input::hasFile('upload')){
                 $file=Input::file('upload');
+                $new_document->parent_path = $parent_path;
                 $new_document->name = $new_filename;//$new_file_path.'/'.$new_filename;
             }
             $new_document->save();
-            
-            $id= Input::get('working_dir');
-            DB::table('folders')
-                ->where('id', $id)
-                ->update(array('latest_doc' => $new_filename));
+
+            // $id = Input::get('working_dir');
+            // update latest doc column in folders to reflect new document
+            DB::update('update folders set latest_doc=? where id=?', [$new_filename, $folder_id]);
+
+            // DB::table('folders')
+            //     ->where('id', $id)
+            //     ->update(array('latest_doc' => $new_filename));
 
             // add filename to searchterm in folder
-            $folder_id = $id;
-            $concat_filename= $new_filename;
+            // $folder_id = $id;
+
+            // update search term with new document name to enable efficient searching...
+            $concat_filename = $new_filename;
             $concat = DB::select('select * from folders where id=?', [$folder_id]);
             foreach($concat as $com){
                 $concat_filename .= ((array) $com)["search_term"];
             }
             DB::update('update folders set search_term=? where id=?', [$concat_filename, $folder_id]);
-            
+
             $new_activity = new Activity;
             $new_activity->activity_by= Input::get('comment_by');
-            $new_activity->folder_id= Input::get('working_dir');
+            $new_activity->folder_id = $folder_id;// Input::get('working_dir');
             $new_activity->activity= Input::get('activity');
             $new_activity->save();
         }
@@ -96,9 +112,7 @@ class UploadController extends LfmController
         } else { // upload via ckeditor 'Upload' tab
             $response = $this->useFile($new_filename);
         }
-
        // Audit::log(Auth::user()->id, trans('registry/lfm.audit-log.category'), trans('registry/lfm.audit-log.msg-upload-doc', ['doc_title' => $new_document->title])); 
-	
         return $response;
     }
 

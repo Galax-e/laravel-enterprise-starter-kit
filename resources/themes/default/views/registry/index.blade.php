@@ -182,9 +182,9 @@
                 </div>
               </div>
               <input type="hidden" name="comment_by" value="registry@kdsg.gov.ng">
-			  <input type="hidden" name="activity" value="registry@kdsg.gov.ng Added new document to this file">
-			  <input type='hidden' name='working_dir' id='working_dir'>
-			  <input type='hidden' name='type' id='type' value='{{ request("type") }}'>
+              <input type="hidden" name="activity" value="registry@hallowgate.com added a new document to this file">
+              <input type='hidden' name='working_dir' id='working_dir'>
+              <input type='hidden' name='type' id='type' value='{{ request("type") }}'>
               <input type='hidden' name='_token' value='{{csrf_token()}}'>
             </form>
           </div>

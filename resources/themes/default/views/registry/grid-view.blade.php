@@ -10,7 +10,7 @@
       <?php $thumb_src = $item->thumb; ?>
       <?php $item_path = $item->is_file ? $item->url : $item->path; ?>
 
-      <div class="square clickable {{ $item->is_file ? 'file' : 'folder'}}-item" data-id="{{ $item_path }}">
+      <div class="square clickable {{ $item->is_file ? 'file' : 'folder'}}-item" name="gridView" data-id="{{ $item_path }}">
         @if($thumb_src)
         <img src="{{ $thumb_src }}">
         @else
