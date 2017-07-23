@@ -1,5 +1,6 @@
 {{-- @if((sizeof($files) > 0) || (sizeof($directories) > 0)) come back to link back to grid view --}}
 
+{{$working_dir}}
 @if( $count > 0)
 
     <div class="row">

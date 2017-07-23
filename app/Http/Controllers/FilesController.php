@@ -349,6 +349,18 @@ class FilesController extends Controller {
 
 	public function storepinform(){
 		
+		$user = Auth::user();
+		$currentPin = $user->pin;
+
+		$currentPinCheck = Input::get('current_pin');
+		
+		if($currentPin !== strval($currentPinCheck)){
+
+			Flash::warning('PIN does not match');
+			return redirect()->back()->with('Enter correct existing PIN');
+		}
+
+
 		$pin = Input::get('new_pin');
 		$id = Auth::user()->id;
 		if (Input::get('new_pin') == Input::get('confirmpin')){
@@ -364,7 +376,7 @@ class FilesController extends Controller {
 			return redirect()->back()->with('PIN Changed');
 		}
 		else{
-			Flash::Error('PIN does not match');
+			Flash::error('PIN does not match');
 			return redirect()->back()->with('LOL');
 		}
 	}
@@ -381,7 +393,7 @@ class FilesController extends Controller {
 			if($currentPin == strval($postPinToAuth)){
 				return "true";
 			}else{
-				Flash::Error('Wrong Pin');
+				Flash::error('Wrong Pin');
 				return "false";
 			}
 		}
@@ -392,7 +404,7 @@ class FilesController extends Controller {
 			if($currentPin == strval($forwardPinToAuth)){
 				return "true";
 			}else{
-				Flash::Error('Wrong Pin');				
+				Flash::error('Wrong Pin');				
 				return "false";
 			}
 		}
