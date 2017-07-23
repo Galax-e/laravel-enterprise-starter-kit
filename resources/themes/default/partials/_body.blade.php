@@ -127,7 +127,7 @@ desired effect
                 <div class="pull-right box-tools">
             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button></div><!-- /. tools -->
             </div>        
-        <form method="post" action="storepinform">
+        <form method="post" action="{{route('storepinform')}}">
             {{ csrf_field() }}
             <div class="box-body">
                 <div class="form-group">

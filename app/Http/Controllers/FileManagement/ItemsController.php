@@ -45,9 +45,9 @@ class ItemsController extends LfmController
                 'directories' => $directories,
 				'folders'     => $folders,
                 'count'       => $count,
-                'items'       => array_merge($directories, $files)
-            ]),
-            'working_dir' => $working_dir
+                'items'       => array_merge($directories, $files),
+                'working_dir' => $working_dir
+            ])
         ];
     }
 

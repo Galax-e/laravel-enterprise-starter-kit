@@ -31,8 +31,9 @@ class UploadController extends LfmController
         $new_folder->folder_no          = Input::get('folder_no');
 
         $new_folder->name               = Input::get('fold_name');
+        $new_folder->path               = parent::getInternalPath(parent::getCurrentPath()).'/'.$new_folder->name;
         $new_folder->desc               = Input::get('add_folder_description');
-        $new_folder->registry           = 'registry@kdsg.gov.ng';
+        $new_folder->registry           = 'registry@hallowgate.com';
         $new_folder->folder_by          = Auth::user()->email;
         $new_folder->agency_dept        = Input::get('agency_dept');
         $new_folder->category           = Input::get('category');
@@ -42,15 +43,6 @@ class UploadController extends LfmController
         $new_folder->save();        //Audit::log(Auth::user()->id, trans('registry/lfm.audit-log.category'), trans('registry/lfm.audit-log.msg-newfolder', ['fold_name' => $new_folder->fold_name]));   
 
         //Audit::log(Auth::user()->id, trans('registry/lfm.audit-log.category'), trans('registry/lfm.audit-log.msg-newfolder', ['fold_name' => $new_folder->fold_name]));   
-    }
-	
-	public function share()
-    {
-        $id = Input::get('add-folder-input');
-        $fold_name = $request->input('rename-input');
-        DB::update('update folders set folder_to = ? where id = ?',[$folder_to,$id]);
-
-        //Audit::log(Auth::user()->id, trans('registry/lfm.audit-log.category'), trans('registry/lfm.audit-log.msg-shared', ['fold_name' => $fold_name])); 
     }
 	
     public function upload()
@@ -66,7 +58,7 @@ class UploadController extends LfmController
             } elseif ($new_filename == 'invalid') {
                 array_push($error_bag, $response);
             }
-			
+	
 			
             $new_file_path = parent::getCurrentPath($new_filename);
             $new_document = new Document;
@@ -82,6 +74,15 @@ class UploadController extends LfmController
             DB::table('folders')
                 ->where('id', $id)
                 ->update(array('latest_doc' => $new_filename));
+
+            // add filename to searchterm in folder
+            $folder_id = $id;
+            $concat_filename= $new_filename;
+            $concat = DB::select('select * from folders where id=?', [$folder_id]);
+            foreach($concat as $com){
+                $concat_filename .= ((array) $com)["search_term"];
+            }
+            DB::update('update folders set search_term=? where id=?', [$concat_filename, $folder_id]);
             
             $new_activity = new Activity;
             $new_activity->activity_by= Input::get('comment_by');

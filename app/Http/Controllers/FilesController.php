@@ -356,8 +356,8 @@ class FilesController extends Controller {
 		
 		if($currentPin !== strval($currentPinCheck)){
 
-			flash()->error('PIN does not match');
-			return redirect()->back()->with('Enter the right PIN');
+			Flash::warning('PIN does not match');
+			return redirect()->back()->with('Enter correct existing PIN');
 		}
 
 

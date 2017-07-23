@@ -2,8 +2,6 @@
 
 @section('head_extra')
     <!-- jVectorMap 1.2.2 -->
-
-
     <link href="{{ asset("/bower_components/admin-lte/plugins/jvectormap/jquery-jvectormap-1.2.2.css") }}" rel="stylesheet" type="text/css" />
 @endsection
 
@@ -37,59 +35,52 @@
             <div class="box-header with-border">
               <h3 class="box-title">Compose New Message</h3>
             </div><!-- /.box-header -->
-			<form action="store_memo" method="post" enctype="multipart/form-data">
-            <div class="box-body">
-			<input type="hidden" name="email_name" value="{{ Auth::user()->email }} {{ Auth::user()->last_name }}">
-			<input type="hidden" name="emailfrom" value="{{ Auth::user()->email }}">
-
-            <div class="form-group"> 
-                <label>To:</label>      
-              <select id="forward_to_user" class="form-control select2" name="emailto[]" multiple="multiple" placeholder="Recipient Email..."></select>
-            </div>
-
-              <!--<div class="form-group">
-                <input class="form-control" name="emailto" placeholder="To:"/>
-              </div>-->
-              <div class="form-group">
-                <input class="form-control" name="subject" placeholder="Subject:"/>
+            <form action="store_memo" method="post" enctype="multipart/form-data">
+              <div class="box-body">
+                <input type="hidden" name="email_name" value="{{ Auth::user()->email }} {{ Auth::user()->last_name }}">
+                <input type="hidden" name="emailfrom" value="{{ Auth::user()->email }}">
+                <div class="form-group"> 
+                    <label>To:</label>      
+                  <select id="forward_to_user" class="form-control select2" name="emailto[]" multiple="multiple" placeholder="Recipient Email..."></select>
+                </div>
+                <!--<div class="form-group">
+                  <input class="form-control" name="emailto" placeholder="To:"/>
+                </div>-->
+                <div class="form-group">
+                  <input class="form-control" name="subject" placeholder="Subject:"/>
+                </div>
+                <div class="form-group">
+                  <textarea id="compose-textarea" class="form-control" name="message" placeholder="Message" style="height: 300px">
+                  </textarea>
+                </div>
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              </div><!-- /.box-body -->
+              <div class="box-footer">
+                <div class="pull-right">
+                  <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
+                </div>
               </div>
-              <div class="form-group">
-                <textarea id="compose-textarea" class="form-control" name="message" placeholder="Message" style="height: 300px">
-                  
-                </textarea>
-              </div>
-			  <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            </div><!-- /.box-body -->
-            <div class="box-footer">
-              <div class="pull-right">
-                <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
-              </div>
-              	</form>
-                <div class="box-header"> 
-                        <script type="text/javascript" src="scripts3/jquery.min.js"></script>
-                        <script type="text/javascript" src="scripts3/jquery.form.js"></script>
-                        <script type="text/javascript" src="scripts3/upload.js"></script>
+            </form>
+            <div class="box-header"> 
 
-                        <link type="text/css" rel="stylesheet" href="style.css" />
+              {{--  @include('views.attachment_libs')  --}}
 
-                        
-                            
-                                <center>
-                                    <div style="width:350px" align="center">
-                                        <div id='preview'></div>    
-                                        <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
-                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                            <div class="browse_text">Attach File/Image:</div>
-                                            <div class="file_input_container">
-                                                <div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" /></div>
-                                            </div><br clear="all">
-                                        </form>
-                                    </div>
-                                </center>
-                                                        
-              </div>
-            </div><!-- /.box-footer -->
-		
+              <link type="text/css" rel="stylesheet" href="style.css" />     
+              <center>
+                <div style="width:350px" align="center">
+                  <div id='preview'></div>    
+                  <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  <div class="browse_text">Attach File/Image:</div>
+                  <div class="file_input_container">
+                    <div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" />
+                    </div>
+                  </div>
+                  <br clear="all">
+                  </form>
+                </div> <!-- center-->
+              </center>                                         
+            </div> <!-- /.box-header -->
           </div><!-- /. box -->
         </div><!-- /.col -->
       </div><!-- /.row -->

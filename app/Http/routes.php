@@ -101,7 +101,7 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::post('storepinform', ['as'=>'storepinform', 'uses'=>'FilesController@storepinform']);
 
     Route::post('forward',['as'=>'forward', 'uses'=>'FilesController@forward']); // remove the id
-    Route::post('share','FilesController@share');
+    Route::post('share',['as'=>'share', 'uses'=>'FilesController@share']);
 
     // creating documents and uploading file
     Route::post('newdocument','FileManagement\UploadController@upload');
