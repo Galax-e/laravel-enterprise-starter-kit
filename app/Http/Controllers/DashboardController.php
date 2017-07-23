@@ -370,16 +370,30 @@ class DashboardController extends Controller
                     $tmp = $_FILES['photo']['tmp_name'];
                     if(move_uploaded_file($tmp, $path.$image_name)){
                     	if($ext !== "pdf"){
-                       echo "<img src='uploads/".$image_name."' class='preview'>";
-                   }
-                   else echo '
-                   	<object data="uploads/'.$image_name.'" type="application/pdf" style="width: 100%; height: 100%">
-									<!-- support older browsers -->
-									<!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
-									<!-- For those without native support, no pdf plugin, or no js -->
-									<p>It appears you do not have PDF support in this web browser. 
-									<a href="{{ asset("/docs/files".$folder->name."/".$folder->latest_doc) }}" target="_blank">Click here to download the document.</a></p>
-					</object>';
+                    	echo'
+                    	<ul class="mailbox-attachments clearfix">
+                    	<li>
+		                  <span class="mailbox-attachment-icon has-img"><img src="uploads/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
+		                  <div class="mailbox-attachment-info">
+		                    <a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$image_name.'</a>
+		                        <span class="mailbox-attachment-size">
+		                          1.9 MB
+		                          <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+		                        </span>
+		                  </div>
+		                </li></ul>';
+                   } else
+                   echo'<ul class="mailbox-attachments clearfix">
+                
+                    	<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+			                  <div class="mailbox-attachment-info">
+			                    <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$image_name.'</a>
+			                        <span class="mailbox-attachment-size">
+			                          1,245 KB
+			                          <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+			                        </span>
+			                  </div>
+			           </li></ul>';
                     }
                     else
                     echo "Image Upload failed";

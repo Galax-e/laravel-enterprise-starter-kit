@@ -80,6 +80,16 @@
                                         <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
                                          <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <div class="browse_text">Attach File/Image:</div>
+
+
+                                            <div class="form-group">
+                                              <div class="btn btn-default btn-file">
+                                                <i class="fa fa-paperclip"></i> Attachment
+                                                <input type="file" name="photo" id="photo" class="file_input" />
+                                              </div>
+                                              <p class="help-block">Max. 32MB</p>
+                                            </div>
+                                            
                                             <div class="file_input_container">
                                                 <div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" /></div>
                                             </div><br clear="all">
