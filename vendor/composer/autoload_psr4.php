@@ -12,6 +12,7 @@ return array(
     'Zizaco\\Entrust\\' => array($vendorDir . '/zizaco/entrust/src/Entrust'),
     'XdgBaseDir\\' => array($vendorDir . '/dnoegel/php-xdg-base-dir/src'),
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
+    'Unisharp\\Laravelfilemanager\\' => array($vendorDir . '/unisharp/laravel-filemanager/src'),
     'Tylercd100\\Notify\\' => array($vendorDir . '/tylercd100/laravel-notify/src'),
     'Tylercd100\\Monolog\\' => array($vendorDir . '/tylercd100/monolog-mailgun/src', $vendorDir . '/tylercd100/monolog-sms/src'),
     'Tylercd100\\LERN\\' => array($vendorDir . '/tylercd100/lern/src'),

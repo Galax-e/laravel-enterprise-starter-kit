@@ -6423,5 +6423,83 @@
             "package",
             "packager"
         ]
+    },
+    {
+        "name": "unisharp/laravel-filemanager",
+        "version": "v1.8.1",
+        "version_normalized": "1.8.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/UniSharp/laravel-filemanager.git",
+            "reference": "f5ec3b4e6398d196000aa320c44800e6d8b6fc00"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/UniSharp/laravel-filemanager/zipball/f5ec3b4e6398d196000aa320c44800e6d8b6fc00",
+            "reference": "f5ec3b4e6398d196000aa320c44800e6d8b6fc00",
+            "shasum": ""
+        },
+        "require": {
+            "ext-exif": "*",
+            "illuminate/support": ">=4.2.0",
+            "intervention/image": "2.*",
+            "php": ">=5.4.0"
+        },
+        "require-dev": {
+            "orchestra/testbench": "~3.0",
+            "phpspec/phpspec": "~2.1",
+            "phpunit/phpunit": "~4.8"
+        },
+        "suggest": {
+            "ext-gd": "to use GD library based image processing.",
+            "ext-imagick": "to use Imagick based image processing."
+        },
+        "time": "2017-07-13T06:55:50+00:00",
+        "bin": [
+            "bin/debug"
+        ],
+        "type": "library",
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "Unisharp\\Laravelfilemanager\\LaravelFilemanagerServiceProvider",
+                    "Intervention\\Image\\ImageServiceProvider"
+                ],
+                "aliases": {
+                    "Image": "Intervention\\Image\\Facades\\Image"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Unisharp\\Laravelfilemanager\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Trevor Sawler",
+                "email": "trevor.sawler@gmail.com"
+            },
+            {
+                "name": "UniSharp Ltd.",
+                "email": "unisharp-service@unisharp.com"
+            }
+        ],
+        "description": "A file upload/editor intended for use with Laravel 5 and CKEditor / TinyMCE",
+        "keywords": [
+            "CKEditor",
+            "file",
+            "filemanager",
+            "image",
+            "laravel",
+            "manager",
+            "tinymce",
+            "upload"
+        ]
     }
 ]

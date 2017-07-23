@@ -140,6 +140,16 @@ class FilesController extends Controller {
 		$comment->comment_by = request('comment_by');	
 		$comment->comment    = request('comment');
 		$comment->save();
+
+
+		// update comment on file to enable searching...
+		$folder_id = request('folder_id');
+		$concat_comment = $comment->comment;
+		$concat = DB::select('select * from folders where id=?', [$folder_id]);
+        foreach($concat as $com){
+            $concat_comment .= ((array) $com)["last_comment"];
+        }
+		DB::update('update folders set last_comment=? where id=?', [$concat_comment, $folder_id]);
 		
 		$activity = new Activity;
 		$activity->activity_by = $comment->comment_by; // request('comment_by');
@@ -382,7 +392,7 @@ class FilesController extends Controller {
 			if($currentPin == strval($forwardPinToAuth)){
 				return "true";
 			}else{
-				Flash::Error('Wrong Pin');
+				Flash::Error('Wrong Pin');				
 				return "false";
 			}
 		}

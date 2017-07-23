@@ -4,7 +4,6 @@
     }
 </style>
 <script type="text/javascript">
-
     $(function(){
         var imageBgCol = $('.user-header').css('background-color');
         $('#image_view_update').css('background-color', imageBgCol);
@@ -48,12 +47,12 @@
                                <i id="" class="fa fa-file"></i>
                            </a>
                        </li>                        
-                        <li class="">
+                       {{--  <li class="">
                            <!-- Create Pin button -->
                             <a href="#" class="btn btn-block btn-success" title="Create Pin" data-toggle="modal" data-target="#createPinModal">
                                <i class="fa fa-key"></i>
                            </a>
-                       </li> 
+                       </li>  --}}
 
                         <li class="dropdown messages-menu">
                             <!-- Menu toggle button -->
@@ -85,8 +84,8 @@
                                                     <!-- Message title and timestamp -->
                                                     <h4>
                                                         {{ $user_name }}
-                                                        {{--<small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
-                                                        <i class="fa fa-clock-o pull-right"></i>--}}
+                                                        <small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
+                                                        <i class="fa fa-clock-o pull-right"></i>
                                                     </h4>
                                                     <!-- The message -->
                                                     <p>{{ $memo->subject}}</p>
@@ -114,7 +113,7 @@
                                         <!-- Inner Menu: contains the notifications -->
                                         
                                         <ul class="menu">
-                                        <?php $folder_requests = Illuminate\Support\Facades\DB::select('select * from folder_requests where treated = ? order by created_at desc limit 5',[0]); ?>
+                                        <?php $folder_requests = Illuminate\Support\Facades\DB::select('select * from folder_requests order by created_at desc limit 5'); ?>
                                         
                                          @foreach($folder_requests as $folder_request)
                                          <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@hallowgate.com')->first();
@@ -235,7 +234,7 @@
                     @if ( Setting::get('app.right_sidebar') )
                         <!-- Control Sidebar Toggle Button -->
                         <li>
-                           
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                         </li>
                     @endif
                 @else

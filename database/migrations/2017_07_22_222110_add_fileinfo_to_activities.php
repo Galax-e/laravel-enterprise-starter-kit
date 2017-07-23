@@ -17,7 +17,7 @@ class AddFileinfoToActivities extends Migration
 
            if(!Schema::hasColumn('activities', 'fileinfo')) {
                $table->string('fileinfo')->nullable();
-           }            
+           }         
        });
     }
 

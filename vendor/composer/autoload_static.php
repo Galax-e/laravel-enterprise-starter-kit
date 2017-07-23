@@ -48,6 +48,10 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
         array (
             'Webmozart\\Assert\\' => 17,
         ),
+        'U' => 
+        array (
+            'Unisharp\\Laravelfilemanager\\' => 28,
+        ),
         'T' => 
         array (
             'Tylercd100\\Notify\\' => 18,
@@ -179,6 +183,10 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Unisharp\\Laravelfilemanager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/unisharp/laravel-filemanager/src',
         ),
         'Tylercd100\\Notify\\' => 
         array (
@@ -547,6 +555,7 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
     );
 
     public static $classMap = array (
+        'AddCommentToActivities' => __DIR__ . '/../..' . '/database/migrations/2017_07_23_015536_add_comment_to_activities.php',
         'AddCustomFieldsToExistingTables' => __DIR__ . '/../..' . '/database/migrations/2017_05_28_140842_add_custom_fields_to_existing_tables.php',
         'AddEmailVerification' => __DIR__ . '/../..' . '/database/migrations/2016_09_07_182002_AddEmailVerification.php',
         'AddEnabledFieldToAuthorizationTables' => __DIR__ . '/../..' . '/database/migrations/2015_07_07_170139_add_enabled_field_to_authorization_tables.php',

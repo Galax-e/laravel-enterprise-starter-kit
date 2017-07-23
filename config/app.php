@@ -363,6 +363,7 @@ return [
 
 
         Barryvdh\Elfinder\ElfinderServiceProvider::class,
+        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
     ),
 

@@ -102,6 +102,11 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::post('forward',['as'=>'forward', 'uses'=>'FilesController@forward']); // remove the id
     Route::post('share/{id}','FilesController@share');
 
+    // creating documents and uploading file
+    Route::post('newdocument','FileManagement\UploadController@upload');
+    Route::post('newfolder','FileManagement\UploadController@newfolder');
+
+    Route::get( 'scandir',    ['as' => 'scandir',    'uses' => 'FileManagement\SearchFolderController@scanDirectory']);
 
     // Site administration section
     Route::group(['prefix' => 'admin'], function () {
@@ -215,6 +220,67 @@ Route::group(['middleware' => 'authorize'], function () {
         Route::get(   'settings/{settingKey}/delete',         ['as' => 'admin.settings.delete',           'uses' => 'SettingsController@destroy']);
 
     }); // End of ADMIN group
+
+    // Unisharp upload routes
+    Route::group(['prefix' => 'registry'], function (){
+        Route::get('/laravel-filemanager', 'FileManagement\LfmController@show');
+        Route::post('/laravel-filemanager/upload', 'FileManagement\LfmController@upload');
+
+        // \Unisharp\Laravelfilemanager\controllers
+        // list all lfm routes here...
+
+        // @cpnwaugha: I decided not to scaffold the Controllers so as to reduce the app size
+        // am using the controllers from the LFM package.
+        // Show LFM 
+        Route::get('/', ['uses' => 'FileManagement\LfmController@show', 'as' => 'registry.show']);
+
+        // Show integration error messages
+        Route::get('/errors', ['uses' => 'FileManagement\LfmController@getErrors', 'as' => 'registry.get.errors']);
+
+        // upload
+        Route::any('/upload', ['uses' => 'FileManagement\UploadController@upload', 'as' => 'registry.upload']);
+
+        // list images & files
+        Route::get('/jsonitems', ['uses' => 'FileManagement\ItemsController@getItems', 'as' => 'registry.get.items']);
+
+        // folders
+        Route::get('/newfolder', ['uses' => 'FileManagement\FolderController@getAddfolder', 'as' => 'registry.get.addfolder']);
+        Route::get('/deletefolder', ['uses' => 'FileManagement\FolderController@getDeletefolder', 'as' => 'regisrty.get.deletefolder']);
+        Route::get('/folders', ['uses' => 'FileManagement\FolderController@getFolders', 'as' => 'registry.get.folders']);
+
+        // move
+        Route::get('/move', ['uses' => 'FileManagement\RenameController@getMove', 'as' => 'getMove']);
+
+        // crop
+        Route::get('/crop', ['uses' => 'FileManagement\CropController@getCrop', 'as' => 'getCrop']);
+        Route::get('/cropimage', ['uses' => 'FileManagement\CropController@getCropimage', 'as' => 'registry.get.cropimage'
+        ]);
+
+        // rename
+        Route::get('/rename', ['uses' => 'FileManagement\RenameController@getRename', 'as' => 'registry.get.rename']);
+        // scale/resize
+        Route::get('/resize', ['uses' => 'FileManagement\ResizeController@getResize', 'as' => 'registry.get.resize'
+        ]);
+        Route::get('/doresize', ['uses' => 'FileManagement\ResizeController@performResize', 'as' => 'registry.perform.resize']);
+        // download
+        Route::get('/download', ['uses' => 'FileManagement\DownloadController@getDownload', 'as' => 'registry.get.download'
+        ]);
+
+        // delete
+        Route::get('/delete', ['uses' => 'FileManagement\DeleteController@getDelete', 'as' => 'registry.get.delete']);
+
+        Route::get('/demo', 'FileManagement\DemoController@index');
+
+        // @cpnwaugha: c-e: confirm that this is going to the public dir.
+        // Get file when base_directory isn't public
+        $images_url = '/' . \Config::get('lfm.images_folder_name') . '/{base_path}/{image_name}';
+        $files_url = '/' . \Config::get('lfm.files_folder_name') . '/{base_path}/{file_name}';
+        Route::get($images_url, 'FileManagement\RedirectController@getImage')
+            ->where('image_name', '.*');
+        Route::get($files_url, 'FileManagement\RedirectController@getFile')
+            ->where('file_name', '.*');
+
+    }); // end of Registry Group
 
     // Uncomment to enable Rapyd datagrid.
 //    require __DIR__.'/rapyd.php';
