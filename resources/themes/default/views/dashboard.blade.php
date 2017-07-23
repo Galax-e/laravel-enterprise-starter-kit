@@ -129,7 +129,7 @@
 					@foreach($activities as $activity)
 						@if($activity->activity_by == Auth::user()->email || Auth::user()->username)
 						<li>   
-						 <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $activity->activity_by)->first();
+						 <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', Auth::user()->email)->first();
 	                    
 	                    $temp = array();
 	                    foreach($user as $field => $val ){
@@ -235,7 +235,7 @@
 						@include('views.attachment_libs')
 						<!-- tesying file attachment -->					
 
-						<div class="container">
+						<div class="container hidden">
 
 							<form method="post" name="upload_form" id="upload_form" enctype="multipart/form-data" action="attachment">
 								<input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">   
@@ -252,7 +252,7 @@
 
 						</div>
 
-						<div class="row">
+						<div class="row hidden">
 							<div class="gallery">
 								<?php
 								if(!empty($uploaded_images)){ 
@@ -268,18 +268,27 @@
 					
 						<div class="box"> <!-- div for comment header-->
 							<div class="box-header"> 
-								{{--  <i class="fa fa-paperclip"></i>
-								<span class="browse_text">Attach new File:</span>  --}}
-								<center class="text-center">
-									<div style="width:350px" align="center">
-										<div id='preview'></div>    
-										<form id="image_upload_form" method="post" enctype="multipart/form-data" action='file-upload/image_upload.php' autocomplete="off">
-											<div class="file_input_container">
-												<div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" /></div>
-											</div><br clear="all">
-										</form>
-									</div>
-								</center>
+												<script type="text/javascript" src="scripts3/jquery.min.js"></script>
+												<script type="text/javascript" src="scripts3/jquery.form.js"></script>
+												<script type="text/javascript" src="scripts3/upload.js"></script>
+
+												<link type="text/css" rel="stylesheet" href="style.css" />
+
+												
+												    
+												        <center>
+												            <div style="width:350px" align="center">
+												                <div id='preview'></div>    
+												                <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+												                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+												                    <div class="browse_text">Attach File/Image:</div>
+												                    <div class="file_input_container">
+												                        <div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" /></div>
+												                    </div><br clear="all">
+												                </form>
+												            </div>
+												        </center>
+												        												
 							</div>
 							<div class="box-footer">
 								<ul class="list-inline">

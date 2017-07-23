@@ -560,6 +560,7 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
         'AddEmailVerification' => __DIR__ . '/../..' . '/database/migrations/2016_09_07_182002_AddEmailVerification.php',
         'AddEnabledFieldToAuthorizationTables' => __DIR__ . '/../..' . '/database/migrations/2015_07_07_170139_add_enabled_field_to_authorization_tables.php',
         'AddFileinfoToActivities' => __DIR__ . '/../..' . '/database/migrations/2017_07_22_222110_add_fileinfo_to_activities.php',
+        'AddFolderNoToFolders' => __DIR__ . '/../..' . '/database/migrations/2017_07_23_075039_add_folder_no_to_folders.php',
         'AddNotifyToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_040142_add_notify_to_users_table.php',
         'AddPinToUsers' => __DIR__ . '/../..' . '/database/migrations/2017_07_21_075433_add_pin_to_users.php',
         'AddRequestHandlerToFolderRequests' => __DIR__ . '/../..' . '/database/migrations/2017_07_22_082926_add_request_handler_to_folder_requests.php',

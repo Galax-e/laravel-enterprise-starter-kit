@@ -65,18 +65,29 @@
                 <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
               </div>
               	</form>
-                <center>
-                  <div class="form-group">
-                    {!! Form::open(array('url'=>'upload/uploadFiles','method'=>'POST', 'files'=>true)) !!}
-                    {!! Form::file('images[]', array('multiple'=>true)) !!}
-                      <p>{!!$errors->first('images')!!}</p>
-                      @if(Session::has('error'))
-                        <p>{!! Session::get('error') !!}</p>
-                      @endif
-                    {!! Form::submit('Attach File', array('class'=>'btn btn-primary')) !!}
-                    {!! Form::close() !!}
-                  </div>
-                </center>
+                <div class="box-header"> 
+                        <script type="text/javascript" src="scripts3/jquery.min.js"></script>
+                        <script type="text/javascript" src="scripts3/jquery.form.js"></script>
+                        <script type="text/javascript" src="scripts3/upload.js"></script>
+
+                        <link type="text/css" rel="stylesheet" href="style.css" />
+
+                        
+                            
+                                <center>
+                                    <div style="width:350px" align="center">
+                                        <div id='preview'></div>    
+                                        <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <div class="browse_text">Attach File/Image:</div>
+                                            <div class="file_input_container">
+                                                <div class="upload_button"><input type="file" name="photo" id="photo" class="file_input" /></div>
+                                            </div><br clear="all">
+                                        </form>
+                                    </div>
+                                </center>
+                                                        
+              </div>
             </div><!-- /.box-footer -->
 		
           </div><!-- /. box -->

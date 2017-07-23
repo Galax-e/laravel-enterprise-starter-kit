@@ -29,7 +29,7 @@
             <span class="sr-only">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu" role="menu">
-      <li><a href="javascript:rename('{{ $item_name }}')"><i class="fa fa-share-square-o fa-fw"></i> Share</a></li>
+        <li><a href="javascript:rename('{{ $item_name }}')"><i class="fa fa-share-square-o fa-fw"></i> Share</a></li>
         
         <li><a href="javascript:history('{{ $item_name }}')"><i class="fa fa-arrows fa-fw"></i> History</a></li>
         <li><a href="javascript:move('{{ $item_name }}')"><i class="fa fa-external-link fa-fw"></i> Move</a></li>

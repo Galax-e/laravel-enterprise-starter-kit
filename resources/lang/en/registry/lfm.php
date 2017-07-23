@@ -86,7 +86,9 @@ return [
     'btn-copy-crop'     => 'Copy & Crop',
     'btn-cancel'        => 'Cancel',
     'btn-resize'        => 'Resize',
-    'btn-forward'        => 'Forward',
+    'btn-forward'       => 'Forward',
+    'btn-folder'        => 'Create',
+    'btn-share'         => 'Share',
 
     'resize-ratio'      => 'Ratio:',
     'resize-scaled'     => 'Image scaled:',

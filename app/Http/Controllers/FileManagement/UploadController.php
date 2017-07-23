@@ -28,12 +28,11 @@ class UploadController extends LfmController
 	public function newfolder()
     {
         $new_folder = new Folder;
-        $new_folder->id                 = Input::get('folder_no');
         $new_folder->folder_no          = Input::get('folder_no');
 
         $new_folder->name               = Input::get('fold_name');
         $new_folder->desc               = Input::get('add_folder_description');
-        $new_folder->registry           = Input::get('folder_by');
+        $new_folder->registry           = 'registry@kdsg.gov.ng';
         $new_folder->folder_by          = Auth::user()->email;
         $new_folder->agency_dept        = Input::get('agency_dept');
         $new_folder->category           = Input::get('category');
@@ -72,7 +71,7 @@ class UploadController extends LfmController
             $new_file_path = parent::getCurrentPath($new_filename);
             $new_document = new Document;
             $new_document->folder_id= Input::get('working_dir');
-            $new_document->title= Input::get('name');
+            $new_document->file_by= Auth::user()->email;
             if (Input::hasFile('upload')){
                 $file=Input::file('upload');
                 $new_document->name = $new_filename;//$new_file_path.'/'.$new_filename;
