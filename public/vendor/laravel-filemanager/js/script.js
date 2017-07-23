@@ -300,9 +300,11 @@ function move(item_name) {
 
 function history(item_name) {
 
-    $('#historyModal').modal('show');
+    
     $('#item_name').val(item_name);
-    var fold_name = item_name;
+    $('#item_div').html('<span>item_name</span>');
+    //var fold_name = item_name;
+    $('#historyModal').modal('show');
 
 }
 

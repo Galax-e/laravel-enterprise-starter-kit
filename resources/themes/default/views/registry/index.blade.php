@@ -297,13 +297,13 @@
             <div class="box-body">
               <ul class="todo-list">
                 @foreach($activity as $folder_id)
-                     @if($folder_id->folder_id == '/1/KDSG-HHH-1498582776631')
+                     {{-- @if($folder_id->folder_id == '/1/KDSG-HHH-1498582776631') --}}
                     <li>                     
                       <small>{{ $folder_id->activity }} 
                       <i class="fa fa-clock-o"></i>
 					          <b>{{ $folder_id->created_at }}</b></small>
                       </li>             
-                        @endif
+                       {{-- @endif --}}
 			          	@endforeach
               </ul>
             </div><!-- /.box-body -->
