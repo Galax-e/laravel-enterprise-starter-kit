@@ -177,7 +177,7 @@
        function desktopNotification(heading='New event', message='You have a new folder on your desk', count=0){
            // show desktop notification
            if(count >= 1){
-                $beep = new Audio('assets/audio/getsway.ogg');
+                $beep = new Audio('assets/audio/iphone.mp3');
                 $playAudio = function() {
                     $beep && $beep.play();
                 };

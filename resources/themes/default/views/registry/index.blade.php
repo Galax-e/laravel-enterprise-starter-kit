@@ -243,12 +243,11 @@
                 <input type="text" class="form-control" id="category" name="category" placeholder="Category"/>
               </div>
           </div>
+          </form>
           <div class="box-footer clearfix">
-            <button class="pull-right btn btn-default" name="post" id="post">Create <i class="fa fa-arrow-circle-right"></i></button>
-          </div>
-        </form>
-        <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
-           <button type="button" class="btn btn-primary" id="add-folder-btn">{{ trans('registry/lfm.btn-folder') }}</button>      
+          <button type="button" class="btn btn-primary pull-right" id="add-folder-btn">{{ trans('registry/lfm.btn-folder') }} <i class="fa fa-arrow-circle-right"></i></button>
+            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+            </div>     
         </div>
     </div>
   </div>
@@ -263,7 +262,7 @@
             <h4 class="modal-title" id="myModalLabel">{{ trans('registry/lfm.file-share') }}</h4>
           </div>
           <div class="modal-body">
-            <form action="/share/8" role='form' id='shareForm' name='shareForm' method='post'>
+            <form action="share" role='form' id='shareForm' name='shareForm' method='post'>
               <div class="form-group" id="attachment">
                 <label for='upload' class='control-label'>{{ trans('registry/lfm.file-to') }}</label>
                 <div class="controls">
@@ -272,16 +271,16 @@
                   </div>
                 </div>
               </div> 
-			  <input type='hidden' name='fold_name' id='item_name'>
-			  <input type="hidden" name="comment_by" value="registry@kdsg.gov.ng">
-			 <input type="hidden" name="activity" value="registry@kdsg.gov.ng Forward this file to ">
+        			  <input type='hidden' name='fold_name' value="HGS-2017-AC-223">
+        			  <input type="hidden" name="comment_by" value="registry@kdsg.gov.ng">
+        			 <input type="hidden" name="activity" value="registry@kdsg.gov.ng Forward this file to ">
               <input type='hidden' name='_token' value='{{csrf_token()}}'>
             </form>
           </div>
           <div class="modal-footer">
 		    
 			 <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
-            <button type="button" class="btn btn-primary" id="share-btn">{{ trans('registry/lfm.btn-forward') }}</button>
+            <button type="button" class="btn btn-primary" id="share-btn">{{ trans('registry/lfm.btn-share') }} <i class="fa fa-arrow-circle-right"></i></button>
           </div>
         </div>
       </div>

@@ -71,7 +71,7 @@ class RenameController extends LfmController
     {
         $new_name = parent::translateFromUtf8(trim(request('items')));        
         $old_file = parent::getCurrentPath($new_name);
-        $new_path = public_path().'/docs/files/shares/'.$new_name;
+        $new_path = public_path().'/docs/files/shares/kiv/'.$new_name;
         $move     =  File::copyDirectory($old_file, $new_path);
         $delete   =  File::deleteDirectory($old_file);
    }

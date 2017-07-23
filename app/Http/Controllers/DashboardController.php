@@ -353,4 +353,45 @@ class DashboardController extends Controller
 		Flash::success('New file attached flash');
 		return redirect()->back()->with('New file attached');
     }
+
+        public function single_upload(){
+        session_start();
+        $session_id='1'; 
+        $path = "uploads/";
+        $valid_formats = array("jpg", "png", "gif", "bmp", "jpeg", "pdf");
+
+           $name = $_FILES['photo']['name'];
+           $size = $_FILES['photo']['size'];
+           if(strlen($name)) {
+              list($txt, $ext) = explode(".", $name);
+              if(in_array($ext,$valid_formats)) {
+                 if($size<(10024*10024)) {
+                    $image_name = time().$session_id.".".$ext;
+                    $tmp = $_FILES['photo']['tmp_name'];
+                    if(move_uploaded_file($tmp, $path.$image_name)){
+                    	if($ext !== "pdf"){
+                       echo "<img src='uploads/".$image_name."' class='preview'>";
+                   }
+                   else echo '
+                   	<object data="uploads/'.$image_name.'" type="application/pdf" style="width: 100%; height: 100%">
+									<!-- support older browsers -->
+									<!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
+									<!-- For those without native support, no pdf plugin, or no js -->
+									<p>It appears you do not have PDF support in this web browser. 
+									<a href="{{ asset("/docs/files".$folder->name."/".$folder->latest_doc) }}" target="_blank">Click here to download the document.</a></p>
+					</object>';
+                    }
+                    else
+                    echo "Image Upload failed";
+                 }
+                 else
+                 echo "Image file size max 1 MB";
+              }
+              else
+              echo "Invalid file format..";
+           }
+           else
+           echo "Please select image..!";
+           exit;      
+    }
 }

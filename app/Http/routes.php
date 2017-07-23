@@ -72,6 +72,7 @@ Route::group(['middleware' => 'authorize'], function () {
 	Route::post(  'store_memo',     ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
     Route::post(  'insert',     ['as' => 'insert',          'uses' => 'DashboardController@insert']);
     Route::post(  'attachment',     ['as' => 'attachment',          'uses' => 'DashboardController@attachment']);
+    Route::post(  'single_upload',     ['as' => 'single_upload',          'uses' => 'DashboardController@single_upload']);
     Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
     Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
 
@@ -100,7 +101,7 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::post('storepinform', ['as'=>'storepinform', 'uses'=>'FilesController@storepinform']);
 
     Route::post('forward',['as'=>'forward', 'uses'=>'FilesController@forward']); // remove the id
-    Route::post('share/{id}','FilesController@share');
+    Route::post('share','FilesController@share');
 
     // creating documents and uploading file
     Route::post('newdocument','FileManagement\UploadController@upload');

@@ -6,7 +6,7 @@ $middleware = array_merge(\Config::get('lfm.middlewares'), [
 ]);
 $prefix = \Config::get('lfm.prefix', 'laravel-filemanager');
 $as = 'unisharp.lfm.';
-$namespace = '\App\Http\Controllers\FileManagement'; //'\Unisharp\Laravelfilemanager\controllers';
+$namespace = '\App\Http\Controllers\FileManagement';// '\Unisharp\Laravelfilemanager\controllers';
 
 // make sure authenticated
 Route::group(compact('middleware', 'prefix', 'as', 'namespace'), function () {

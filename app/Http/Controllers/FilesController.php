@@ -242,13 +242,13 @@ class FilesController extends Controller {
     }
 	
 	
-	public function share(Request $request, $id)
+	public function share()
     {
         
-		$folder = Folder::find($request->input('fold_name'));
-        $folder->folder_to = $request->input('share-input');
-		//$folder->fold_name = $request->input();
-        $folder->save();
+		$folder_no = Input::get('fold_name');
+		$registry = Auth::user()->email;
+		$folder_to = Input::get('share-input');
+		DB::update('update folders set folder_to = ?, registry = ? where folder_no = ?', [$folder_to, $registry, $folder_no]);
 		
 		$user2 = new Activity;
 		$shareInput = Input::get('share-input');
