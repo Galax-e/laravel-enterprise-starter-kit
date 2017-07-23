@@ -6,6 +6,9 @@ use Unisharp\Laravelfilemanager\Events\ImageWasRenamed;
 use Unisharp\Laravelfilemanager\Events\FolderIsRenaming;
 use Unisharp\Laravelfilemanager\Events\FolderWasRenamed;
 
+use Illuminate\Support\Facades\Input;
+use App\Activity;
+use Auth;
 /**
  * Class RenameController
  */
@@ -74,5 +77,13 @@ class RenameController extends LfmController
         $new_path = public_path().'/docs/files/shares/kiv/'.$new_name;
         $move     =  File::copyDirectory($old_file, $new_path);
         $delete   =  File::deleteDirectory($old_file);
+
+
+                    $activity = new Activity;
+                    $activity->activity_by= Auth::user()->email;
+                    $activity->activity_by_post = Auth::user()->position;
+                    $activity->folder_id= '10000';
+                    $activity->activity= ' Move File to KIV (Keep In View)';
+                    $activity->save();
    }
 }

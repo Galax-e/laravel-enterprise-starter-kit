@@ -116,7 +116,7 @@ class FilesController extends Controller {
 		
 		$activity = new Activity;
 		$activity->activity_by= Input::get('comment_by');
-		$user->activity_by_post = Auth::user()->position;
+		$activity->activity_by_post = Auth::user()->position;
 		$activity->folder_id= Input::get('folder_id');
 		$activity->activity= Input::get('activity');
 		$activity->comment= Input::get('comment');
