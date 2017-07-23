@@ -366,9 +366,22 @@ class DashboardController extends Controller
               list($txt, $ext) = explode(".", $name);
               if(in_array($ext,$valid_formats)) {
                  if($size<(10024*10024)) {
+
                     $image_name = time().$session_id.".".$ext;
                     $tmp = $_FILES['photo']['tmp_name'];
                     if(move_uploaded_file($tmp, $path.$image_name)){
+					$attach = new Document;
+					$attach->name = $image_name;
+					$attach->file_by = Auth::user()->email;
+					$attach->folder_id = Input::get('folder_id');
+					$attach->save();
+
+					$activity = new Activity;
+					$activity->activity_by= Auth::user()->email;
+					$activity->activity_by_post = Auth::user()->position;
+					$activity->folder_id= Input::get('folder_id');
+					$activity->activity= Auth::user()->email.' Added new Document';
+					$activity->save();
                     	if($ext !== "pdf"){
                     	echo'
                     	<ul class="mailbox-attachments clearfix">

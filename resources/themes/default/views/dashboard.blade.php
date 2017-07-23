@@ -268,19 +268,15 @@
 					
 						<div class="box"> <!-- div for comment header-->
 							<div class="box-header"> 
-             
-												
+
 												<script type="text/javascript" src="scripts3/jquery.form.js"></script>
 												<script type="text/javascript" src="scripts3/upload.js"></script>
-
 												<link type="text/css" rel="stylesheet" href="style.css" />
-
-												
-												    
-												      
+   
 												            <div style="width:350px" align="center">
 												                <div id='preview'></div>    
 												                <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+												                <input type = "hidden" id="folder_id" name = "folder_id" value = "{{ $folder->id }}"> 
 												                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 												                    <div class="browse_text">Attach File/Image:</div>
 
