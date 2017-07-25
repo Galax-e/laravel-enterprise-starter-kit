@@ -235,6 +235,8 @@ Route::group(['middleware' => 'authorize'], function () {
         // Show LFM 
         Route::get('/', ['uses' => 'FileManagement\LfmController@show', 'as' => 'registry.show']);
 
+        Route::get('showhistory', ['uses' => 'FileManagement\LfmController@show', 'as' => 'showhistory']);
+
         // Show integration error messages
         Route::get('/errors', ['uses' => 'FileManagement\LfmController@getErrors', 'as' => 'registry.get.errors']);
 

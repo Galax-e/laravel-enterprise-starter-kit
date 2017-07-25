@@ -556,6 +556,7 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
 
     public static $classMap = array (
         'AddActivitybypostToActivities' => __DIR__ . '/../..' . '/database/migrations/2017_07_23_022553_add_activitybypost_to_activities.php',
+        'AddClearanceLevelToUsers' => __DIR__ . '/../..' . '/database/migrations/2017_07_25_070057_add_clearance_level_to_users.php',
         'AddCommentToActivities' => __DIR__ . '/../..' . '/database/migrations/2017_07_23_015536_add_comment_to_activities.php',
         'AddCustomFieldsToExistingTables' => __DIR__ . '/../..' . '/database/migrations/2017_05_28_140842_add_custom_fields_to_existing_tables.php',
         'AddEmailVerification' => __DIR__ . '/../..' . '/database/migrations/2016_09_07_182002_AddEmailVerification.php',

@@ -383,7 +383,8 @@ class DashboardController extends Controller
 					$activity->fileinfo= $image_name;
 					$activity->activity= ' Added new Document';
 					$activity->save();
-                    	if($ext !== "pdf"){
+                    
+					if($ext !== "pdf"){
                     	echo'
                     	<ul class="mailbox-attachments clearfix">
                     	<li>

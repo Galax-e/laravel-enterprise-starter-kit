@@ -303,15 +303,34 @@ function move(item_name) {
     });
 }
 
-
 function history(item_name) {
 
-    
-    $('#item_name').val(item_name);
-    $('#item_div').html('<span>item_name</span>');
+    //$('#item_name').html(item_name);
+    $.ajax({
+      url:"registry/showhistory",
+      method:"GET",
+      dataType:"json"
+    }).done(function(returnVal){
+      $.each(returnVal, function(index, value){
+          
+        if (value.folder_id == '/shares/'+item_name){
+            var renderActivity = `
+            <li>                     
+                <small>${ value.activity } 
+                    <i class="fa fa-clock-o"></i>
+                    <b>${ value.created_at }</b>
+                </small>
+            </li>
+            `;
+            $('#showactivities').append(renderActivity);
+        }
+        
+      });
+    }).fail(function(returnData){
+      console.log('bad request');
+    });
     //var fold_name = item_name;
     $('#historyModal').modal('show');
-
 }
 
 function trash(item_name) {

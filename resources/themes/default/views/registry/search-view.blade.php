@@ -9,11 +9,9 @@
                     {{--  <i class="fa fa-folder fa-5x"></i>  --}}
                     <img src="{{ asset('/img/folder.png') }}" width="150">
                 </div>
-
                 {{--  <div><a href="{{ $folder->path }}"><img src="{{ asset('/img/folder.png') }}" width="150">
                 </a></div>  --}}
                 
-
                 <div class="caption text-center">
                     <div class="btn-group">
                         <button type="button" id='folder_no' data-id="{{ $folder->folder_no }}" class="item_name btn btn-default btn-xs -item">

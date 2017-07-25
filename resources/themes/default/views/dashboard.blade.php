@@ -186,6 +186,33 @@
 			
 			@foreach($folders as $folder)
 
+			<script>
+
+				$( function() {
+				var availableTags = [
+					@foreach($users as $user) 
+						@if($folder->clearance_level >= $user->clearance_level) 
+							"{{ $user->first_name }}, {{ $user->last_name }}",
+						@endif
+					@endforeach
+					""
+				];
+				// @if($user->position){{$user->position}} - @endif
+
+				//availableTags.splice(0, 0,'Select Recipient');
+
+				$(".js-parents").select2();
+				$(".select-with-search").select2({
+					theme: "bootstrap",
+					placeholder: "Select Recipient",
+					//minimumInputLength: 3,
+					allowClear: true,
+					data: availableTags,
+					tags: false
+				});
+			})
+			</script>
+
 			<?php $loopindex++; ?>
 			<div class='container-fluid'> <!-- external panel -->
 				<div class="col-md-9"> <!-- pull right col-md-9 div for pdf view + comment + forward, and file activity -->

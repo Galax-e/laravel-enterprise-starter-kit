@@ -80,6 +80,7 @@ return [
         'ministry'                  =>  'Ministry',
         'department'                =>  'Department',
         'staff_code'                =>  'Staff code',
+        'clearance_level'           =>  'clearance Level',
         'created'                   =>  'Created',
         'updated'                   =>  'Updated',
         'actions'                   =>  'Actions',

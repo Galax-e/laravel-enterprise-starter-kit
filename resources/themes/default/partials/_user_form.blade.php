@@ -73,6 +73,16 @@
             </div>
 
             <div class="form-group">
+                {!! Form::label('clearance_level', trans('admin/users/general.columns.clearance_level')) !!}
+                @if ( $user->isRoot() )
+                    {!! Form::text('clearance_level', null, ['class' => 'form-control', 'readonly']) !!}
+                @else
+                    
+                    {!! Form::selectRange('clearance_level', null, ['class' => 'form-control', 'number'=>[5, 17] ]) !!}
+                @endif
+            </div>
+
+            <div class="form-group">
                 {!! Form::label('username', trans('admin/users/general.columns.username')) !!}
                 @if ( $user->isRoot() )
                     {!! Form::text('username', null, ['class' => 'form-control', 'readonly']) !!}

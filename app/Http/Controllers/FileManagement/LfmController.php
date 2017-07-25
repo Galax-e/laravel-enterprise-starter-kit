@@ -30,10 +30,19 @@ class LfmController extends Controller
     {
         $page_title = trans('general.text.welcome');
         $page_description = "Registry Area";
-		$activity = DB::select('select * from activities');	
+		$activities = DB::select('select * from activities');
+
+        if($request->ajax()){
+
+            $data = array();
+            foreach($activities as $activity){
+                $data[] = $activity;
+            }
+            return response()->json($data);
+        }	
         
         Flash::success('Welcome! Registry File Management Area.');
-        return view('registry.index', compact('page_description', 'page_title', 'activity'));
+        return view('registry.index', compact('page_description', 'page_title', 'activities'));
     }
 
     public function getErrors()

@@ -295,16 +295,17 @@
           </div>
           <div class="modal-body">
             <div class="box-body">
-              <ul class="todo-list">
-                @foreach($activity as $folder_id)
-                     {{-- @if($folder_id->folder_id == '/1/KDSG-HHH-1498582776631') --}}
+              <ul id="showactivities" class="todo-list"
+                @foreach($activities as $activity)
+                  @if($activity->folder_id == strval("555"))
                     <li>                     
-                      <small>{{ $folder_id->activity }} 
-                      <i class="fa fa-clock-o"></i>
-					          <b>{{ $folder_id->created_at }}</b></small>
-                      </li>             
-                       {{-- @endif --}}
-			          	@endforeach
+                      <small>{{ $activity->activity }} 
+                        <i class="fa fa-clock-o"></i>
+                        <b>{{ $activity->created_at }}</b>
+                      </small>
+                    </li>             
+                  @endif
+                @endforeach
               </ul>
             </div><!-- /.box-body -->
           </div>
