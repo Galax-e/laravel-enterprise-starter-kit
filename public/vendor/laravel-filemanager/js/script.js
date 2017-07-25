@@ -311,19 +311,21 @@ function history(item_name) {
       method:"GET",
       dataType:"json"
     }).done(function(returnVal){
-      $.each(returnVal, function(index, value){
-          
-        if (value.folder_id == '/shares/'+item_name){
-            var renderActivity = `
-            <li>                     
-                <small>${ value.activity } 
-                    <i class="fa fa-clock-o"></i>
-                    <b>${ value.created_at }</b>
-                </small>
-            </li>
-            `;
-            $('#showactivities').append(renderActivity);
-        }
+        
+        $('ul#showactivities').html("");
+        $.each(returnVal, function(index, value){
+
+            if (value.folder_id == '/shares/'+item_name){
+                var renderActivity = `
+                <li>                     
+                    <small>${ value.activity } 
+                        <i class="fa fa-clock-o"></i>
+                        <b>${ value.created_at }</b>
+                    </small>
+                </li>
+                `;
+                $('#showactivities').append(renderActivity);
+            }
         
       });
     }).fail(function(returnData){

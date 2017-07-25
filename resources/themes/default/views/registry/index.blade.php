@@ -226,18 +226,24 @@
 ; padding: 10px;"></textarea>
               </div>               <div class="form-group">
                 <input type="text" class="form-control" id="agency_dept" name="agency_dept" placeholder="Agency/ Department"/>
-              </div>               <div class="form-group">
+              </div>               
+              <div class="form-group">
+              <label>Clearance Level</label>
                 <select id="clearance_level" class="form-control" name="clearance_level">
-                     <option>Clearance Level</option>
-                     <option>1</option>
-                     <option>2</option>
-                     <option>3</option>
-                     <option>4</option>
-                     <option>5</option>
-                     <option>6</option>
-                     <option>7</option>
-                     <option>8</option>
-                   </select>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                  <option selected="true">8</option>
+                  <option>9</option>
+                  <option>10</option>
+                  <option>11</option>
+                  <option>12</option>
+                  <option>13</option>
+                  <option>14</option>
+                  <option>15</option>
+                  <option>16</option>
+                  <option>17</option>
+                </select>
               </div>
                <div class="form-group">
                 <input type="text" class="form-control" id="category" name="category" placeholder="Category"/>
@@ -295,7 +301,10 @@
           </div>
           <div class="modal-body">
             <div class="box-body">
-              <ul id="showactivities" class="todo-list"
+              <ul id="showactivities" class="todo-list">
+
+                {{--  Folder hostory comes here.
+                
                 @foreach($activities as $activity)
                   @if($activity->folder_id == strval("555"))
                     <li>                     
@@ -305,12 +314,13 @@
                       </small>
                     </li>             
                   @endif
-                @endforeach
+                @endforeach  --}}
+
               </ul>
             </div><!-- /.box-body -->
           </div>
           <div class="modal-footer">
-			 <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+			      <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
           </div>
         </div>
       </div>

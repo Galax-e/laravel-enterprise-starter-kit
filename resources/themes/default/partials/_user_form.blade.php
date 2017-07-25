@@ -75,10 +75,9 @@
             <div class="form-group">
                 {!! Form::label('clearance_level', trans('admin/users/general.columns.clearance_level')) !!}
                 @if ( $user->isRoot() )
-                    {!! Form::text('clearance_level', null, ['class' => 'form-control', 'readonly']) !!}
+                     {!! Form::selectRange('clearance_level', 5, 17, 8, ['class' => 'form-control', 'readonly', 'width'=>'20px', 'disabled'=>'true'] ) !!} 
                 @else
-                    
-                    {!! Form::selectRange('clearance_level', null, ['class' => 'form-control', 'number'=>[5, 17] ]) !!}
+                    {!! Form::selectRange('clearance_level', 5, 17, 8, ['class' => 'form-control', 'width'=>'20px'] ) !!}  
                 @endif
             </div>
 
