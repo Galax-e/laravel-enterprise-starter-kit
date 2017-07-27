@@ -254,6 +254,9 @@ Route::group(['middleware' => 'authorize'], function () {
         // move
         Route::get('/move', ['uses' => 'FileManagement\RenameController@getMove', 'as' => 'getMove']);
 
+        // move
+        Route::get('/temp_delete', ['uses' => 'FileManagement\RenameController@getTemp', 'as' => 'getTemp']);
+
         // crop
         Route::get('/crop', ['uses' => 'FileManagement\CropController@getCrop', 'as' => 'getCrop']);
         Route::get('/cropimage', ['uses' => 'FileManagement\CropController@getCropimage', 'as' => 'registry.get.cropimage'

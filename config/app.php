@@ -184,7 +184,7 @@ return [
     |
     | NOTE: The short name does not support any HTML markup.
     */
-    'short_name' => env('app.short_name', 'FMS'),
+    'short_name' => env('app.short_name', 'KDSG'),
 
     /* 'short_name' => env('app.short_name', 'LESK'), */
 
@@ -198,7 +198,7 @@ return [
     |
     | NOTE: The tag line supports HTML markup for styling.
     */
-    'tag_line' => env('app.tag_line', 'version 1.0'),
+    'tag_line' => env('app.tag_line', 'version 4.0'),
 
     /*
     |--------------------------------------------------------------------------

@@ -86,4 +86,21 @@ class RenameController extends LfmController
                     $activity->activity= ' Move File to KIV (Keep In View)';
                     $activity->save();
    }
+
+   Public function getTemp()
+    {
+        $new_name = parent::translateFromUtf8(trim(request('items')));        
+        $old_file = parent::getCurrentPath($new_name);
+        $new_path = public_path().'/docs/files/trash/'.$new_name;
+        $move     =  File::copyDirectory($old_file, $new_path);
+        $delete   =  File::deleteDirectory($old_file);
+
+
+                    $activity = new Activity;
+                    $activity->activity_by= Auth::user()->email;
+                    $activity->activity_by_post = Auth::user()->position;
+                    $activity->folder_id= '10000';
+                    $activity->activity= ' Delete File';
+                    $activity->save();
+   }
 }

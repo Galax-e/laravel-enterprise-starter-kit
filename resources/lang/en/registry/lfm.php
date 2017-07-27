@@ -57,6 +57,7 @@ return [
     'message-empty'     => 'Folder is empty.',
     'message-choose'    => 'Choose File(s)',
     'message-delete'    => 'Are you sure you want to delete this item?',
+    'temp-delete'       => 'Are you sure you want to delete this item?',
     'message-move'      => 'Are you sure you want to move this item to KIV?',
     'message-name'      => 'Folder name:',
     'message-rename'    => 'Rename to:',

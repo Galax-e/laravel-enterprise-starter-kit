@@ -303,6 +303,16 @@ function move(item_name) {
     });
 }
 
+function temp_delete(item_name) {
+    bootbox.confirm(lang['temp-delete'], function(result) {
+        if (result == true) {
+            performLfmRequest('temp_delete', { items: item_name })
+                .done(refreshFoldersAndItems);
+        }
+    });
+}
+
+
 function history(item_name) {
 
     //$('#item_name').html(item_name);
