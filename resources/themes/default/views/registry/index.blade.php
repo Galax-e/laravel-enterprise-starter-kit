@@ -62,15 +62,69 @@
       padding-right: 10px;
       -webkit-appearance: none;
     }
+
+    .list-group-item ul{
+      margin-top: 10px;
+      margin-right: -15px;
+      margin-bottom: -10px;
+    }
+    .list-group-item li{
+      padding: 10px 15px 10px 3em;
+      border-top: 1px solid #ddd;
+    }
+    .list-group-item li:before{
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      margin-top: -11px;
+      background: #ddd;
+    }
   
   </style>
   <div class="container-fluid" id="wrapper">
     <div class="row">
-      <div class="col-sm-2 hidden-xs">
-        <div id="tree"></div>
+      <div class="col-md-3 col-sm-3 hidden-xs">
+        <div id="tree" class="list-group-item"></div>
+        <!-- Activities -->
+        <div id="activity-timeline" class="box box-primary" style="margin-top: 10px;">
+          <div class="box-header">
+            <i class="ion ion-clipboard"></i>
+            <h3 class="box-title">Activity</h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              </div>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <ul class="todo-list">
+            @foreach($activities as $activity)
+              {{--  @if($activity->activity_by == Auth::user()->email || Auth::user()->username)  --}}
+              <li>   
+              <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', Auth::user()->email)->first();
+                        
+                        $temp = array();
+                        foreach($user as $field => $val ){
+                            $temp[$field] = $val;
+                        }
+                        
+                        $user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];  ?>
+              <small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 30px;" alt="User Image"/>  &nbsp; &nbsp;{{ $activity->folder_id }}
+              </small><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+              <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small>
+              </li>           
+              {{--  @endif  --}}
+            @endforeach
+            </ul>
+          </div><!-- /.box-body -->
+          <div class="box-footer text-center">
+            <a href="viewall" class="uppercase">View All Activity</a>
+          </div><!-- /.box-footer -->
+        </div><!-- /.box -->
       </div>
 
-      <div class="col-sm-10 col-xs-12" id="main">
+      <div class="col-md-9 col-sm-9 col-xs-12" id="main">
         <nav class="navbar navbar-default" id="nav">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-buttons">
@@ -103,7 +157,6 @@
                   <span class="fa fa-search fa-fw"></span>
                 </button>
               </li>
-
               <li>
                 <a class="clickable" id="thumbnail-display">
                   <i class="fa fa-th-large"></i>
@@ -136,12 +189,11 @@
             </ul>
           </div>
         </nav>
-        <div class="visible-xs" id="current_dir" style="padding: 5px 15px;background-color: #f8f8f8;color: #5e5e5e;"></div>
-
+        <div class="visible-xs" id="current_dir" style="padding: 5px 15px;background-color: #f8f8f8;color: #5e5e5e;">
+        </div>
         <div id="alerts"></div>
-
         <div id="content"></div>
-      </div>
+      </div><!-- /col. -->
 
       <ul id="fab">
         <li>
@@ -160,44 +212,43 @@
           </ul>
         </li>
       </ul>
-    </div>
-    </div>
+    </div> <!-- /row -->
+  </div><!-- /container wrapper -->
 
-     <!-- upload modal -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aia-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">{{ trans('registry/lfm.title-upload') }}</h4>
-          </div>
-          <div class="modal-body">
-            <form action="newdocument" role='form' id='uploadForm' name='uploadForm' method='post' enctype='multipart/form-data'>
-              <div class="form-group" id="attachment">
-                <label for='upload' class='control-label'>{{ trans('registry/lfm.message-choose') }}</label>
-                <div class="controls">
-                  <div class="input-group" style="width: 100%">
-                    <input type="file" id="upload" name="upload[]" multiple="multiple">
-                  </div>
+    <!-- upload modal -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aia-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">{{ trans('registry/lfm.title-upload') }}</h4>
+        </div>
+        <div class="modal-body">
+          <form action="newdocument" role='form' id='uploadForm' name='uploadForm' method='post' enctype='multipart/form-data'>
+            <div class="form-group" id="attachment">
+              <label for='upload' class='control-label'>{{ trans('registry/lfm.message-choose') }}</label>
+              <div class="controls">
+                <div class="input-group" style="width: 100%">
+                  <input type="file" id="upload" name="upload[]" multiple="multiple">
                 </div>
               </div>
-              <input type="hidden" name="comment_by" value="registry@kdsg.gov.ng">
-              <input type="hidden" name="activity" value="registry@hallowgate.com added a new document to this file">
-              <input type='hidden' name='working_dir' id='working_dir'>
-              <input type='hidden' name='type' id='type' value='{{ request("type") }}'>
-              <input type='hidden' name='_token' value='{{csrf_token()}}'>
-            </form>
-          </div>
-          <div class="modal-footer">
-		    
-			 <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
-            <button type="button" class="btn btn-primary" id="upload-btn">{{ trans('registry/lfm.btn-upload') }}</button>
-          </div>
+            </div>
+            <input type="hidden" name="comment_by" value="registry@hallowgate.com">
+            <input type="hidden" name="activity" value="registry@hallowgate.com added a new document to this folder">
+            <input type='hidden' name='working_dir' id='working_dir'>
+            <input type='hidden' name='type' id='type' value='{{ request("type") }}'>
+            <input type='hidden' name='_token' value='{{csrf_token()}}'>
+          </form>
+        </div>
+        <div class="modal-footer">		    
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+          <button type="button" class="btn btn-primary" id="upload-btn">{{ trans('registry/lfm.btn-upload') }}</button>
         </div>
       </div>
     </div>
-    {{-- eoluwafemi edit --}}
-     <!-- Request file modal-->
+  </div>
+
+  {{-- add folder modal --}}
   <div class="modal fade" id="add-folderModal" role="dialog">
   <div class="modal-dialog">
     <!-- Modal content-->
@@ -211,20 +262,25 @@
             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
           </div><!-- /. tools -->
         </div>        
-        <form action="newfolder" role='form' id='add-folderForm' name='uploadForm' method='post' enctype='multipart/form-data'>
+        <form action="{{route('newfolder')}}" role='form' id='add-folderForm' name='uploadForm' method='post' enctype='multipart/form-data'>
             {{ csrf_field() }}
+
+            <input type="hidden" name="activity" value="new folder created by system">
+            <input type='hidden' name='working_dir'>
             <input type='hidden' name='folder_by' id='folder_by' value='{{ Auth::user()->email }}'>
+
             <div class="box-body">
               <div class="form-group">
                 <input type="text" class="form-control" id="folder_no" name="folder_no" placeholder="File No"/>
               </div>
               <div class="form-group">
                 <input type="text" class="form-control" id="fold_name" name="fold_name" placeholder="File name/ Subject"/>
-              </div>               <div>
-                <textarea class="textarea" name="add_folder_description" id="add_folder_description" placeholder="Full Description" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd
-
-; padding: 10px;"></textarea>
-              </div>               <div class="form-group">
+              </div>               
+              <div>
+                <textarea class="textarea" name="add_folder_description" id="add_folder_description" placeholder="Full Description..." style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+                </textarea>
+              </div>               
+              <div class="form-group">
                 <input type="text" class="form-control" id="agency_dept" name="agency_dept" placeholder="Agency/ Department"/>
               </div>               
               <div class="form-group">
@@ -245,7 +301,7 @@
                   <option>17</option>
                 </select>
               </div>
-               <div class="form-group">
+              <div class="form-group">
                 <input type="text" class="form-control" id="category" name="category" placeholder="Category"/>
               </div>
           </div>
@@ -255,11 +311,11 @@
             <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
             </div>     
         </div>
+      </div>
     </div>
   </div>
-</div>
 
-	{{-- eoluwafemi rename --}}
+	{{-- eoluwafemi share --}}
 	<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -268,7 +324,7 @@
             <h4 class="modal-title" id="myModalLabel">{{ trans('registry/lfm.file-share') }}</h4>
           </div>
           <div class="modal-body">
-            <form action="share" role='form' id='shareForm' name='shareForm' method='post'>
+            <form action="{{route('share')}}" role='form' id='shareForm' name='shareForm' method='post'>
               <div class="form-group" id="attachment">
                 <label for='upload' class='control-label'>{{ trans('registry/lfm.file-to') }}</label>
                 <div class="controls">
@@ -276,16 +332,17 @@
                     <input type="text" id="share-input" name="share-input">
                   </div>
                 </div>
-              </div> 
-        			  <input type='hidden' name='fold_name' value="HGS-2017-AC-223">
-        			  <input type="hidden" name="comment_by" value="registry@kdsg.gov.ng">
-        			 <input type="hidden" name="activity" value="registry@kdsg.gov.ng Forward this file to ">
+              </div>
+
+        			<input type='hidden' name='folder_no' id='share_folder_no'>
+              <input type='hidden' name='working_dir'>
+        			<input type="hidden" name="activity" value="">
               <input type='hidden' name='_token' value='{{csrf_token()}}'>
+
             </form>
           </div>
           <div class="modal-footer">
-		    
-			 <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+			      <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
             <button type="button" class="btn btn-primary" id="share-btn">{{ trans('registry/lfm.btn-share') }} <i class="fa fa-arrow-circle-right"></i></button>
           </div>
         </div>

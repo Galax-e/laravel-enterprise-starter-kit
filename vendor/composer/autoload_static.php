@@ -566,6 +566,7 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
         'AddNotifyToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_040142_add_notify_to_users_table.php',
         'AddPinToUsers' => __DIR__ . '/../..' . '/database/migrations/2017_07_21_075433_add_pin_to_users.php',
         'AddRequestHandlerToFolderRequests' => __DIR__ . '/../..' . '/database/migrations/2017_07_22_082926_add_request_handler_to_folder_requests.php',
+        'AddSharedbyToFoldersTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_26_051637_add_sharedby_to_folders_table.php',
         'AddUserDataAndUrlToLernTables' => __DIR__ . '/../..' . '/database/migrations/2016_03_27_000000_add_user_data_and_url_to_lern_tables.php',
         'CreateActivitiesTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_01_223323_create_activities_table.php',
         'CreateAuditTable' => __DIR__ . '/../..' . '/database/migrations/2015_10_25_162237_CreateAuditTable.php',

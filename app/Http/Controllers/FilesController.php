@@ -37,17 +37,17 @@ class FilesController extends Controller {
       return view('read', compact('user'));
    }
    
-   public function edit(Request $request,$id) {
+   public function edit(Request $request, $id) {
 		$folder_to = $request->input('folder_to');
 		DB::update('update folders set folder_to = ? where id = ?',[$folder_to,$id]);
 
-		$user2 = new Activity;
-		$user2->activity_by= Input::get('comment_by');
-		$user->activity_by_post = Auth::user()->position;
-		$user2->folder_id= Input::get('folder_id');
-		$forward_activity= Input::get('forward_activity');
-		$user2->activity = $forward_activity.$folder_to;
-		$user2->save();
+		$activity = new Activity;
+		$activity->activity_by= Input::get('comment_by');
+		$activity->activity_by_post = Auth::user()->position;
+		$activity->folder_id= Input::get('folder_id');
+		$forward_activity = Input::get('forward_activity');
+		$activity->activity = $forward_activity.$folder_to;
+		$activity->save();
 		echo "Record updated successfully.<br/>";
 		echo '<a href = "/edit-records">Click Here</a> to continue.';
    }
@@ -84,13 +84,14 @@ class FilesController extends Controller {
 	public function store_session()
     {  
 		$folder = new Folder;
-		$folder->fold_name= Input::get('fold_name');
-		$folder->fold_desc= Input::get('fold_desc');
+		$folder->name= Input::get('fold_name');
+		$folder->desc= Input::get('fold_desc');
 		$folder->folder_by= Input::get('folder_by');
 		$folder->clearance_level= Input::get('clearance_level');
 		$folder->save();
-		$id = Auth::user()->email;
-		$users = DB::select('select * from folders where folder_by = ?',[$id]);
+
+		$email = Auth::user()->email;
+		$users = DB::select('select * from folders where folder_by = ?',[$email]);
 		return view('file',['users'=>$users]);
     }
 	
@@ -142,7 +143,7 @@ class FilesController extends Controller {
 		$comment->save();
 
 
-		// update comment on file to enable searching...
+		// update comment on folder to enable searching...
 		$folder_id = request('folder_id');
 		$concat_comment = $comment->comment;
 		$concat = DB::select('select * from folders where id=?', [$folder_id]);
@@ -154,7 +155,8 @@ class FilesController extends Controller {
 		$activity = new Activity;
 		$activity->activity_by = $comment->comment_by; // request('comment_by');
 		$activity->folder_id   = $comment->folder_id; //request('folder_id');
-		$activity->activity    = request('activity');
+		$activity->element_id  = $folder_id;
+		$activity->activity    = Auth::user()->full_name. ' Commented on '. request('activity');
 		$activity->comment     = $comment->comment ; //request('comment');
 		$activity->save();
 
@@ -193,11 +195,10 @@ class FilesController extends Controller {
 	
 	public function forward(Request $request)
     {
-
+		$user = Auth::user();
 		// retrieve the folder handle and save.
        	$fold_name = Input::get('fold_name');
        	$temp = Input::get('share-input');
-        
         // remove white spaces...
         $temp = preg_replace('/\s+/', '', $temp);
         $fullname_array = explode(',', $temp);
@@ -215,26 +216,30 @@ class FilesController extends Controller {
 		$receiver_email=  $receiver_user['email'];
 
 		$folder_to = $receiver_email; // $temp;
-        DB::update('update folders set folder_to = ? where name = ?', [$folder_to, $fold_name]);
-       
-        
-        // create activity for sharing the folder
-        $activity = new Activity;
-        $shareInput = $receiver_user['first_name'].', '.$receiver_user['last_name'];
-        $activity->activity_by= Input::get('comment_by');
-        $activity->folder_id= Input::get('fold_name');
-		$activity->fileinfo= Input::get('fileinfo');
-        $activity->activity= Input::get('activity'). $shareInput;
-        $activity->save();        // create a notification and save to database
-      
+        DB::update('update folders set folder_to = ?, forwarded_by=? where name = ?', [$folder_to, $user->email, $fold_name]);
+    
+	    $folder = DB::select('select id from folders where name = ?', [$fold_name]);
+		$folder_id = 0;
+		foreach($folder as $fid){
+			$folder_id = ((array) $fid)["id"];
+		}
+     
         $sender_id = Auth::user()->id;
         $receiver_id =  $receiver_user['id']; // DB::table('users')->where('email', $receiver_email)->first()->id;
-              
-		$folder_id = 1;
 		
         // create notification
         FolderNotification::create(['folder_id'=>$folder_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);        
 		
+		// create activity for sharing the folder
+        $activity = new Activity;
+        $shareInput = $receiver_user['first_name'].', '.$receiver_user['last_name'];
+        $activity->activity_by= $user->email;
+        $activity->folder_id= Input::get('fold_name');
+		$activity->element_id = $folder_id;
+		$activity->fileinfo= Input::get('fileinfo');
+        $activity->activity = $user->full_name.' Forwarded this folder: '.Input::get('activity').', to '. $shareInput;
+        $activity->save();  
+
 		//return 'session';
         Flash::success('File has been sent to '. $first_name . ', '. $last_name);
         //return redirect()->back()->with('Dashboard up-to-date');
@@ -244,27 +249,35 @@ class FilesController extends Controller {
 	
 	public function share()
     {
-        
-		$folder_no = Input::get('fold_name');
-		$registry = Auth::user()->email;
+		$user = Auth::user();
+		$folder_no = Input::get('folder_no');
 		$folder_to = Input::get('share-input');
-		DB::update('update folders set folder_to = ?, registry = ? where folder_no = ?', [$folder_to, $registry, $folder_no]);
+		$shared_by = $user->email;
+		DB::update('update folders set folder_to = ?, shared_by = ? where folder_no = ?', [$folder_to, $shared_by, $folder_no]);
 		
-		$user2 = new Activity;
-		$shareInput = Input::get('share-input');
-		$user2->activity_by= Input::get('comment_by');
-		$user2->folder_id= Input::get('fold_name');
-		$user2->activity= Input::get('activity'). $shareInput;
-		$user2->save();
+		// get folder id
+		$folder = DB::select('select id from folders where folder_no = ?', [$folder_no]);
+		
+		$folder_id = 0;
+		foreach($folder as $fid){
+			$folder_id = ((array) $fid)["id"];
+		}
 
 		// create a notification and save to database
-		$sender_id = Auth::user()->id;
-		$receiver_email = Input::get('share-input');
+		$sender_id = $user->id;
+		$receiver_email = $folder_to;// Input::get('share-input');
 		$receiver_id = User::where('email', $receiver_email)->first()->id;
-		$folder_id = 1; //Folder::find($request->input('fold_name'))->first()->id;
+		//$folder_id = 1; //Folder::find($request->input('fold_name'))->first()->id;
 		// create notification
-		FolderNotification::create(['folder_id'=>folder_id, 'sender_id'=>sender_id, 'receiver_id'=>receiver_id]);
+		FolderNotification::create(['folder_id'=>$folder_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);
 
+		$activity = new Activity;
+		$shareInput = $receiver_email; // Input::get('share-input');
+		$activity->activity_by= $user->email;
+		$activity->folder_id = $folder_no; // Input::get('folder_no');
+		$activity->element_id = $folder_id;
+		$activity->activity = $user->email.' Forwarded this folder to '. $shareInput;
+		$activity->save();
 		
 		//return 'session';
 		Flash::success('File has been sent to '. Input::get('share-input'));
@@ -280,7 +293,7 @@ class FilesController extends Controller {
 		$user->save();
 
 		$sender_id = Auth::user()->id;
-		$folder_request_id = DB::table('folders')->where('fold_name', 'like', '$user->foldername')->get();
+		$folder_request_id = DB::table('folders')->where('name', 'like', '$user->foldername')->get();
 
 		if (!$folder_request_id){
 			$folder_request_id = 1;

@@ -33,10 +33,8 @@ $('#to-previous').click(function() {
 });
 
 $('#add-folder').click(function() {
-
     //	  performance = new Date().getTime();
     //  createFolder('KDSG-'+performance+'-'+result);
-
     $('#add-folderModal').modal('show');
 });
 
@@ -272,14 +270,21 @@ function createFolder(folder_name) {
         .done(refreshFoldersAndItems);
 }
 
-function rename(item_name) {
+function share(item_name) {
+
+    // $('#folder_no').val(item_name);
     $('#shareModal').modal('show');
 
     $('#share-btn').click(function() {
-        var foldername = $('#share-input').val();
-        $('#item_name').val('/1/' + item_name);
-        var fold_name = item_name; // Hey Emma, See it here.............
-        if (foldername == null) return;
+
+        var folder_to = $('#share-input').val();
+        $('#share_folder_no').val(item_name);
+        //console.log(item_name);
+        //$('#item_name').val('/share/' + item_name);
+        // var fold_name = item_name; // Hey Emma, See it here...
+        if (folder_to == null) 
+            return;
+        
         $('#shareModal').modal('hide');
         $('#share-btn').html(lang['btn-folder']).removeClass('disabled');
 
@@ -287,7 +292,6 @@ function rename(item_name) {
             success: function(data, statusText, xhr, $form) {
                 //refreshFoldersAndItems(data);
                 // implement sharing
-
             }
         });
 
@@ -319,23 +323,23 @@ function history(item_name) {
     $.ajax({
       url:"registry/showhistory",
       method:"GET",
-      dataType:"json"
+      dataType:"json",
+      data: {item_name, item_name}
     }).done(function(returnVal){
-        
+
         $('ul#showactivities').html("");
         $.each(returnVal, function(index, value){
-
-            if (value.folder_id == '/shares/'+item_name){
-                var renderActivity = `
-                <li>                     
-                    <small>${ value.activity } 
+            var renderActivity = `
+            <li>                     
+                <small>${ value.activity } 
+                    <label class="label bg-yellow">
                         <i class="fa fa-clock-o"></i>
                         <b>${ value.created_at }</b>
-                    </small>
-                </li>
-                `;
-                $('#showactivities').append(renderActivity);
-            }
+                    </label>
+                </small>
+            </li>
+            `;
+            $('#showactivities').append(renderActivity);
         
       });
     }).fail(function(returnData){

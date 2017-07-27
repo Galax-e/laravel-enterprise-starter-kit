@@ -17,6 +17,7 @@ return array(
     'AddNotifyToUsersTable' => $baseDir . '/database/migrations/2017_05_29_040142_add_notify_to_users_table.php',
     'AddPinToUsers' => $baseDir . '/database/migrations/2017_07_21_075433_add_pin_to_users.php',
     'AddRequestHandlerToFolderRequests' => $baseDir . '/database/migrations/2017_07_22_082926_add_request_handler_to_folder_requests.php',
+    'AddSharedbyToFoldersTable' => $baseDir . '/database/migrations/2017_07_26_051637_add_sharedby_to_folders_table.php',
     'AddUserDataAndUrlToLernTables' => $baseDir . '/database/migrations/2016_03_27_000000_add_user_data_and_url_to_lern_tables.php',
     'CreateActivitiesTable' => $baseDir . '/database/migrations/2017_06_01_223323_create_activities_table.php',
     'CreateAuditTable' => $baseDir . '/database/migrations/2015_10_25_162237_CreateAuditTable.php',

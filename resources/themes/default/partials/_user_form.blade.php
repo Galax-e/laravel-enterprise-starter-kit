@@ -77,7 +77,7 @@
                 @if ( $user->isRoot() )
                      {!! Form::selectRange('clearance_level', 5, 17, 8, ['class' => 'form-control', 'readonly', 'width'=>'20px', 'disabled'=>'true'] ) !!} 
                 @else
-                    {!! Form::selectRange('clearance_level', 5, 17, 8, ['class' => 'form-control', 'width'=>'20px'] ) !!}  
+                    {!! Form::selectRange('clearance_level', 5, 17, 8, ['class' => 'form-control', 'width'=>'20px', 'required'=>'true'] ) !!}  
                 @endif
             </div>
 

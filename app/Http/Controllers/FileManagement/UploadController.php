@@ -27,15 +27,17 @@ class UploadController extends LfmController
 	 
 	public function newfolder()
     {
+
+        $user = Auth::user();
+
         $new_folder = new Folder;
         $new_folder->folder_no          = Input::get('folder_no');
-
         $new_folder->path               = parent::getInternalPath(parent::getCurrentPath()).'/'.$new_folder->folder_no;
         
         $new_folder->name               = Input::get('fold_name');
         $new_folder->desc               = Input::get('add_folder_description');
-        $new_folder->registry           = 'registry@hallowgate.com';
-        $new_folder->folder_by          = Auth::user()->email;
+        // $new_folder->registry           = 'registry@hallowgate.com';
+        $new_folder->folder_by          = $user->email;
         $new_folder->agency_dept        = Input::get('agency_dept');
         $new_folder->category           = Input::get('category');
         $new_folder->clearance_level    = Input::get('clearance_level');
@@ -44,6 +46,13 @@ class UploadController extends LfmController
         $new_folder->save();        //Audit::log(Auth::user()->id, trans('registry/lfm.audit-log.category'), trans('registry/lfm.audit-log.msg-newfolder', ['fold_name' => $new_folder->fold_name]));   
 
         //Audit::log(Auth::user()->id, trans('registry/lfm.audit-log.category'), trans('registry/lfm.audit-log.msg-newfolder', ['fold_name' => $new_folder->fold_name]));   
+        
+        $new_activity = new Activity;
+        $new_activity->activity_by = $user->email;
+        $new_activity->element_id  = $new_folder->id;
+        $new_activity->folder_id   = Input::get('working_dir');
+        $new_activity->activity    = Input::get('activity');
+        $new_activity->save();
     }
 	
     public function upload()
@@ -89,9 +98,6 @@ class UploadController extends LfmController
             //     ->where('id', $id)
             //     ->update(array('latest_doc' => $new_filename));
 
-            // add filename to searchterm in folder
-            // $folder_id = $id;
-
             // update search term with new document name to enable efficient searching...
             $concat_filename = $new_filename;
             $concat = DB::select('select * from folders where id=?', [$folder_id]);
@@ -102,7 +108,8 @@ class UploadController extends LfmController
 
             $new_activity = new Activity;
             $new_activity->activity_by= Input::get('comment_by');
-            $new_activity->folder_id = $folder_id;// Input::get('working_dir');
+            $new_activity->folder_id =  Input::get('working_dir');
+            $new_activity->element_id = $folder_id;
             $new_activity->activity= Input::get('activity');
             $new_activity->save();
         }

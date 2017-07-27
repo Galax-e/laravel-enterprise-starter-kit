@@ -127,7 +127,7 @@
 				<div class="box-body">
 					<ul class="todo-list">
 					@foreach($activities as $activity)
-						@if($activity->activity_by == Auth::user()->email || Auth::user()->username)
+						@if($activity->type == 'onfolder' )
 						<li>   
 						 <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', Auth::user()->email)->first();
 	                    
@@ -137,8 +137,6 @@
 	                    }
 	                    
 	                    $user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];  ?>
-
-
 						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 30px;" alt="User Image"/>  &nbsp; &nbsp;{{ $activity->folder_id }}
 						</small><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small>
@@ -228,12 +226,12 @@
 						
 							<div class="mailbox-read-message">        
 								{{--  <object data="{{ asset("/docs/files/1/".$folder->name."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">  --}}
-								<object data="{{ asset("/files/FirstFolder/SharpBrochure.pdf") }}" type="application/pdf" style="width: 100%" height="450">
+								<object data="{{ asset("/docs/files/".$folder->path."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">
 									<!-- support older browsers -->
 									<!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
 									<!-- For those without native support, no pdf plugin, or no js -->
 									<p>It appears you do not have PDF support in this web browser. 
-									<a href="{{ asset("/docs/files".$folder->name."/".$folder->latest_doc) }}" target="_blank">Click here to download the document.</a></p>
+									<a href="{{ asset("/docs/files".$folder->path."/".$folder->latest_doc) }}" target="_blank">Click here to download the document.</a></p>
 								</object>
 							</div><!-- /.mailbox-read-message -->
 						</div><!-- /.box-body first pdf view-->
@@ -296,26 +294,26 @@
 						<div class="box"> <!-- div for comment header-->
 							<div class="box-header"> 
 
-												<script type="text/javascript" src="scripts3/jquery.form.js"></script>
-												<script type="text/javascript" src="scripts3/upload.js"></script>
-												<link type="text/css" rel="stylesheet" href="style.css" />
-   
-												            <div style="width:350px" align="center">
-												                <div id='preview'></div>    
-												                <form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
-												                <input type = "hidden" id="folder_id" name = "folder_id" value = "{{ $folder->id }}"> 
-												                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-												                    <div class="browse_text">Attach File/Image:</div>
+					<script type="text/javascript" src="scripts3/jquery.form.js"></script>
+					<script type="text/javascript" src="scripts3/upload.js"></script>
+					<link type="text/css" rel="stylesheet" href="style.css" />
 
-												                    <div class="file_input_container">
-												                        <div class="upload_button"><div class="btn btn-default btn-file">
-						                                                <i class="fa fa-paperclip"></i> Attachment
-						                                                <input type="file" name="photo" id="photo" class="file_input" />
-						                                              </div>
-						                                              <p class="help-block">Max. 32MB</p></div>
-												                    </div><br clear="all">
-												                </form>
-												            </div>
+								<div style="width:350px" align="center">
+									<div id='preview'></div>    
+									<form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+									<input type = "hidden" id="folder_id" name = "folder_id" value = "{{ $folder->id }}"> 
+										<input type="hidden" name="_token" value="{{ csrf_token() }}">
+										<div class="browse_text">Attach File/Image:</div>
+
+										<div class="file_input_container">
+											<div class="upload_button"><div class="btn btn-default btn-file">
+											<i class="fa fa-paperclip"></i> Attachment
+											<input type="file" name="photo" id="photo" class="file_input" />
+											</div>
+											<p class="help-block">Max. 32MB</p></div>
+										</div><br clear="all">
+									</form>
+								</div>
 											     
 												        												
 							</div>
@@ -516,7 +514,7 @@
 					<form action="comment" id="commentForm{{$loopindex}}" class='commentFormClass' method="post" enctype="multipart/form-data">
 						<input type="hidden" id="comment_by{{$loopindex}}" name="comment_by" value="{{ Auth::user()->email }}">
 						<input type="hidden" id="folder_id{{$loopindex}}" name="folder_id" value="{{ $folder->id }}">
-						<input type="hidden" id="activity{{$loopindex}}" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Comment on {{ substr($folder->name, 3) }}">
+						<input type="hidden" id="activity{{$loopindex}}" name="activity" value="{{ substr($folder->name, 3) }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="box-footer">
 							<div class="input-group">
@@ -532,8 +530,7 @@
 				<div class=""> <!--div forward file -->
 					<form action="{{route('forward')}}" id="forwardForm{{$loopindex}}"  method="post">
 						<input type = "hidden" name="_token" value="<?php echo csrf_token(); ?>">
-						<input type="hidden" name="comment_by" value="{{ Auth::user()->email }}">
-						<input type="hidden" name="activity" value="{{ Auth::user()->first_name }} {{ Auth::user()->last_name }} Forwarded this file: {{ substr($folder->name, 3) }} to ">
+						<input type="hidden" name="activity" value="{{ substr($folder->name, 3) }}">
 						<input type="hidden" name="fold_name" value="{{ $folder->name }}">
 						
 						 
