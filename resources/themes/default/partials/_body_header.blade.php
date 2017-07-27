@@ -203,8 +203,7 @@
                             </li>
 
                             @if ( Setting::get('app.extended_user_menu') )
-                                <!-- Menu Body -->
-                                <li class="user-body">
+                                <!-- <li class="user-body">
                                     <div class="col-xs-4 text-center">
                                         <a href="#">Followers</a>
                                     </div>
@@ -214,7 +213,9 @@
                                     <div class="col-xs-4 text-center">
                                         <a href="#">Friends</a>
                                     </div>
-                                </li>
+                                </li> -->
+                                </br>
+                                
                             @endif
                             <!-- Menu Footer-->
                             <!-- @cpnwaugha changed button default->color, and flat-raised-->
