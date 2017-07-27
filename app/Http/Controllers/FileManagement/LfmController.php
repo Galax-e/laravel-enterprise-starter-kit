@@ -30,13 +30,28 @@ class LfmController extends Controller
     {
         $page_title = trans('general.text.welcome');
         $page_description = "Registry Area";
-		$activities = DB::select('select * from activities');
 
+        $activity = '%Forward%';
+        $comment  = '%Comment%';
+        $creation = '%created%';
+        $activities = DB::select('select * from activities where activity like ? or activity like ? or activity like ?  order by created_at desc limit 5', [$activity, $comment, $creation]);
+		
         if($request->ajax()){
 
+            $folder_no = request('item_name');
+            $folder = DB::select('select id from folders where folder_no = ?', [$folder_no]);
+            $folder_id = 0;
+            foreach($folder as $fid){
+                $folder_id = ((array) $fid)["id"];
+            }
+
+            $activities = DB::select('select * from activities');
             $data = array();
             foreach($activities as $activity){
-                $data[] = $activity;
+
+                if( ((array)$activity)["element_id"] == $folder_id){
+                    $data[] = $activity;
+                }
             }
             return response()->json($data);
         }	

@@ -104,8 +104,8 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::post('share',['as'=>'share', 'uses'=>'FilesController@share']);
 
     // creating documents and uploading file
-    Route::post('newdocument','FileManagement\UploadController@upload');
-    Route::post('newfolder','FileManagement\UploadController@newfolder');
+    Route::post('newdocument',['as'=>'newdocument', 'uses'=>'FileManagement\UploadController@upload']);
+    Route::post('newfolder',['as'=>'newfolder', 'uses'=>'FileManagement\UploadController@newfolder']);
 
     Route::get( 'scandir',    ['as' => 'scandir',    'uses' => 'FileManagement\SearchFolderController@scanDirectory']);
 

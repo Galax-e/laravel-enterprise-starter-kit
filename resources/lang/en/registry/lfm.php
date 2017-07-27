@@ -41,7 +41,7 @@ return [
     'menu-crop'         => 'Crop',
 
     'title-page'        => 'File Manager',
-    'title-panel'       => 'Laravel FileManager',
+    'title-panel'       => 'Registry',
     'title-upload'      => 'Upload File(s)',
     'title-view'        => 'View File',
     'title-root'        => 'Files',
