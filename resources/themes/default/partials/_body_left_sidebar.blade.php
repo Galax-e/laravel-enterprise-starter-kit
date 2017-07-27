@@ -10,6 +10,10 @@
         -o-transform: rotate(-90deg);
         transform: rotate(-90deg);
     }
+    .main-sidebar {
+        position:fixed;
+        top:0px;
+    }
 </style>
 
 <!-- Left side column. contains the logo and sidebar -->
