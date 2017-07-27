@@ -2,6 +2,11 @@
     #image_view_update:hover{
        /* box-shadow: 0 0 5px #8E8E38; */
     }
+    .main-header {
+        width:100%;
+        position:fixed;
+        top:0px;
+    }
 </style>
 <script type="text/javascript">
     $(function(){
@@ -247,4 +252,17 @@
             </ul>
         </div>
     </nav>
+    {{-- <script>
+    // Work on this later. Fix like on Linked in
+    // http://jsfiddle.net/FDv2J/1913/
+    // https://css-tricks.com/scroll-fix-content/
+    // https://forums.digitalpoint.com/threads/stop-scrolling-div-before-footer.2751269/
+      // $(document).scroll(function(){
+      //   $('.main-header').css('position', 'fixed');
+      // }).mouseup(function(){
+      //   $('.navbar').css('position', 'absolute');
+      // }).keyup(function(){
+      //   $('.navbar').css('position', 'relative');
+      // });     
+   //</script>
 </header>

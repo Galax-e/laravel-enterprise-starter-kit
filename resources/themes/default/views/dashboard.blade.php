@@ -34,31 +34,15 @@
   
   <script>
 
-    $( function() {
-     var availableTags = [
-         @foreach($users as $user)  
-            "{{ $user->first_name }}, {{ $user->last_name }}",
-         @endforeach
-         ""
-       ];
-       // @if($user->position){{$user->position}} - @endif
-
-      //availableTags.splice(0, 0,'Select Recipient');
-
-      $(".js-parents").select2();
-      $(".select-with-search").select2({
-        theme: "bootstrap",
-        placeholder: "Select Recipient",
-        //minimumInputLength: 3,
-        allowClear: true,
-        data: availableTags,
-        tags: false
-      });
-   })
  </script>
 
   <style type="text/css">
     .column{margin-top: -10px; float: right; }
+	.left-hand-activity {
+        position:fixed;
+		margin-bottom: 40px;
+		width: 23%;
+    }
   </style>
 
   {{-- <script type="text/javascript" src="file-upload/scripts/jquery.min.js"></script> --}}
@@ -77,6 +61,7 @@
   
 		<div class='col-md-3'> <!-- left hand div -->
 			<!-- USERS LIST -->
+			<div class="left-hand-activity">
 			<div class="box box-primary"> <!-- department div-->
 				<div class="box-header with-border">
 					<!-- @cpnwaugha: c-e: here we will allow users see the other users in their department
@@ -148,7 +133,8 @@
 				<div class="box-footer text-center">
 					<a href="viewall" class="uppercase">View All Activity</a>
 				</div><!-- /.box-footer -->
-			</div><!-- /.box -->        
+			</div><!-- /.box -->
+			</div>        
 		</div><!-- /.col  end left div -->
 
     <!--<div class='row pull-right'> -->
@@ -189,8 +175,10 @@
 				$( function() {
 				var availableTags = [
 					@foreach($users as $user) 
-						@if($folder->clearance_level >= $user->clearance_level) 
-							"{{ $user->first_name }}, {{ $user->last_name }}",
+						@if($folder->clearance_level >= $user->clearance_level && $user->id !== Auth::user()->id) 
+							  
+								"{{ $user->first_name }}, {{ $user->last_name }}",
+							
 						@endif
 					@endforeach
 					""
