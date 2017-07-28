@@ -139,7 +139,7 @@
 						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
 						  &nbsp; &nbsp;
 						  {{ $user_to_name->first_name }}, {{ $user_to_name->last_name }}							  
-						</small>
+						</small><br/>
 						<small class="row">{{ $activity->folder_id }}<small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
 						</li>           
@@ -250,10 +250,10 @@
 									<span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i>
 									</span>
 									<div class="mailbox-attachment-info">
-										<i class="fa fa-paperclip"></i> {{ $file->name }}<br/> <!-- </a> -->
+										<i class="fa fa-paperclip"></i> <a href="{{ asset("/docs/files/shares/KDSG-111-CDG-01/59793d0d8b1eb.pdf") }}" style="color: #000000;" target="_blank"> {{ $file->name }}</a><br/> <!-- </a> -->
 										<span class="mailbox-attachment-size">
 											{{ $file->created_at }}
-											<a href="#" class="btn btn-default btn-xs pull-right">{{--<i class="fa fa-cloud-download"></i>--}}</a>
+											<a href="{{ asset("/docs/files/shares/KDSG-111-CDG-01/59793d0d8b1eb.pdf") }}" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
 										</span>
 									</div>
 								</li>
