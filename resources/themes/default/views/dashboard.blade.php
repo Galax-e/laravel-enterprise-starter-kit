@@ -131,11 +131,14 @@
 							foreach($folder as $fold ){
 								$folder_to = ((array)$fold)['folder_to'];
 							}  
+
+							
+							$user_to_name = Illuminate\Support\Facades\DB::table('users')->where('email', $folder_to)->first();
 						
 						?>
 						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
 						  &nbsp; &nbsp;
-						  {{ $folder_to }}							  
+						  {{ $user_to_name->first_name }}, {{ $user_to_name->last_name }}							  
 						</small>
 						<small class="row">{{ $activity->folder_id }}<small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
