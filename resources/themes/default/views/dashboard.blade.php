@@ -139,9 +139,10 @@
 						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
 						  &nbsp; &nbsp;
 						  {{ $user_to_name->first_name }}, {{ $user_to_name->last_name }}							  
-						</small><br/>
-						<small class="row">{{ $activity->folder_id }}<small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+						</small>
+						<div></span><small class="">{{ $activity->folder_id }}<small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
+						</div>
 						</li>           
 						@endif
 					@endforeach
