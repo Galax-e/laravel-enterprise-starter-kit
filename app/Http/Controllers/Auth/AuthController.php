@@ -85,11 +85,11 @@ class AuthController extends Controller
     {
 
         $this->validate($request, [
-            'username' => 'required|min:3|max:255',
+            'email'    => 'required|min:3|max:255',
             'password' => 'required',
         ]);
 
-        $credentials = $request->only('username', 'password');
+        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
 
@@ -97,12 +97,13 @@ class AuthController extends Controller
             // Allow only if user is root or enabled.
             if ( ('root' == $user->username) || ($user->enabled) )
             {
-                Audit::log(Auth::user()->id, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-success', ['username' => $user->username]));
-		$user2 = new activity;
-		$user2->activity_by= $user->username;
-        $user->activity_by_post = Auth::user()->position;
-		$user2->activity= 'Successful login';
-		$user2->save();
+                Audit::log(Auth::user()->id, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-success', ['email' => $user->email]));
+                
+                $activity = new Activity;
+                $activity->activity_by= $user->username;
+                $user->activity_by_post = Auth::user()->position;
+                $activity->activity= 'Successful login';
+                $activity->save();
 		
                 Flash::success("Welcome " . Auth::user()->first_name);
                 return redirect()->intended($this->redirectPath());
@@ -113,9 +114,9 @@ class AuthController extends Controller
 
                 Auth::logout();
                 return redirect(route('login'))
-                    ->withInput($request->only('username', 'remember'))
+                    ->withInput($request->only('email', 'remember'))
                     ->withErrors([
-                        'username' => trans('admin/users/general.error.login-failed-user-disabled'),
+                        'email' => trans('admin/users/general.error.login-failed-user-disabled'),
                     ]);
             }
         }
@@ -123,9 +124,9 @@ class AuthController extends Controller
         Audit::log(null, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-failed', ['username' => $credentials['username']]));
 
         return redirect($this->loginPath())
-            ->withInput($request->only('username', 'remember'))
+            ->withInput($request->only('email', 'remember'))
             ->withErrors([
-                'username' => $this->getFailedLoginMessage(),
+                'email' => $this->getFailedLoginMessage(),
             ]);
     }
 

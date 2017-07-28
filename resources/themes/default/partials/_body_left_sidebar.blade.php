@@ -91,7 +91,7 @@
                             <span>Registry</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
-                                <span class="label label-primary pull-right">4</span>
+                                <span class="label label-primary pull-right folder_req_notif"></span>
                             </span>
                         </a>
                         <ul class="treeview-menu">
@@ -99,7 +99,7 @@
                                 <a href="{{ url('/viewallrequest') }}">
                                     <i class="fa fa-files-o"></i><span> Folder Requests</span>
                                     <span class="pull-right-container">
-                                        <small class="label pull-right bg-blue">4</small>
+                                        <small class="label pull-right bg-blue folder_req_notif"></small>
                                     </span>
                                 </a>
                             </li>
