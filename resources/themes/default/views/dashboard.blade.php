@@ -233,7 +233,7 @@
 									<span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i>
 									</span>
 									<div class="mailbox-attachment-info">
-										<i class="fa fa-paperclip"></i> {{ $file->name }}<br/> <!-- </a> -->
+										<i class="fa fa-paperclip"></i> <a href="" target="_blank"> {{ $file->name }}</a><br/> <!-- </a> -->
 										<span class="mailbox-attachment-size">
 											{{ $file->created_at }}
 											<a href="#" class="btn btn-default btn-xs pull-right">{{--<i class="fa fa-cloud-download"></i>--}}</a>
