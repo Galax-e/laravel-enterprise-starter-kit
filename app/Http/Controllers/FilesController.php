@@ -276,6 +276,9 @@ class FilesController extends Controller {
 		$activity->activity_by= $user->email;
 		$activity->folder_id = $folder_no; // Input::get('folder_no');
 		$activity->element_id = $folder_id;
+		$activity->fileinfo = Input::get('folder_no');
+		$activity->activity_to = Input::get('share-input');
+		$activity->activity_by_post = Auth::user()->position;
 		$activity->activity = $user->email.' Forwarded this folder to '. $shareInput;
 		$activity->save();
 		

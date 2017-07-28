@@ -228,7 +228,7 @@
 						
 							<div class="mailbox-read-message">        
 								{{--  <object data="{{ asset("/docs/files/1/".$folder->name."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">  --}}
-								<object data="{{ asset("/docs/files/".$folder->path."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">
+								<object data="{{ asset("/docs/files".$folder->path."/".$folder->latest_doc) }}" type="application/pdf" style="width: 100%" height="450">
 									<!-- support older browsers -->
 									<!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
 									<!-- For those without native support, no pdf plugin, or no js -->
@@ -250,7 +250,7 @@
 										<i class="fa fa-paperclip"></i> <a href="{{ asset("/docs/files/shares/KDSG-111-CDG-01/59793d0d8b1eb.pdf") }}" style="color: #000000;" target="_blank"> {{ $file->name }}</a><br/> <!-- </a> -->
 										<span class="mailbox-attachment-size">
 											{{ $file->created_at }}
-											<a href="{{ asset("/docs/files/shares/KDSG-111-CDG-01/59793d0d8b1eb.pdf") }}" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+											<a href="{{ asset("/docs/files".$folder->path."/".$folder->latest_doc) }}" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
 										</span>
 									</div>
 								</li>
@@ -303,8 +303,10 @@
 								<div style="width:350px" align="center">
 									<div id='preview'></div>    
 									<form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
-									<input type = "hidden" id="folder_id" name = "folder_id" value = "{{ $folder->id }}"> 
+										<input type = "hidden" id="folder_id" name = "folder_id" value = "{{ $folder->id }}"> 
 										<input type="hidden" name="_token" value="{{ csrf_token() }}">
+										<input type="hidden" name="path" value="{{"docs/files".$folder->path."/"}}">
+										
 										<div class="browse_text">Attach File/Image:</div>
 
 										<div class="file_input_container">
@@ -567,8 +569,8 @@
 					</div><!-- /.box-header -->
 					<div class="box-body">
 						<ul class="todo-list">
-						@foreach($activities as $activity)
-							@if($activity->folder_id == $folder->id)
+						@foreach($file_movement as $activity)
+							@if($activity->element_id == $folder->id)
 								<li> 
 									{{ $activity->activity }}                    
 									<small class="label label-info"> 

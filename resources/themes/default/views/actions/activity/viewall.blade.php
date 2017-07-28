@@ -128,7 +128,7 @@
                   }
 
         
-                elseif (strpos($activity_by->activity, 'login') !== false) {
+                elseif (strpos($activity_by->activity, 'Successful') !== false) {
                 echo '
                 <li>
                   <i class="fa fa-user bg-aqua"></i>
@@ -166,6 +166,50 @@
                   </div>
                 </li>';
                   }
+
+                  elseif (strpos($activity_by->activity, 'Delete') !== false) {
+                echo '
+                <li>
+                  <i class="fa fa-folder bg-purple"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> '.date('H:i A | F d, Y', strtotime($activity_by->created_at )).'</span>
+                    <h3 class="timeline-header"><a href="#">'.Auth::user()->first_name.' '.Auth::user()->last_name.'</a> '.$activity_by->activity.'</h3>
+                    <div class="timeline-body">
+                      <img src="'.asset('/img/folder.png').'" width="150" alt="folder" class="margin" /><b>'.$activity_by->fileinfo.'</b>
+                    </div>
+                  </div>
+                </li>';
+                  }
+
+                  elseif (strpos($activity_by->activity, 'Move') !== false) {
+                echo '
+                <li>
+                  <i class="fa fa-folder bg-purple"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> '.date('H:i A | F d, Y', strtotime($activity_by->created_at )).'</span>
+                    <h3 class="timeline-header"><a href="#">'.Auth::user()->first_name.' '.Auth::user()->last_name.'</a> '.$activity_by->activity.'</h3>
+                    <div class="timeline-body">
+                      <img src="'.asset('/img/folder.png').'" width="150" alt="folder" class="margin" /><b>'.$activity_by->fileinfo.'</b>
+                    </div>
+                  </div>
+                </li>';
+                  }
+
+                   elseif (strpos($activity_by->activity, 'new folder') !== false) {
+                echo '
+                <li>
+                  <i class="fa fa-folder bg-purple"></i>
+                  <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> '.date('H:i A | F d, Y', strtotime($activity_by->created_at )).'</span>
+                    <h3 class="timeline-header"><a href="#">'.Auth::user()->first_name.' '.Auth::user()->last_name.'</a> '.$activity_by->activity.'</h3>
+                    <div class="timeline-body">
+                      <img src="'.asset('/img/folder.png').'" width="150" alt="folder" class="margin" /><b>'.$activity_by->fileinfo.'</b>
+                    </div>
+                  </div>
+                </li>';
+                  }
+
+
 
                   elseif (strpos($activity_by->activity, 'Document') !== false) {
                 echo '

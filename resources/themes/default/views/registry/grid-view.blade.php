@@ -18,7 +18,6 @@
         @endif
       </div>
       
-
       <div class="caption text-center">
         <div class="btn-group">
           <button type="button" id='fold_name' data-id="{{ $item_path }}" class="item_name btn btn-default btn-xs {{ $item->is_file ? 'file' : 'folder'}}-item">

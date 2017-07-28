@@ -77,6 +77,7 @@ class DashboardController extends Controller
 		
 		//$folder = Folder::all();	
 		$activities = DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$activity]);
+		$file_movement = DB::select('select * from activities');
 
 		$folders = DB::select('select * from folders where folder_to = ?', [$user_email]);
 		$files = DB::select('select * from documents');
@@ -86,7 +87,7 @@ class DashboardController extends Controller
 		$dept_size = DB::select('select * from users where department =?', [Auth::user()->department]);
 		$dept_size = count($dept_size);
 
-        return view('dashboard', compact('users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size'));
+        return view('dashboard', compact('users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size', 'file_movement'));
     }
     
     public function viewallcontacts()
@@ -188,7 +189,7 @@ class DashboardController extends Controller
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
 		$user_id = Auth::user()->email;
 		$user_position = Auth::user()->position;
-		$user_id2 = 'root';
+		$user_id2 = Auth::user()->username;
 		
 		$act = '%Forward%';
 		
@@ -196,7 +197,7 @@ class DashboardController extends Controller
 		$folderactivity = DB::table('activities')->where('activity', 'like', $act)->orderBy('created_at', 'DESC')->paginate(5);
 
 		//$folder = Folder::all();	
-		$activity = DB::table('activities')->where('activity_by', $user_id)->orwhere('activity_by_post', $user_position)->orderBy('created_at', 'DESC')->paginate(12);
+		$activity = DB::table('activities')->where('activity_by', $user_id)->orwhere('activity_by', $user_id2)->orwhere('activity_by_post', $user_position)->orderBy('created_at', 'DESC')->paginate(12);
         return view('views.actions.activity.viewall', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
     }
 
@@ -357,7 +358,7 @@ class DashboardController extends Controller
         public function single_upload(){
         session_start();
         $session_id='1'; 
-        $path = "uploads/";
+        $path = Input::get('path');
         $valid_formats = array("jpg", "png", "gif", "bmp", "jpeg", "pdf");
 
            $name = $_FILES['photo']['name'];
@@ -375,6 +376,8 @@ class DashboardController extends Controller
 					$attach->file_by = Auth::user()->email;
 					$attach->folder_id = Input::get('folder_id');
 					$attach->save();
+					
+					DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
 
 					$activity = new Activity;
 					$activity->activity_by= Auth::user()->email;
