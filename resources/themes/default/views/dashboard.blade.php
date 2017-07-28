@@ -38,11 +38,15 @@
 
   <style type="text/css">
     .column{margin-top: -10px; float: right; }
-	.left-hand-activity {
-        position:fixed;
-		margin-bottom: 40px;
-		width: 23%;
-    }
+
+	@media screen and (min-width: 991px) {
+		.left-hand-activity {
+			position:fixed;
+			margin-bottom: 40px;
+			width: 23%;
+		}
+	}
+	
   </style>
 
   {{-- <script type="text/javascript" src="file-upload/scripts/jquery.min.js"></script> --}}
@@ -61,7 +65,7 @@
   
 		<div class='col-md-3'> <!-- left hand div -->
 			<!-- USERS LIST -->
-			<div class="left-hand-activity">
+			<div class="left-hand-activity col-md-7">
 			<div class="box box-primary"> <!-- department div-->
 				<div class="box-header with-border">
 					<!-- @cpnwaugha: c-e: here we will allow users see the other users in their department
@@ -116,15 +120,25 @@
 						<li>   
 						 <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', Auth::user()->email)->first();
 	                    
-	                    $temp = array();
-	                    foreach($user as $field => $val ){
-	                        $temp[$field] = $val;
-	                    }
-	                    
-	                    $user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];  ?>
-						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 30px;" alt="User Image"/>  &nbsp; &nbsp;{{ $activity->folder_id }}
-						</small><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small>
+							$temp = array();
+							foreach($user as $field => $val ){
+								$temp[$field] = $val;
+							}	                    
+	                    	$user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];
+
+							$folder = Illuminate\Support\Facades\DB::select('select folder_to from folders where folder_no=?', [$activity->folder_id] );  
+							$folder_to = null;
+							foreach($folder as $fold ){
+								$folder_to = ((array)$fold)['folder_to'];
+							}  
+						
+						?>
+						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+						  &nbsp; &nbsp;
+						  {{ $folder_to }}							  
+						</small>
+						<small class="row">{{ $activity->folder_id }}<small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
 						</li>           
 						@endif
 					@endforeach
@@ -302,8 +316,7 @@
 										</div><br clear="all">
 									</form>
 								</div>
-											     
-												        												
+											     				        												
 							</div>
 							<div class="box-footer">
 								<ul class="list-inline">

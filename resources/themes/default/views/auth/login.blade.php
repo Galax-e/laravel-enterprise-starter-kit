@@ -6,7 +6,7 @@
             {!! csrf_field() !!}
 
             <div class="form-group has-feedback">
-                <input type="text" id="username" name="username" class="form-control" placeholder="User name" value="{{ old('username') }}" required autofocus/>
+                <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="{{ old('username') }}" required autofocus/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">

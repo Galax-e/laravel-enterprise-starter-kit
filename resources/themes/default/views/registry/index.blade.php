@@ -102,17 +102,91 @@
             @foreach($activities as $activity)
               {{--  @if($activity->activity_by == Auth::user()->email || Auth::user()->username)  --}}
               <li>   
-              <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', Auth::user()->email)->first();
-                        
-                        $temp = array();
-                        foreach($user as $field => $val ){
-                            $temp[$field] = $val;
-                        }
-                        
-                        $user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];  ?>
-              <small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 30px;" alt="User Image"/>  &nbsp; &nbsp;{{ $activity->folder_id }}
-              </small><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-              <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small>
+              <?php 
+                
+                $folder = Illuminate\Support\Facades\DB::select('select folder_by, shared_by, forwarded_by, folder_to from folders where folder_no=?', [$activity->folder_id] );  
+                $folder_to = null;
+                $shared_by = null;
+                $forwarded_by = null;
+                $folder_by = null;
+                foreach($folder as $fold ){
+                    $folder_to = ((array)$fold)['folder_to'];
+                    $shared_by = ((array)$fold)['shared_by'];
+                    $forwarded_by = ((array)$fold)['forwarded_by'];
+                    $folder_by = ((array)$fold)['folder_by'];
+                }     
+                
+              ?>
+              @if($folder_by)
+                <?php  
+                  $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$folder_by] );  
+                  foreach($temp_user as $us ){
+                      $user_avatar = ((array)$us)['avatar'];
+                  }
+                ?>
+                <div>
+                  <div class="pull-left" style="margin-right: 5px;">
+                    <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+                  </div>
+                  <small class="">{{ $activity->folder_id }}&nbsp; created by &nbsp; {{ $folder_by }}                
+                  </small>
+                  <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+                    <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
+                  </small>
+                </div>
+              @endif
+
+              @if($shared_by && $shared_by != 'root@hallowgate.com' )
+                <?php  
+                  $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$shared_by] );  
+                  foreach($temp_user as $us ){
+                      $user_avatar = ((array)$us)['avatar'];
+                  }
+                ?>
+                </li>
+                <li>
+                <div>
+                  <div class="pull-left" style="margin-right: 5px;">
+                    <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+                  </div>
+                  <small>{{ $shared_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
+                    class="offline" style="width: 30px;" alt="User Image"/>  
+                    &nbsp; &nbsp; {{$folder_to}}
+                  </small>
+                  <small class="label pull-left">
+                    {{ $activity->folder_id }}
+                  </small>
+                  <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+                    <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
+                  </small>
+                </div>
+              @endif
+              @if($forwarded_by && $forwarded_by != 'root@hallowgate.com')
+
+                <?php  
+                  $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$forwarded_by] );  
+                  foreach($temp_user as $us ){
+                      $user_avatar = ((array)$us)['avatar'];
+                  }
+                ?>
+                </li>
+                <li>
+                <div>
+                  <div class="pull-left" style="margin-right: 5px;">
+                    <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+                  </div>
+                  <small>{{ $forwarded_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
+                    class="offline" style="width: 30px;" alt="User Image"/>  
+                    &nbsp; &nbsp; {{$folder_to}}
+                  </small>
+                  <small class="label pull-left">
+                    {{ $activity->folder_id }}
+                  </small>
+                  <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+                    <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
+                  </small>
+                </div>
+              @endif   
               </li>           
               {{--  @endif  --}}
             @endforeach
