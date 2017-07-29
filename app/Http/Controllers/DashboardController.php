@@ -210,7 +210,7 @@ class DashboardController extends Controller
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
 		$user_id = Auth::user()->email;
-		$user_id2 = 'root';		
+		$user_id2 = Auth::user()->username;	
 		$act = '%Forward%';
 		$search = Input::get('search');
 		
@@ -220,7 +220,7 @@ class DashboardController extends Controller
 		$folderactivity = DB::table('activities')->where('activity', 'like', $act)->orderBy('created_at', 'DESC')->paginate(5);
 
 		//$folder = Folder::all();	
-		$activity = DB::table('activities')->where('activity_by', $user_id)->where('activity', 'like', $search)->orwhere('fileinfo', 'like', $search)->orderBy('created_at', 'DESC')->paginate(12);
+		$activity = DB::table('activities')->whereIn('activity_by', [$user_id,$user_id2])->where('activity', 'like', $search)->orwhere('fileinfo', 'like', $search)->orderBy('created_at', 'DESC')->paginate(12);
         return view('actions.activity.viewall', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
     }
 
@@ -376,7 +376,7 @@ class DashboardController extends Controller
 					$attach->file_by = Auth::user()->email;
 					$attach->folder_id = Input::get('folder_id');
 					$attach->save();
-					
+
 					DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
 
 					$activity = new Activity;

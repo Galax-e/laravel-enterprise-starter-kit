@@ -136,7 +136,7 @@
 						  &nbsp; &nbsp;
 						  {{ $user_to_name->first_name }}, {{ $user_to_name->last_name }}							  
 						</small>
-						<div></span><small class="">{{ $activity->folder_id }}<small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+						<div></span><small class=""><b>{{ $activity->folder_id }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
 						</div>
 						</li>           
