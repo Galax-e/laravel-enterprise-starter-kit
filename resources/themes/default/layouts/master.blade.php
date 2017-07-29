@@ -28,6 +28,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Colorbox -->
     <link href="{{ asset("/assets/colorbox/example1/colorbox.css") }}" rel="stylesheet" type="text/css" />
+
+    <!-- @cpnwaugha jQuery Toast -->
+    <link href="{{ asset("/bower_components/admin-lte/dist/css/jquery.toast.css") }}" rel="stylesheet" type="text/css" />
     <!-- Application CSS-->
     <link href="{{ asset(elixir('css/all.css')) }}" rel="stylesheet" type="text/css" />
 

@@ -23,8 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="{{ asset("/bower_components/admin-lte/font-awesome/css/font-awesome.min.css") }}" rel="stylesheet" type="text/css" />
     <!-- Ionicons 2.0.1 -->
     <link href="{{ asset("/bower_components/admin-lte/ionicons/css/ionicons.min.css") }}" rel="stylesheet" type="text/css" />
-    <!-- Theme style -->
-    <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}" rel="stylesheet" type="text/css" />
+    
 
     <!-- Colorbox -->
     <link href="{{ asset("/assets/colorbox/example1/colorbox.css") }}" rel="stylesheet" type="text/css" />
@@ -35,8 +34,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE select2 -->
     <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/select2/dist/css/select2.min.css") }}" >
 
+    <!-- Theme style -->
+    <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}" rel="stylesheet" type="text/css" />
+
     <!-- MUI -->
     <link href="{{ asset("/bower_components/admin-lte/mui/css/mui.min.css") }}" rel="stylesheet" type="text/css" />
+
 
     <script src="{{ asset("/bower_components/admin-lte/mui/js/mui.min.js") }}"></script>
 
@@ -44,6 +47,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" type="text/css" href="{{asset('/bower_components/admin-lte/plugins/datatables/jquery.dataTables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{asset('/bower_components/admin-lte/plugins/datatables/material.min.css') }}"> 
     <link rel="stylesheet" type="text/css" href="{{asset('/bower_components/admin-lte/plugins/datatables/dataTables.material.min.css') }}">  
+
+    <!-- Theme style -->
+    <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}" rel="stylesheet" type="text/css" />
 
     <!-- Application CSS-->
     <link href="{{ asset(elixir('css/all.css')) }}" rel="stylesheet" type="text/css" />
