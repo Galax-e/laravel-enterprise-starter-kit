@@ -100,6 +100,7 @@ class RenameController extends LfmController
                     $activity->activity_by= Auth::user()->email;
                     $activity->activity_by_post = Auth::user()->position;
                     $activity->folder_id= '10000';
+                    $activity->fileinfo= $new_name;
                     $activity->activity= ' Delete File';
                     $activity->save();
    }
