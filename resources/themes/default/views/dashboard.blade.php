@@ -127,13 +127,9 @@
 	                    	$user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];
 
 							$folder = Illuminate\Support\Facades\DB::select('select folder_to from folders where folder_no=?', [$activity->folder_id] );  
-							$folder_to = null;
-							foreach($folder as $fold ){
-								$folder_to = ((array)$fold)['folder_to'];
-							}  
-
 							
-							$user_to_name = Illuminate\Support\Facades\DB::table('users')->where('email', $folder_to)->first();
+							$folder = Illuminate\Support\Facades\DB::table('folders')->where('folder_no', $activity->folder_id)->first();							
+							$user_to_name = Illuminate\Support\Facades\DB::table('users')->where('email', $folder->folder_to)->first();
 						
 						?>
 						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
@@ -194,16 +190,12 @@
 				var availableTags = [
 					@foreach($users as $user) 
 						@if($folder->clearance_level >= $user->clearance_level && $user->id !== Auth::user()->id) 
-							  
-								"{{ $user->first_name }}, {{ $user->last_name }}",
-							
+							"{{ $user->first_name }}, {{ $user->last_name }}",
 						@endif
 					@endforeach
 					""
 				];
 				// @if($user->position){{$user->position}} - @endif
-
-				//availableTags.splice(0, 0,'Select Recipient');
 
 				$(".js-parents").select2();
 				$(".select-with-search").select2({
@@ -311,11 +303,11 @@
 										<input type="hidden" name="_token" value="{{ csrf_token() }}">
 										<input type="hidden" name="path" value="{{"docs/files".$folder->path."/"}}">
 										
-										<div class="browse_text">Attach File/Image:</div>
+										<div class="browse_text"><label>Attach File/Image:</label></div>
 
 										<div class="file_input_container">
-											<div class="upload_button"><div class="btn btn-default btn-file">
-											<i class="fa fa-paperclip"></i> Attachment
+											<div class="upload_button"><div class="btn btn-info btn-file">
+												<i class="fa fa-paperclip"></i> Attachment
 											<input type="file" name="photo" id="photo" class="file_input" />
 											</div>
 											<p class="help-block">Max. 32MB</p></div>
@@ -394,10 +386,20 @@
 											console.log('good, right pin');											
 											var formData  = $("#commentForm{{$loopindex}}").serialize();
 											postCommentForm(formData);
-										}else{
+										}else{											
+											$.toast({
+												heading: 'PIN Verification',
+												text: 'Wrong pin: Enter the correct PIN',
+												icon: 'success',
+												//bgColor: '#E01A31',
+												hideAfter: 5000,
+												showHideTransition: 'slide',
+												loader: false,        // Change it to false to disable loader
+												loaderBg: '#9EC600'  // To change the background
+											});
 											console.log('bad, wrong pin.');
 										}
-									}).fail(function(){
+									}).fail(function(){										
 										console.log('No connection to pin controller');
 									});
 								});
@@ -508,6 +510,19 @@
 									icon: 'success',
 									// bgColor: '#E01A31',
 									hideAfter: 5000,
+									showHideTransition: 'slide',
+									loader: false,        // Change it to false to disable loader
+									loaderBg: '#9EC600'  // To change the background
+								});
+							}
+
+							function toastFunc(heading='heading', test='test', hideAfter=5000){
+								$.toast({
+									heading: heading,
+									text: test,
+									icon: 'success',
+									// bgColor: '#E01A31',
+									hideAfter: hideAfter,
 									showHideTransition: 'slide',
 									loader: false,        // Change it to false to disable loader
 									loaderBg: '#9EC600'  // To change the background
