@@ -63,29 +63,10 @@
 						</div>
 						{{--  <input type="hidden" name="_token" value="{{ csrf_token() }}">  --}}		
 						<input type="hidden" name="attachment" value="">			
-
-						<script>							
-
-							$(function() {	
-								$.ajaxSetup({
-									headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
-								});	
-
-								$('#photo').on('change', function(e)			{ 
-									e.preventDefault();
-									e.stopPropagation();
-									//$("#preview").html('');
-									//$("#preview").html('<img src="loader.gif" alt="Uploading...."/>');
-									var formdata = $('#image_upload_form').serialize();
-									//var data = formdata.push({file: $('#photo').val()});
-									console.log(typeof(data));
-									
-								});
-							}) 
-						</script>
 					
 					</div><!-- /.box-body -->
 					<div class="box-footer">
+					<div id='preview'></div> 
 						<div class="pull-right">
 						  <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
 						</div>
@@ -94,8 +75,8 @@
           </div>
 
 						<div style="width:350px" align="center">
-							<div id='preview'></div>    
-							<form id="image_upload_form" method="post" enctype="multipart/form-data" action='memo_attachment' autocomplete="off">
+							   
+							<form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload'' autocomplete="off">
 							  <input type="hidden" name="_token" value="{{ csrf_token() }}">
 								<div class="browse_text"><label>Attach File/Image:</label>
 								</div>

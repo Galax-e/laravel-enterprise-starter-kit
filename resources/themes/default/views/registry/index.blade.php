@@ -136,7 +136,7 @@
                 </div>
               @endif
 
-              @if($shared_by && $shared_by != 'root@hallowgate.com' )
+              @if($shared_by && $shared_by != 'pet@hallowgate.com' )
                 <?php  
                   $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$shared_by] );  
                   foreach($temp_user as $us ){
@@ -153,7 +153,7 @@
                     class="offline" style="width: 30px;" alt="User Image"/>  
                     &nbsp; &nbsp; {{$folder_to}}
                   </small>
-                  <small class="label pull-left">
+                  <small class="pull-left">
                     {{ $activity->folder_id }}
                   </small>
                   <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
@@ -314,7 +314,7 @@
             <input type='hidden' name='_token' value='{{csrf_token()}}'>
           </form>
         </div>
-        <div class="modal-footer">		    
+        <div class="modal-footer">        
           <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
           <button type="button" class="btn btn-primary" id="upload-btn">{{ trans('registry/lfm.btn-upload') }}</button>
         </div>
@@ -338,7 +338,6 @@
         </div>        
         <form action="{{route('newfolder')}}" role='form' id='add-folderForm' name='uploadForm' method='post' enctype='multipart/form-data'>
             {{ csrf_field() }}
-
             <input type="hidden" name="activity" value="new folder created by system">
             <input type='hidden' name='working_dir'>
             <input type='hidden' name='folder_by' id='folder_by' value='{{ Auth::user()->email }}'>
@@ -351,11 +350,32 @@
                 <input type="text" class="form-control" id="fold_name" name="fold_name" placeholder="File name/ Subject"/>
               </div>               
               <div>
-                <textarea class="textarea" name="add_folder_description" id="add_folder_description" placeholder="Full Description..." style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+                <textarea class="form-control" name="add_folder_description" id="add_folder_description" placeholder="Folder description..." style="width: 100%; height: 125px; font-size: 14px;">
                 </textarea>
               </div>               
-              <div class="form-group">
-                <input type="text" class="form-control" id="agency_dept" name="agency_dept" placeholder="Agency/ Department"/>
+              <div class="form-group">                
+                <label>Department</label>
+                <select id="agency_dept" class="form-control" name="agency_dept">
+                  <option value='agric'>Agric</option>
+                  <option value='education'>Education</option>
+                  <option value='health'>Health</option>
+                  <option value='rural'>Rural</option>
+                  <option value='works'>Works</option>
+                  <option value='budget'>Budget</option>
+                  <option value='environment'>Environment</option>
+                  <option value='jsutice'>Justice</option>
+                  <option value='water'>Water</option>
+                  <option value='youth'>Youth</option>
+                  <option value='commerce'>Commerce</option>
+                  <option value='finance'>Finance</option>
+                  <option value='localgov'>Local Gov</option>
+                  <option value='women'>Women</option>
+                  <option value='hos'>HOS</option>
+                  <option value='bpsr'>BPSR</option>
+                  <option value='gh'>GH</option>
+                  <option value='csc' selected="true">CSC</option>
+                  <option value='asc'>ASC</option>
+                </select>
               </div>               
               <div class="form-group">
               <label>Clearance Level</label>
@@ -381,16 +401,16 @@
           </div>
           </form>
           <div class="box-footer clearfix">
-          <button type="button" class="btn btn-primary pull-right" id="add-folder-btn">{{ trans('registry/lfm.btn-folder') }} <i class="fa fa-arrow-circle-right"></i></button>
-            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
-            </div>     
+            <button type="button" style="margin: 5px;" class="btn btn-primary pull-right" id="add-folder-btn">{{ trans('registry/lfm.btn-folder') }} <i class="fa fa-arrow-circle-right"></i></button>
+            <button type="button" style="margin: 5px;" class="btn btn-warning pull-right" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+          </div>     
         </div>
       </div>
     </div>
   </div>
 
-	{{-- eoluwafemi share --}}
-	<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  {{-- eoluwafemi share --}}
+  <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -408,22 +428,22 @@
                 </div>
               </div>
 
-        			<input type='hidden' name='folder_no' id='share_folder_no'>
+              <input type='hidden' name='folder_no' id='share_folder_no'>
               <input type='hidden' name='working_dir'>
-        			<input type="hidden" name="activity" value="">
+              <input type="hidden" name="activity" value="">
               <input type='hidden' name='_token' value='{{csrf_token()}}'>
 
             </form>
           </div>
           <div class="modal-footer">
-			      <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
             <button type="button" class="btn btn-primary" id="share-btn">{{ trans('registry/lfm.btn-share') }} <i class="fa fa-arrow-circle-right"></i></button>
           </div>
         </div>
       </div>
     </div>
-		
-	<div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+  <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -451,7 +471,7 @@
             </div><!-- /.box-body -->
           </div>
           <div class="modal-footer">
-			      <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
           </div>
         </div>
       </div>

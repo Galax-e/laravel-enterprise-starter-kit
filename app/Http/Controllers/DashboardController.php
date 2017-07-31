@@ -149,9 +149,9 @@ class DashboardController extends Controller
 			$memo->save();
 
 			// call attachment...
-			$attachment_name = Input::get('attachment');
+			$attachment_name = Input::get('attachment_name');
 			//$attachment = DB::select('select * from attachments where name=?', [$attachment_name]);
-			DB::update("update attachments set memo_id=5 where name=?", [$attachment_name]);
+			DB::update("update attachments set memo_id=? where name=?", [$memo->id, $attachment_name]);
 			
 
 
@@ -466,9 +466,9 @@ class DashboardController extends Controller
 				$tmp = $_FILES['photo']['tmp_name'];
 				if(move_uploaded_file($tmp, $path.$image_name)){
 				
-				$attach = new Document;
+				$attach = new Attachment;
 				$attach->name = $image_name;
-				$attach->file_by = Auth::user()->email;
+				$attach->memo_by = Auth::user()->email;
 				$attach->save();
 
 				DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
@@ -481,10 +481,11 @@ class DashboardController extends Controller
 				$activity->save();
 				
 				if($ext !== "pdf"){
+					echo '<input type="hidden" name="attachment_name" value="'.$image_name.'">';
 					echo'
-					<ul class="mailbox-attachments clearfix">
+					<ul id="attach_image" class="mailbox-attachments clearfix attachdoc">
 					<li>
-						<span class="mailbox-attachment-icon has-img"><img src="uploads/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
+						<span class="mailbox-attachment-icon"><i class="fa fa-file-image-o"></i></span>
 						<div class="mailbox-attachment-info">
 						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$image_name.'</a>
 							<span class="mailbox-attachment-size">
@@ -492,8 +493,9 @@ class DashboardController extends Controller
 							</span>
 						</div>
 					</li></ul>';
-				} else
-				echo'<ul class="mailbox-attachments clearfix">
+				} else {
+				echo '<input type="hidden" name="attachment_name" value="'.$image_name.'">';
+				echo'<ul id="attach_pdf" class="mailbox-attachments clearfix attachdoc">
 			
 					<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
 							<div class="mailbox-attachment-info">
@@ -503,6 +505,7 @@ class DashboardController extends Controller
 								</span>
 							</div>
 					</li></ul>';
+					}
 				}
 				else
 				echo "Image Upload failed";
