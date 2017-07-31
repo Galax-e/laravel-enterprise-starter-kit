@@ -34,7 +34,8 @@ class MemoNotificationController extends Controller
     // user has seen notification, turn status to 1
     public function notificationseen(Request $request)
     {
-        $receiver_id =  Auth::user()->id;
+        $user = Auth::user();
+        $receiver_id =  $user->id;
         
         $status = 0;
         $notifications = DB::select('select * from memo_notifications where receiver_id = ? and status = ?', [$receiver_id, $status]);
@@ -46,6 +47,17 @@ class MemoNotificationController extends Controller
         }
 
         return response()->json((array) $notifications); //redirect()->back();
+    }
+
+    public function seenmemo(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        DB::update('update memos set treated=1 where emailto=?', [$user->email]);
+
+        $data = array('done'=>'Success');
+
+        return response()->json((array) $data); //redirect()->back();
     }
 
     /**

@@ -83,6 +83,7 @@
                    console.log('error connecting to fetch memo notification');
                }
            });
+           
 
            $.ajax({
                url:"request_file_notification",

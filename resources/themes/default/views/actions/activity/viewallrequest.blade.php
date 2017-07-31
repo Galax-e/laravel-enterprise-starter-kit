@@ -51,13 +51,13 @@
                       <input type="checkbox" value="" name="" disabled/>
 
 
-                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@hallowgate.com')->first();
+                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $folder_request->from)->first();
                           $temp = array();
                           foreach($user as $field => $val ){
                               $temp[$field] = $val;
                           } ?>
                         
-                      <span class="text" style="color: #B8B8B8;"><strike><b> {{ $user->first_name }}, {{ $user->last_name }}</b> requsted for {{ $folder_request->folder_name }}, {{ $folder_request->folder_desc }}</strike></span>
+                      <span class="text" style="color: #B8B8B8;"><strike><b> {{ $user->first_name }}, {{ $user->last_name }}</b> requested for {{ $folder_request->folder_name }}, {{ $folder_request->folder_desc }}</strike></span>
                       
                       <small class="label label-default"><i class="fa fa-clock-o"></i> {{ date('H:i A | F d, Y', strtotime($folder_request->created_at )) }}</small>
                       
@@ -83,7 +83,7 @@
                       <input type="checkbox" onclick="startAjax( {{ $folder_request->id, Auth::user()->email }} )" id="request{{ $folder_request->id }}" value="" name=""/>
 
 
-                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@hallowgate.com')->first();
+                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $folder_request->from)->first();
                           $temp = array();
                           foreach($user as $field => $val ){
                               $temp[$field] = $val;
@@ -105,7 +105,7 @@
            <script type='text/javascript'>
     
             //AJAX function
-            function startAjax(id=0, handleremail='root@hallowgate.com') {
+            function startAjax(id=0, handleremail='peter@hallowgate.com') {
               var data = {id: id, handleremail: handleremail};
               console.log(handleremail);
               $.ajax({
@@ -189,13 +189,7 @@
     </section>
 
 
-<script src="{{ asset("/bower_components/jquery/dist/jquery.min.js") }}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{ asset("/bower_components/jquery-ui/jquery-ui.min.js") }}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 
-<!-- Bootstrap 3.3.7 -->
-<script src="{{ asset("/bower_components/bootstrap/dist/js/bootstrap.min.js") }}"></script>
 <!-- Morris.js charts -->
 <script src="{{ asset("/bower_components/raphael/raphael.min.js") }}"></script>
 <script src="{{ asset("/bower_components/morris.js/morris.min.js") }}"></script>

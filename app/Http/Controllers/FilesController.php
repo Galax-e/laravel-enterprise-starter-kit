@@ -16,6 +16,7 @@ use App\Folder;
 use App\Activity;
 use App\User;
 use App\FolderRequest;
+use App\folder_request;
 use App\Pin;
 use App\FolderNotification;
 use App\RequestFileNotification;
@@ -289,7 +290,7 @@ class FilesController extends Controller {
 	
 	public function requestform(){
 
-		$user = new folder_request;
+		$user = new Folder_request;
 		$user->request_from= Auth::user()->email;
 		$user->foldername= Input::get('foldername');
 		$user->desc= Input::get('desc');

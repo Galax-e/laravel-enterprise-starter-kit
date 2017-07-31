@@ -39,16 +39,30 @@
 
                 @if (Auth::check())
 
-                    @if ( Setting::get('app.context_help_area') && (isset($context_help_area)))
+                    {{--  @if ( Setting::get('app.context_help_area') && (isset($context_help_area)))
                         {!! $context_help_area   !!}
-                    @endif
+                    @endif  --}}
 
                     @if ( Setting::get('app.notification_area') )
-                        <!-- Messages: style can be found in dropdown.less-->
+                        <!-- Messages: style can be found in dropdown.less-->                        
 
                         <li class="">
                            <!-- Request File button -->
-                           <a href="#" class="btn btn-block btn-info" title="Request file" data-toggle="modal" data-target="#requestFileModal">
+                           <a href="{{route('dashboard')}}" class="btn btn-block" title="Home">
+                               <i id="" class="fa fa-home"></i>
+                           </a>
+                       </li>
+
+                       <li class="">
+                           <!-- Request File button -->
+                           <a href="{{route('compose')}}" class="btn btn-block" title="eDispatch">
+                               <i id="" class="fa fa-send"></i>
+                           </a>
+                       </li>
+
+                        <li class="">
+                           <!-- Request File button -->
+                           <a href="#" class="btn btn-block" title="Request file" data-toggle="modal" data-target="#requestFileModal">
                                <i id="" class="fa fa-file"></i>
                            </a>
                        </li>                        
@@ -70,9 +84,31 @@
                                 <li>
                                     <!-- inner menu: contains the messages -->
                                     <ul class="menu">
-                                        <?php $useremail = Auth::user()->email; $memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto = ? order by created_at desc limit 5', [$useremail]); ?>
-                                        @foreach($memos as $memo)
-                                            <li><!-- start message -->
+                                        <?php $useremail = Auth::user()->email; $memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto = ? and treated=0 order by created_at desc limit 5', [$useremail]); ?>
+                                        <?php $loopindex = 0; ?>
+                                        @foreach($memos as $memo)  
+                                            <?php $loopindex++; ?>
+
+                                            <script>
+                                                $(function(){
+                                                    $('#memo_toggle, #inbox_left_li').on("click", function(){
+                                                        $.ajax({
+                                                            url:"seen_memo/{{ $loopindex }}",
+                                                            method:"GET",
+                                                            dataType:"json",
+                                                            success:function(data)
+                                                            {
+                                                                console.log('success seen memo');
+                                                            },
+                                                            error:function(){
+                                                                console.log('error, connecting to memo notification controller ');
+                                                            }
+                                                        });
+                                                    });
+                                                })
+                                            </script>
+
+                                            <li id="seen_memo{{ $loopindex }}"><!-- start message -->
                                                 <a href="{{url('read_memo/'.$memo->id) }}">
                                                     <div class="pull-left">
                                                         <!-- User Image -->
@@ -121,7 +157,7 @@
                                         <?php $folder_requests = Illuminate\Support\Facades\DB::select('select * from folder_requests where treated != 1 order by created_at desc limit 5'); ?>
                                         
                                          @foreach($folder_requests as $folder_request)
-                                         <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', 'root@hallowgate.com')->first();
+                                         <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $folder_request->from)->first();
                                                         
                                                         $temp = array();
                                                         foreach($user as $field => $val ){
@@ -239,9 +275,9 @@
                     </li>
                     @if ( Setting::get('app.right_sidebar') )
                         <!-- Control Sidebar Toggle Button -->
-                        <li>
+                        {{--  <li>
                             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                        </li>
+                        </li>  --}}
                     @endif
                 @else
                     <li>{!! link_to_route('login', 'Sign in') !!}</li>

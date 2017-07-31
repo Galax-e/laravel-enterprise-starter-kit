@@ -27,6 +27,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-3">
+                <a href="{{route('inbox')}}" class="btn btn-primary btn-block margin-bottom">Back to Inbox</a>
                 @include('views.actions.mailbox.left_mail_menu')
             </div><!-- /.col -->
 

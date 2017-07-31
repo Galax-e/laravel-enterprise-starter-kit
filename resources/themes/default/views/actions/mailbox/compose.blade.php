@@ -23,10 +23,17 @@
           });
         });
     </script>
+
+		{{-- <script type="text/javascript" src="file-upload/scripts/jquery.min.js"></script> --}}
+		<script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
+		<script type="text/javascript" src="{{ asset("file-upload/scripts/upload.js") }}"></script>
+		<link type="text/css" rel="stylesheet" href="{{ asset("file-upload/style.css") }}" />
+
     <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-md-3">
+					<a href="{{route('inbox')}}" class="btn btn-primary btn-block margin-bottom">Back to Incoming</a>
           @include('views.actions.mailbox.left_mail_menu')
         </div><!-- /.col -->
         
@@ -54,20 +61,41 @@
 						  <textarea id="compose-textarea" class="form-control" name="message" placeholder="Message" style="height: 300px">
 						  </textarea>
 						</div>
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">
+						{{--  <input type="hidden" name="_token" value="{{ csrf_token() }}">  --}}		
+						<input type="hidden" name="attachment" value="">			
+
+						<script>							
+
+							$(function() {	
+								$.ajaxSetup({
+									headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+								});	
+
+								$('#photo').on('change', function(e)			{ 
+									e.preventDefault();
+									e.stopPropagation();
+									//$("#preview").html('');
+									//$("#preview").html('<img src="loader.gif" alt="Uploading...."/>');
+									var formdata = $('#image_upload_form').serialize();
+									//var data = formdata.push({file: $('#photo').val()});
+									console.log(typeof(data));
+									
+								});
+							}) 
+						</script>
+					
 					</div><!-- /.box-body -->
 					<div class="box-footer">
 						<div class="pull-right">
 						  <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
 						</div>
-            <div>
-              <script type="text/javascript" src="scripts3/jquery.form.js"></script>
-					    <script type="text/javascript" src="scripts3/upload.js"></script>
-					    <link type="text/css" rel="stylesheet" href="style.css" />
-            </div>
+						</form>
+          	<div>
+          </div>
+
 						<div style="width:350px" align="center">
 							<div id='preview'></div>    
-							<form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+							<form id="image_upload_form" method="post" enctype="multipart/form-data" action='memo_attachment' autocomplete="off">
 							  <input type="hidden" name="_token" value="{{ csrf_token() }}">
 								<div class="browse_text"><label>Attach File/Image:</label>
 								</div>
@@ -84,7 +112,6 @@
               <small class="help-block">Max. 32MB</small>
 						</div>
           </div>
-				</form>
 			</div><!-- /. box -->
         </div><!-- /.col -->
     </div><!-- /.row -->

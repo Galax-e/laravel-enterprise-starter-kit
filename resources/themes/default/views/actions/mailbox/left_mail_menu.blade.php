@@ -1,4 +1,3 @@
-<a href="inbox" class="btn btn-primary btn-block margin-bottom">Back to Inbox</a>
 <div class="box box-solid">
   <div class="box-header with-border">
     <h3 class="box-title">Memo</h3>
@@ -16,7 +15,7 @@
       </li>
       <li id="inbox_left_li">
         <a href="{{url('inbox')}}">
-            <i class="fa fa-inbox"></i><span> Inbox</span>
+            <i class="fa fa-inbox"></i><span> Incoming</span>
             <span class="pull-right-container">
                 <small id="inbox_left" class="label pull-right bg-red"></small>
             </span>                                
@@ -25,29 +24,29 @@
       {{--  <li><a href="sent"><i class="fa fa-envelope-o"></i> Sent</a></li>  --}}
       <li>
         <a href="{{url('sent')}}">
-            <i class="fa fa-envelope-square"></i><span> Sent</span>
+            <i class="fa fa-envelope-square"></i><span> Outgoing</span>
             <span class="pull-right-container">
-                <small class="label pull-right bg-green">12</small>
+                <small id='sent_left' class="label pull-right"></small>
             </span>
         </a>
       </li>
-      <li>
+      {{--  <li>
         <a href="{{url('draft')}}">
             <i class="fa fa-database"></i><span> Draft</span>
             <span class="pull-right-container">
                 <small class="label pull-right bg-yellow">16</small>
             </span>
         </a>
-      </li>
+      </li>  --}}
       {{--  <li><a href="trash"><i class="fa fa-trash-o"></i> Trash</a></li>  --}}
-      <li>
+      {{--  <li>
         <a href="{{url('trash')}}">
             <i class="fa fa-trash-o"></i><span> Trash</span>
             <span class="pull-right-container">
                 <small class="label pull-right bg-blue">21</small>
             </span>
         </a>
-      </li>
+      </li>  --}}
     </ul>
   </div><!-- /.box-body -->
 

@@ -166,7 +166,7 @@ class UsersController extends Controller
         Flash::success( trans('admin/users/general.status.created') ); // 'User successfully created');
         
         // @cpnwaugha: c-e: send mail to user on-create
-        $this->postEmail($request);
+        //$this->postEmail($request); for repair
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('User created, enabled attribute true, and email sent', ['username' => $user->username]));
 
         return redirect('/admin/users');

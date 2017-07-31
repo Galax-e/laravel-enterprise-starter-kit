@@ -121,4 +121,18 @@ class MemoController extends Controller
 
         return response()->json($results);
     }
+
+    public function sent()
+    {  
+       Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
+
+       $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+       $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+       
+       $user_id = Auth::user()->email;
+       $memos = DB::table('memos')->where('emailfrom', $user_id)->orderBy('created_at', 'DESC')->paginate(20);  
+       $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+       return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
+    }
+
 }

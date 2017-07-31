@@ -43,6 +43,7 @@ use App\Activity;
 use App\Document;
 use App\MemoNotification;
 use App\folder_request;
+use App\Attachment;
 
 use Illuminate\Support\Facades\Input;
 
@@ -71,6 +72,8 @@ class DashboardController extends Controller
         $page_description = "Your Desk"; // trans('admin/users/general.page.index.description'); // "List of users";
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+		
+		$dept_users = DB::select('select * from users');
 		$user_email = Auth::user()->email;
 
 		$activity = '%Forward%';
@@ -87,7 +90,7 @@ class DashboardController extends Controller
 		$dept_size = DB::select('select * from users where department =?', [Auth::user()->department]);
 		$dept_size = count($dept_size);
 
-        return view('dashboard', compact('users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size', 'file_movement'));
+        return view('dashboard', compact('users', 'dept_users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size', 'file_movement'));
     }
     
     public function viewallcontacts()
@@ -145,8 +148,15 @@ class DashboardController extends Controller
 			$memo->message = Input::get('message');
 			$memo->save();
 
+			// call attachment...
+			$attachment_name = Input::get('attachment');
+			//$attachment = DB::select('select * from attachments where name=?', [$attachment_name]);
+			DB::update("update attachments set memo_id=5 where name=?", [$attachment_name]);
+			
 
-			$memo_id = 1;
+
+
+			$memo_id = $memo->id;
 			$sender_id = Auth::user()->id;
 			$receiver_id =  $receiver_user['id'];
 
@@ -163,8 +173,18 @@ class DashboardController extends Controller
 			MemoNotification::create(['memo_id'=>$memo_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);
 		}
 
+		// return to inbox with properties
+		Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
+
+        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+        
+        $user_id = Auth::user()->email;
+        $memos = DB::table('memos')->where('emailto', $user_id)->orderBy('created_at', 'DESC')->paginate(4);  
+        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+        
 		Flash::success('Email sent');
-		return redirect()->back()->with('Memo Sent');
+		return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'))->with('Memo Sent');
     }
 
 
@@ -174,6 +194,7 @@ class DashboardController extends Controller
         $handleremail = request('handleremail');
         $treated = 1;
         DB::update('update folder_requests set treated = ?, request_handler = ? where id = ?', [$treated, $handleremail, $id]);
+		DB::update('update request_file_notifications set status = 1 where id = ?', [$id]);
 
         return 'true';
 
@@ -355,75 +376,145 @@ class DashboardController extends Controller
 		return redirect()->back()->with('New file attached');
     }
 
-        public function single_upload(){
-        session_start();
-        $session_id='1'; 
-        $path = Input::get('path');
-        $valid_formats = array("jpg", "png", "gif", "bmp", "jpeg", "pdf");
+	public function single_upload(){
+		
+		session_start();
+		$session_id='1'; 
+		$path = Input::get('path');
+		$valid_formats = array("jpg", "png", "gif", "bmp", "jpeg", "pdf");
 
-           $name = $_FILES['photo']['name'];
-           $size = $_FILES['photo']['size'];
-           if(strlen($name)) {
-              list($txt, $ext) = explode(".", $name);
-              if(in_array($ext,$valid_formats)) {
-                 if($size<(10024*10024)) {
+		$name = $_FILES['photo']['name'];
+		$size = $_FILES['photo']['size'];
+		if(strlen($name)) {
+			list($txt, $ext) = explode(".", $name);
+			if(in_array($ext,$valid_formats)) {
+				if($size<(10024*10024)) {
 
-                    $image_name = time().$session_id.".".$ext;
-                    $tmp = $_FILES['photo']['tmp_name'];
-                    if(move_uploaded_file($tmp, $path.$image_name)){
-					$attach = new Document;
-					$attach->name = $image_name;
-					$attach->file_by = Auth::user()->email;
-					$attach->folder_id = Input::get('folder_id');
-					$attach->save();
+				$image_name = time().$session_id.".".$ext;
+				$tmp = $_FILES['photo']['tmp_name'];
+				if(move_uploaded_file($tmp, $path.$image_name)){
+				$attach = new Document;
+				$attach->name = $image_name;
+				$attach->file_by = Auth::user()->email;
+				$attach->folder_id = Input::get('folder_id');
+				$attach->save();
 
-					DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
+				DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
 
-					$activity = new Activity;
-					$activity->activity_by= Auth::user()->email;
-					$activity->activity_by_post = Auth::user()->position;
-					$activity->folder_id= Input::get('folder_id');
-					$activity->fileinfo= $image_name;
-					$activity->activity= ' Added new Document';
-					$activity->save();
-                    
-					if($ext !== "pdf"){
-                    	echo'
-                    	<ul class="mailbox-attachments clearfix">
-                    	<li>
-		                  <span class="mailbox-attachment-icon has-img"><img src="uploads/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
-		                  <div class="mailbox-attachment-info">
-		                    <a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$image_name.'</a>
-		                        <span class="mailbox-attachment-size">
-		                          1.9 MB
-		                          <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-		                        </span>
-		                  </div>
-		                </li></ul>';
-                   } else
-                   echo'<ul class="mailbox-attachments clearfix">
-                
-                    	<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
-			                  <div class="mailbox-attachment-info">
-			                    <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$image_name.'</a>
-			                        <span class="mailbox-attachment-size">
-			                          1,245 KB
-			                          <a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-			                        </span>
-			                  </div>
-			           </li></ul>';
-                    }
-                    else
-                    echo "Image Upload failed";
-                 }
-                 else
-                 echo "Image file size max 1 MB";
-              }
-              else
-              echo "Invalid file format..";
-           }
-           else
-           echo "Please select image..!";
-           exit;      
+				$activity = new Activity;
+				$activity->activity_by= Auth::user()->email;
+				$activity->activity_by_post = Auth::user()->position;
+				$activity->folder_id= Input::get('folder_id');
+				$activity->fileinfo= $image_name;
+				$activity->activity= ' Added new Document';
+				$activity->save();
+				
+				if($ext !== "pdf"){
+					echo'
+					<ul class="mailbox-attachments clearfix">
+					<li>
+						<span class="mailbox-attachment-icon has-img"><img src="uploads/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
+						<div class="mailbox-attachment-info">
+						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$image_name.'</a>
+							<span class="mailbox-attachment-size">
+								1.9 MB
+								<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+							</span>
+						</div>
+					</li></ul>';
+				} else
+				echo'<ul class="mailbox-attachments clearfix">
+			
+					<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+							<div class="mailbox-attachment-info">
+							<a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$image_name.'</a>
+								<span class="mailbox-attachment-size">
+									1,245 KB
+									<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+								</span>
+							</div>
+					</li></ul>';
+				}
+				else
+				echo "Image Upload failed";
+				}
+				else
+				echo "Image file size max 1 MB";
+			}
+			else
+			echo "Invalid file format..";
+		}
+		else
+		echo "Please select image..!";
+		exit;      
     }
+
+	public function compose_single_upload(){
+		session_start();
+		$session_id='1'; 
+		$path = 'attachment_file/';
+		$valid_formats = array("jpg", "png", "gif", "bmp", "jpeg", "pdf");
+
+		$name = $_FILES['photo']['name'];
+		$size = $_FILES['photo']['size'];
+		if(strlen($name)) {
+			list($txt, $ext) = explode(".", $name);
+			if(in_array($ext,$valid_formats)) {
+				if($size<(10024*10024)) {
+
+				$image_name = time().$session_id.".".$ext;
+				$tmp = $_FILES['photo']['tmp_name'];
+				if(move_uploaded_file($tmp, $path.$image_name)){
+				
+				$attach = new Document;
+				$attach->name = $image_name;
+				$attach->file_by = Auth::user()->email;
+				$attach->save();
+
+				DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
+
+				$activity = new Activity;
+				$activity->activity_by= Auth::user()->email;
+				$activity->activity_by_post = Auth::user()->position;
+				$activity->fileinfo= $image_name;
+				$activity->activity= ' Added new Document';
+				$activity->save();
+				
+				if($ext !== "pdf"){
+					echo'
+					<ul class="mailbox-attachments clearfix">
+					<li>
+						<span class="mailbox-attachment-icon has-img"><img src="uploads/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
+						<div class="mailbox-attachment-info">
+						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$image_name.'</a>
+							<span class="mailbox-attachment-size">
+								1.9 MB								
+							</span>
+						</div>
+					</li></ul>';
+				} else
+				echo'<ul class="mailbox-attachments clearfix">
+			
+					<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+							<div class="mailbox-attachment-info">
+							<a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$image_name.'</a>
+								<span class="mailbox-attachment-size">
+									1,245 KB
+								</span>
+							</div>
+					</li></ul>';
+				}
+				else
+				echo "Image Upload failed";
+				}
+				else
+				echo "Image file size max 1 MB";
+			}
+			else
+			echo "Invalid file format..";
+		}
+		else
+		echo "Please select image..!";
+		exit; 
+	}
 }

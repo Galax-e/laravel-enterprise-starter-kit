@@ -36,7 +36,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-		$this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => 'getLogout']);
     }
 
     /**
@@ -98,19 +98,13 @@ class AuthController extends Controller
             if ( ('root' == $user->username) || ($user->enabled) )
             {
                 Audit::log(Auth::user()->id, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-success', ['email' => $user->email]));
-                
-                $activity = new Activity;
-                $activity->activity_by= $user->username;
-                $user->activity_by_post = Auth::user()->position;
-                $activity->activity= 'Successful login';
-                $activity->save();
-		
+        
                 Flash::success("Welcome " . Auth::user()->first_name);
                 return redirect()->intended($this->redirectPath());
             }
             else
             {
-                Audit::log(null, trans('general.audit-log.category-login'), trans('general.audit-log.msg-forcing-logout', ['username' => $credentials['username']]));
+                Audit::log(null, trans('general.audit-log.category-login'), trans('general.audit-log.msg-forcing-logout', ['email' => $credentials['email']]));
 
                 Auth::logout();
                 return redirect(route('login'))
@@ -121,7 +115,7 @@ class AuthController extends Controller
             }
         }
 
-        Audit::log(null, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-failed', ['username' => $credentials['username']]));
+        Audit::log(null, trans('general.audit-log.category-login'), trans('general.audit-log.msg-login-failed', ['email' => $credentials['email']]));
 
         return redirect($this->loginPath())
             ->withInput($request->only('email', 'remember'))

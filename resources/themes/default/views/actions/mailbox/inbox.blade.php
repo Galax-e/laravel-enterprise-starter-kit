@@ -29,6 +29,7 @@
     <section class="content">
       <div class="row">
         <div class="col-md-3">
+            <a href="{{route('compose')}}" class="btn btn-primary btn-block margin-bottom">To Compose</a>
             @include('views.actions.mailbox.left_mail_menu')
         </div>
         <div class="col-md-9">

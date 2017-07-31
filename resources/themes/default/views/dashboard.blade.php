@@ -126,10 +126,8 @@
 							}	                    
 	                    	$user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];
 
-							$folder = Illuminate\Support\Facades\DB::select('select folder_to from folders where folder_no=?', [$activity->folder_id] );  
-							
-							$folder = Illuminate\Support\Facades\DB::table('folders')->where('folder_no', $activity->folder_id)->first();							
-							$user_to_name = Illuminate\Support\Facades\DB::table('users')->where('email', $folder->folder_to)->first();
+									
+							$user_to_name = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first();
 						
 						?>
 						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>

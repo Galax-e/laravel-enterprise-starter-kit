@@ -69,9 +69,9 @@
                         <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> Position Activities</a></li>
                         <li>
                             <a href="{{url('inbox')}}">
-                                <i class="fa fa-envelope-o"></i><span> Mailbox</span>
-                                <span class="pull-right-container">
-                                    <small id="inbox_on_mailbox" class="label pull-right bg-red"></small>
+                                <i class="fa fa-envelope-o"></i><span> eDispatch</span>
+                                <span class="pull-right-container pull-right">
+                                    <small id="inbox_on_mailbox" class="label bg-red"></small>
                                 </span>
                             </a>
                         </li>
@@ -80,7 +80,7 @@
                                <i class="fa fa-key"></i> Change Pin
                             </a>
                         </li>
-                        <li class=""><a href="#" data-toggle="modal" data-target="#requestFileModal"><i class="fa fa-file-o"></i> Request Folder</a></li>
+                        <li class=""><a href="#" data-toggle="modal" data-target="#requestFileModal"><i class="fa fa-file-o"></i> Request File</a></li>
                     </ul>
                 </li>
                 

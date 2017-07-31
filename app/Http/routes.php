@@ -58,21 +58,27 @@ Route::get( 'welcome',    ['as' => 'welcome',     'uses' => 'HomeController@welc
 Route::group(['middleware' => 'authorize'], function () {
     // Application routes...
     Route::get(   'compose',        ['as' => 'compose',          'uses' => 'MemoController@compose']);
-	Route::get(   'dashboard',      ['as' => 'dashboard',          'uses' => 'DashboardController@index']);
-	Route::get(   'inbox',          ['as' => 'inbox',          'uses' => 'MemoController@inbox']);
+    Route::get(   'dashboard',      ['as' => 'dashboard',          'uses' => 'DashboardController@index']);
+    Route::get(   'inbox',          ['as' => 'inbox',          'uses' => 'MemoController@inbox']);
     Route::get(   'read_memo/{id}', ['as' => 'read_memo/{id}',          'uses' => 'MemoController@read_memo']);
-	Route::get(   'session',        ['as' => 'session',          'uses' => 'DashboardController@session']);
+    Route::get(   'session',        ['as' => 'session',          'uses' => 'DashboardController@session']);
     Route::post(   'searchactivity',      ['as' => 'searchactivity',          'uses' => 'DashboardController@searchactivity']);
     Route::post(   'searchcontact',      ['as' => 'searchcontact',          'uses' => 'DashboardController@searchcontact']);
-	Route::post(  'store',          ['as' => 'store',          'uses' => 'DashboardController@store']);
+    Route::post(  'store',          ['as' => 'store',          'uses' => 'DashboardController@store']);
     Route::get(   'viewall',        ['as' => 'viewall',          'uses' => 'DashboardController@viewall']);
     Route::get(   'viewallcontacts',        ['as' => 'viewallcontacts',          'uses' => 'DashboardController@viewallcontacts']);
     Route::get(   'viewallrequest', ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
-	Route::post(  'store-session',  ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
-	Route::post(  'store_memo',     ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
+    Route::post(  'store-session',  ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
+    Route::post(  'store_memo',     ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
+    
+    Route::get(   'sent',          ['as' => 'sent',          'uses' => 'MemoController@sent']);
+    
     Route::post(  'insert',     ['as' => 'insert',          'uses' => 'DashboardController@insert']);
     Route::post(  'attachment',     ['as' => 'attachment',          'uses' => 'DashboardController@attachment']);
     Route::post(  'single_upload',     ['as' => 'single_upload',          'uses' => 'DashboardController@single_upload']);
+    //Route::post(  'compose_single_upload',     ['as' => 'compose_single_upload', 'uses' => 'DashboardController@compose_single_upload']);
+    Route::post(  'memo_attachment',     ['as' => 'memo_attachment', 'uses' => 'AttachmentController@memoAttachment']);
+    
     Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
     Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
 
@@ -84,6 +90,8 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::get( 'notif_seen', ['as' => 'notif_seen',  'uses' => 'FolderNotificationController@notificationseen']);
     Route::get( 'memo_seen',  ['as' => 'memo_seen',   'uses' => 'MemoNotificationController@notificationseen']);
     Route::get( 'request_file_seen',  ['as' => 'request_file_seen',   'uses' => 'RequestFileNotificationController@notificationseen']);
+
+    Route::get( 'seen_memo/{id}',  ['as' => 'seen_memo/{id}',   'uses' => 'MemoNotificationController@seenmemo']);
     
     Route::get(   'user/profile/photo',   ['as' => 'user.profile.photo',       'uses' => 'UsersController@profilePhoto']);
     Route::patch( 'user/profile/photo',   ['as' => 'user.profile.photo.patch', 'uses' => 'UsersController@profilePhotoUpdate']);
