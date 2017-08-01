@@ -125,8 +125,7 @@
 								$temp[$field] = $val;
 							}	                    
 	                    	$user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];
-
-									
+								
 							$user_to_name = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first();
 						
 						?>
@@ -328,15 +327,25 @@
 							@foreach($comments as $comment)
 							@if($comment->folder_id == $folder->id)
 								<div class="item">
+
+									<?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', $comment->comment_by)->first();
+	                    
+										$temp = array();
+										foreach($user as $field => $val ){
+											$temp[$field] = $val;
+										}	                    
+										$user_avatar = $temp['avatar']; $comment_user_name = $temp['first_name'] . ', '.$temp['last_name'];									
+									?>
 									{{--<img src="{{ Gravatar::get(Auth::user()->email), 'tiny'}}" class="offline" alt="User Image"/>--}}
-									<img src="img/profile_picture/photo/{{ Auth::user()->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+									<img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
 									<!--<img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" alt="user image" class="offline"/>-->
 									<p class="message">
 										<a href="#" class="name"> <!-- @cpnwaugha: c-e: comments to have date and time -->
 											<small class="text-muted pull-right">
 												<i class="fa fa-clock-o"></i> {{ date('M d, Y', strtotime($comment->created_at)) }}
 											</small> 
-											{{ $comment->comment_by }}
+											 
+											{{ $comment_user_name }}
 										</a>
 										{{ $comment->comment }}
 									</p>
@@ -455,9 +464,9 @@
 									<p class="message">
 									<a href="#" class="name"> 
 									<small class="text-muted pull-right"><i class="fa fa-clock-o"></i> ${created_at}</small> 
-									${comment_by }
+									${ comment_by }
 									</a>
-									${comment}
+									${ comment }
 									</p>
 								</div>
 								`;

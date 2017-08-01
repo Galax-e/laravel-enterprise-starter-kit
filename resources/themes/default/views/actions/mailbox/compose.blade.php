@@ -76,7 +76,7 @@
 
 						<div style="width:350px" align="center">
 							   
-							<form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload'' autocomplete="off">
+							<form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
 							  <input type="hidden" name="_token" value="{{ csrf_token() }}">
 								<div class="browse_text"><label>Attach File/Image:</label>
 								</div>
