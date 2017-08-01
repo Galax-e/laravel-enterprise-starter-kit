@@ -186,7 +186,7 @@
 				$( function() {
 				var availableTags = [
 					@foreach($users as $user) 
-						@if($folder->clearance_level >= $user->clearance_level && $user->id !== Auth::user()->id) 
+						@if( $user->clearance_level >= $folder->clearance_level && $user->id !== Auth::user()->id) 
 							"{{ $user->first_name }}, {{ $user->last_name }}",
 						@endif
 					@endforeach
