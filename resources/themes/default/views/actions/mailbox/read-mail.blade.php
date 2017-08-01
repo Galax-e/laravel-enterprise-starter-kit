@@ -57,21 +57,40 @@
                             </div><!-- /.mailbox-read-message -->
                         </div><!-- /.box-body -->
                         @foreach($attachments as $attachment)
-                        @if($attachment->memo_id == $memo->id)
-                        <ul id="attach_image" class="mailbox-attachments clearfix attachdoc">
-                            <li>
-                                <span class="mailbox-attachment-icon"><i class="fa fa-file-image-o"></i></span>
-                                <div class="mailbox-attachment-info">
-                                        <i class="fa fa-paperclip"></i> <a href="{{ asset("/attachment_file/$attachment->name") }}" style="color: #000000;" target="_blank"> {{ $attachment->name }}</a><br/> <!-- </a> -->
-                                        <span class="mailbox-attachment-size">
-                                            {{ $attachment->created_at }}
-                                            <a href="{{ asset("/attachment_file/$attachment->name") }}" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-                                        </span>
-                                    </div>
-                            </li>
-                        </ul>
-                        @endif
+                            @if($attachment->memo_id == $memo->id)
+                            <ul id="attach_image" class="mailbox-attachments clearfix attachdoc" style="margin-left: 10px;">
+                            <?php
+                            if (strpos($attachment->name, 'jpg') !== false) {
+                            echo '
+                                <li>
+                                    <span class="mailbox-attachment-icon"><i class="fa fa-file-image-o"></i></span>
+                                    <div class="mailbox-attachment-info">
+                                            <i class="fa fa-paperclip"></i> <a href="{{ asset("/attachment_file/'.$attachment->name.'") }}" style="color: #000000;" target="_blank"> '.$attachment->name.'</a><br/> <!-- </a> -->
+                                            <span class="mailbox-attachment-size">
+                                                '.$attachment->created_at.'
+                                                <a href="asset("/attachment_file/'.$attachment->name.'")" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+                                            </span>
+                                        </div>
+                                </li>';
+                                  }
+                                  else {
+                                echo '
+                                <li>
+                                    <span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+                                    <div class="mailbox-attachment-info">
+                                            <i class="fa fa-paperclip"></i> <a href="{{ asset("/attachment_file/'.$attachment->name.'") }}" style="color: #000000;" target="_blank"> '.$attachment->name.'</a><br/> <!-- </a> -->
+                                            <span class="mailbox-attachment-size">
+                                                '.$attachment->created_at.'
+                                                <a href="asset("/attachment_file/'.$attachment->name.'")" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+                                            </span>
+                                        </div>
+                                </li>';
+                                  }
+                                  ?>
+                            </ul>
+                            @endif
                         @endforeach
+
                         @endforeach
                     
                         <div class="box-footer">

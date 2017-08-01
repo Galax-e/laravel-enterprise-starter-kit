@@ -83,7 +83,7 @@
 				</div><!-- /.box-header -->
 				<div class="box-body no-padding">
 					<ul class="users-list clearfix">
-						@foreach($users as $user)
+						@foreach($dept_users as $user)
 							@if($user->department == Auth::user()->department)
 								@if($user->email == Auth::user()->email)
 									@continue
@@ -91,7 +91,8 @@
 								<li>
 									{{--<img src="{{ Gravatar::get($user->email) }}" class="user-image" alt="User Image"/> --}}
 									<img src="{{asset("/img/profile_picture/photo/".$user->avatar) }}" class="offline" style="width: 52px; height: 52px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-									<a class="users-list-name" href="">{!! link_to_route('admin.users.show', $user->full_name, [$user->id], []) !!}</a>
+									<?php $full_name = $user->first_name.', '.$user->last_name; ?>
+									<a class="users-list-name" href="">{!! link_to_route('admin.users.show', $full_name, [$user->id], []) !!}</a>
 									{{-- <span class="users-list-date">{{ $user->created_at }}</span> --}}
 								</li>
 							@endif
