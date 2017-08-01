@@ -75,9 +75,9 @@ Route::group(['middleware' => 'authorize'], function () {
     
     Route::post(  'insert',     ['as' => 'insert',          'uses' => 'DashboardController@insert']);
     Route::post(  'attachment',     ['as' => 'attachment',          'uses' => 'DashboardController@attachment']);
-    Route::post(  'single_upload',     ['as' => 'single_upload',          'uses' => 'DashboardController@compose_single_upload']);
-    //Route::post(  'compose_single_upload',     ['as' => 'compose_single_upload', 'uses' => 'DashboardController@compose_single_upload']);
-    Route::post(  'memo_attachment',     ['as' => 'memo_attachment', 'uses' => 'AttachmentController@memoAttachment']);
+    Route::post(  'single_upload',     ['as' => 'single_upload',          'uses' => 'DashboardController@single_upload']);
+    Route::post(  'compose_single_upload',     ['as' => 'compose_single_upload', 'uses' => 'DashboardController@compose_single_upload']);
+    //Route::post(  'memo_attachment',     ['as' => 'memo_attachment', 'uses' => 'AttachmentController@memoAttachment']);
     
     Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
     Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);

@@ -82,59 +82,37 @@
                             <ul class="dropdown-menu">
                                 <li class="header">Messages</li>
                                 <li>
-                                    <!-- inner menu: contains the messages -->
-                                    <ul class="menu">
-                                        <?php $useremail = Auth::user()->email; $memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto = ? and treated=0 order by created_at desc limit 5', [$useremail]); ?>
-                                        <?php $loopindex = 0; ?>
-                                        @foreach($memos as $memo)  
-                                            <?php $loopindex++; ?>
-
-                                            <script>
-                                                $(function(){
-                                                    $('#memo_toggle, #inbox_left_li').on("click", function(){
-                                                        $.ajax({
-                                                            url:"seen_memo/{{ $loopindex }}",
-                                                            method:"GET",
-                                                            dataType:"json",
-                                                            success:function(data)
-                                                            {
-                                                                console.log('success seen memo');
-                                                            },
-                                                            error:function(){
-                                                                console.log('error, connecting to memo notification controller ');
-                                                            }
-                                                        });
-                                                    });
-                                                })
-                                            </script>
-
-                                            <li id="seen_memo{{ $loopindex }}"><!-- start message -->
-                                                <a href="{{url('read_memo/'.$memo->id) }}">
-                                                    <div class="pull-left">
-                                                        <!-- User Image -->
-                                                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $memo->emailfrom)->first();
-                                                        
-                                                        $temp = array();
-                                                        foreach($user as $field => $val ){
-                                                            $temp[$field] = $val;
-                                                        }
-                                                        
-                                                        $user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name']  ?>
-                                                        <img src="{{ asset('/img/profile_picture/photo/'.$user_avatar) }}" class="img-circle" alt="User Image"/>
-                                                    </div>
-                                                    <!-- Message title and timestamp -->
-                                                    <h4>
-                                                        {{ $user_name }}
-                                                        <small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
-                                                        <i class="fa fa-clock-o pull-right"></i>
-                                                    </h4>
-                                                    <!-- The message -->
-                                                    <p>{{ $memo->subject}}</p>
-                                                </a>
-                                            </li><!-- end message -->                                                 
-                                        @endforeach 
-                                    </ul><!-- /.menu -->
-                                </li>
+                                   <!-- inner menu: contains the messages -->
+                                   <ul class="menu">
+                                       <?php $useremail = Auth::user()->email; $memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto = ? order by created_at desc limit 5', [$useremail]); ?>
+                                       @foreach($memos as $memo)
+                                           <li><!-- start message -->
+                                               <a href="{{url('read_memo/'.$memo->id) }}">
+                                                   <div class="pull-left">
+                                                       <!-- User Image -->
+                                                       <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $memo->emailfrom)->first();
+                                                       
+                                                       $temp = array();
+                                                       foreach($user as $field => $val ){
+                                                           $temp[$field] = $val;
+                                                       }
+                                                       
+                                                       $user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name']  ?>
+                                                       <img src="{{ asset('/img/profile_picture/photo/'.$user_avatar) }}" class="img-circle" alt="User Image"/>
+                                                   </div>
+                                                   <!-- Message title and timestamp -->
+                                                   <h4>
+                                                       {{ $user_name }}
+                                                       <small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
+                                                       <i class="fa fa-clock-o pull-right"></i>
+                                                   </h4>
+                                                   <!-- The message -->
+                                                   <p>{{ $memo->subject}}</p>
+                                               </a>
+                                           </li><!-- end message -->                                                
+                                       @endforeach
+                                   </ul><!-- /.menu -->
+                               </li>
                                 <li class="footer"><a href="{{url('inbox')}}">See All Messages</a></li>
                             </ul>
                         </li><!-- /.messages-menu -->
