@@ -481,6 +481,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>--}}
+    
     <script src="{{ asset('bower_components/admin-lte/plugins/bootbox/bootbox.min.js') }}"></script>
     <script src="{{ asset('jquery-ui/1.11.2/jquery-ui.min.js') }}"></script>    
     <script src="{{ asset('vendor/laravel-filemanager/js/cropper.min.js') }}"></script>
