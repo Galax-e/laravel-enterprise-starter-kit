@@ -84,19 +84,19 @@
 				<div class="box-body no-padding">
 					<ul class="users-list clearfix">
 						@foreach($dept_users as $user)
-							@if($user->department == Auth::user()->department)
-								@if($user->email == Auth::user()->email)
-									@continue
-								@endif
-								<li>
-									{{--<img src="{{ Gravatar::get($user->email) }}" class="user-image" alt="User Image"/> --}}
-									<img src="{{asset("/img/profile_picture/photo/".$user->avatar) }}" class="offline" style="width: 52px; height: 52px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-									<?php $full_name = $user->first_name.', '.$user->last_name; ?>
-									<a class="users-list-name" href="">{!! link_to_route('admin.users.show', $full_name, [$user->id], []) !!}</a>
-									{{-- <span class="users-list-date">{{ $user->created_at }}</span> --}}
-								</li>
-							@endif
-						@endforeach
+                            @if($user->department == Auth::user()->department)
+                                @if($user->email == Auth::user()->email)
+                                    @continue
+                                @endif
+                                <li>
+                                    {{--<img src="{{ Gravatar::get($user->email) }}" class="user-image" alt="User Image"/> --}}
+                                    <img src="{{asset("/img/profile_picture/photo/".$user->avatar) }}" class="offline" style="width: 52px; height: 52px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+                                    <?php $full_name = $user->first_name.', '.$user->last_name; ?>
+                                    <a class="users-list-name" href="">{!! link_to_route('admin.users.show', $full_name, [$user->id], []) !!}</a>
+                                    {{-- <span class="users-list-date">{{ $user->created_at }}</span> --}}
+                                </li>
+                            @endif
+                        @endforeach
 					</ul><!-- /.users-list -->
 				</div><!-- /.box-body -->
 				<div class="box-footer text-center">
@@ -187,7 +187,7 @@
 				$( function() {
 				var availableTags = [
 					@foreach($users as $user) 
-						@if($folder->clearance_level >= $user->clearance_level && $user->id !== Auth::user()->id) 
+						@if( $user->clearance_level >= $folder->clearance_level && $user->id !== Auth::user()->id) 
 							"{{ $user->first_name }}, {{ $user->last_name }}",
 						@endif
 					@endforeach
