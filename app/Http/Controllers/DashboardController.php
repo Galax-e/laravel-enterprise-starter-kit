@@ -77,9 +77,11 @@ class DashboardController extends Controller
 		$user_email = Auth::user()->email;
 
 		$activity = '%Forward%';
+		$memo_activity = 'memo';
 		
 		//$folder = Folder::all();	
-		$activities = DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$activity]);
+		$activities = DB::select('select * from activities where activity like ? or type=? order by created_at desc limit 5', [$activity, $memo_activity]);
+		//$activities = DB::select('select * from activities order by created_at desc limit 5');
 		$file_movement = DB::select('select * from activities');
 
 		$folders = DB::select('select * from folders where folder_to = ?', [$user_email]);
@@ -154,20 +156,19 @@ class DashboardController extends Controller
 			DB::update("update attachments set memo_id=? where name=?", [$memo->id, $attachment_name]);
 			
 
-
-
 			$memo_id = $memo->id;
 			$sender_id = Auth::user()->id;
 			$receiver_id =  $receiver_user['id'];
 
-			$user = new Activity;
-	        $user->activity_by = Input::get('emailfrom');
-	        $user->activity_by_post = Auth::user()->position;
-	        $user->activity = 'Sends mail to: '.Input::get('email_name');
-	        $user->activity_to= $receiver_email;
-	        $user->comment= Input::get('subject');
-	        $user->memo= Input::get('message');
-	        $user->save();
+			$activity = new Activity;
+	        $activity->activity_by = Input::get('emailfrom');
+	        $activity->activity_by_post = Auth::user()->position;
+	        $activity->activity = 'Sends mail to: '.Input::get('email_name');
+	        $activity->activity_to= $receiver_email;
+	        $activity->comment= Input::get('subject');
+			$activity->type = 'memo';
+	        $activity->memo= Input::get('message');
+	        $activity->save();
 			
 			// create notification
 			MemoNotification::create(['memo_id'=>$memo_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);
@@ -179,8 +180,8 @@ class DashboardController extends Controller
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
         
-        $user_id = Auth::user()->email;
-        $memos = DB::table('memos')->where('emailto', $user_id)->orderBy('created_at', 'DESC')->paginate(4);  
+        $user_email = Auth::user()->email;
+        $memos = DB::table('memos')->where('emailto', $user_email)->orderBy('created_at', 'DESC')->paginate(4);  
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         
 		Flash::success('Email sent');
