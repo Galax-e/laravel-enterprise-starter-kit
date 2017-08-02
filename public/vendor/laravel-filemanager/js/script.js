@@ -211,6 +211,7 @@ function performLfmRequest(url, parameter, type) {
 }
 
 function displayErrorResponse(jqXHR) {
+    console.log('Modal comes from here');
     notify('<div style="max-height:50vh;overflow: scroll;">' + jqXHR.responseText + '</div>');
 }
 
