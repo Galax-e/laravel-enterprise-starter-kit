@@ -84,6 +84,7 @@ class UploadController extends LfmController
             $new_document = new Document;
             $new_document->folder_id = $folder_id; //Input::get('working_dir');
             $new_document->file_by= Auth::user()->email;
+            //$new_document->original_name = $file;
 
             if (Input::hasFile('upload')){
                 $file=Input::file('upload');

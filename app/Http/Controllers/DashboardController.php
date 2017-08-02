@@ -77,13 +77,15 @@ class DashboardController extends Controller
 		$user_email = Auth::user()->email;
 
 		$activity = '%Forward%';
+		$memo_activity = 'memo';
 		
 		//$folder = Folder::all();	
-		$activities = DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$activity]);
+		$activities = DB::select('select * from activities where activity like ? or type=? order by created_at desc limit 5', [$activity, $memo_activity]);
+		//$activities = DB::select('select * from activities order by created_at desc limit 5');
 		$file_movement = DB::select('select * from activities');
 
-		$folders = DB::select('select * from folders where folder_to = ?', [$user_email]);
-		$files = DB::select('select * from documents');
+		$folders = DB::select('select * from folders where folder_to = ? order by created_at desc', [$user_email]);
+		$files = DB::select('select * from documents order by created_at desc');
 		$comments = DB::select('select * from comments');
 		
 		// return the count of the number of people in the department
@@ -154,20 +156,19 @@ class DashboardController extends Controller
 			DB::update("update attachments set memo_id=? where name=?", [$memo->id, $attachment_name]);
 			
 
-
-
 			$memo_id = $memo->id;
 			$sender_id = Auth::user()->id;
 			$receiver_id =  $receiver_user['id'];
 
-			$user = new Activity;
-	        $user->activity_by = Input::get('emailfrom');
-	        $user->activity_by_post = Auth::user()->position;
-	        $user->activity = 'Sends mail to: '.Input::get('email_name');
-	        $user->activity_to= $receiver_email;
-	        $user->comment= Input::get('subject');
-	        $user->memo= Input::get('message');
-	        $user->save();
+			$activity = new Activity;
+	        $activity->activity_by = Input::get('emailfrom');
+	        $activity->activity_by_post = Auth::user()->position;
+	        $activity->activity = 'Sends mail to: '.Input::get('email_name');
+	        $activity->activity_to= $receiver_email;
+	        $activity->comment= Input::get('subject');
+			$activity->type = 'memo';
+	        $activity->memo= Input::get('message');
+	        $activity->save();
 			
 			// create notification
 			MemoNotification::create(['memo_id'=>$memo_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);
@@ -179,8 +180,8 @@ class DashboardController extends Controller
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
         
-        $user_id = Auth::user()->email;
-        $memos = DB::table('memos')->where('emailto', $user_id)->orderBy('created_at', 'DESC')->paginate(4);  
+        $user_email = Auth::user()->email;
+        $memos = DB::table('memos')->where('emailto', $user_email)->orderBy('created_at', 'DESC')->paginate(4);  
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         
 		Flash::success('Email sent');
@@ -388,13 +389,14 @@ class DashboardController extends Controller
 		if(strlen($name)) {
 			list($txt, $ext) = explode(".", $name);
 			if(in_array($ext,$valid_formats)) {
-				if($size<(10024*10024)) {
+				if($size<(100024*100024)) {
 
 				$image_name = time().$session_id.".".$ext;
 				$tmp = $_FILES['photo']['tmp_name'];
 				if(move_uploaded_file($tmp, $path.$image_name)){
 				$attach = new Document;
 				$attach->name = $image_name;
+				$attach->original_name = $name;
 				$attach->file_by = Auth::user()->email;
 				$attach->folder_id = Input::get('folder_id');
 				$attach->save();
@@ -413,11 +415,11 @@ class DashboardController extends Controller
 					echo'
 					<ul class="mailbox-attachments clearfix">
 					<li>
-						<span class="mailbox-attachment-icon has-img"><img src="uploads/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
+						<span class="mailbox-attachment-icon has-img"><img src="'.$path.'/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
 						<div class="mailbox-attachment-info">
-						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$image_name.'</a>
+						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$name.'</a>
 							<span class="mailbox-attachment-size">
-								1.9 MB
+								'.$size.'
 								<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
 							</span>
 						</div>
@@ -427,10 +429,10 @@ class DashboardController extends Controller
 			
 					<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
 							<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$image_name.'</a>
+							<a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$name.'</a>
 								<span class="mailbox-attachment-size">
-									1,245 KB
-									<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+									'.$size.'
+									<a href="'.$path.'/'.$image_name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
 								</span>
 							</div>
 					</li></ul>';
@@ -460,7 +462,7 @@ class DashboardController extends Controller
 		if(strlen($name)) {
 			list($txt, $ext) = explode(".", $name);
 			if(in_array($ext,$valid_formats)) {
-				if($size<(10024*10024)) {
+				if($size<(100024*100024)) {
 
 				$image_name = time().$session_id.".".$ext;
 				$tmp = $_FILES['photo']['tmp_name'];
@@ -468,6 +470,7 @@ class DashboardController extends Controller
 				
 				$attach = new Attachment;
 				$attach->name = $image_name;
+				$attach->original_name = $name;
 				$attach->memo_by = Auth::user()->email;
 				$attach->save();
 
@@ -487,21 +490,22 @@ class DashboardController extends Controller
 					<li>
 						<span class="mailbox-attachment-icon"><i class="fa fa-file-image-o"></i></span>
 						<div class="mailbox-attachment-info">
-						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$image_name.'</a>
+						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$name.'</a>
 							<span class="mailbox-attachment-size">
-								1.9 MB								
+								'.$size.'								
 							</span>
 						</div>
-					</li></ul>';
+					</li>
+					</ul>';
 				} else {
 				echo '<input type="hidden" name="attachment_name" value="'.$image_name.'">';
 				echo'<ul id="attach_pdf" class="mailbox-attachments clearfix attachdoc">
 			
 					<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
 							<div class="mailbox-attachment-info">
-							<a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$image_name.'</a>
+							<a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$name.'</a>
 								<span class="mailbox-attachment-size">
-									1,245 KB
+									'.$size.'
 								</span>
 							</div>
 					</li></ul>';

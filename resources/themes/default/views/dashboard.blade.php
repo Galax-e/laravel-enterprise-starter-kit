@@ -2,8 +2,10 @@
 
 @section('head_extra')
     <!-- jVectorMap 1.2.2 -->
-    <link href="{{ asset("/bower_components/admin-lte/plugins/jvectormap/jquery-jvectormap-1.2.2.css") }}" rel="stylesheet" type="text/css" />  
-    @include('partials._head_extra_jstree_css')
+    {{--  <link href="{{ asset("/bower_components/admin-lte/plugins/jvectormap/jquery-jvectormap-1.2.2.css") }}" rel="stylesheet" type="text/css" />  
+     --}}
+   
+    @include('partials._head_extra_jstree_css') 
     @include('partials._head_extra_select2_css')
 @endsection
 
@@ -50,18 +52,18 @@
   </style>
 
   {{-- <script type="text/javascript" src="file-upload/scripts/jquery.min.js"></script> --}}
-  <script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
+  {{--  <script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
   <script type="text/javascript" src="{{ asset("file-upload/scripts/upload.js") }}"></script>
-  <link type="text/css" rel="stylesheet" href="{{ asset("file-upload/style.css") }}" />
+  <link type="text/css" rel="stylesheet" href="{{ asset("file-upload/style.css") }}" />  --}}
 
   <script type="text/javascript" src="{{ asset("bower_components/admin-lte/plugins/moment/moment.min.js") }}"></script>
   
 
 	{{--  <div class="content-wrapper">  --}}
 
-	<section class="content">
+<section class="content">
 
-  <div class='row'>
+  	<div class='row'>
   
 		<div class='col-md-3'> <!-- left hand div -->
 			<!-- USERS LIST -->
@@ -116,30 +118,46 @@
 				</div><!-- /.box-header -->
 				<div class="box-body">
 					<ul class="todo-list">
-					@foreach($activities as $activity)
-						@if($activity->type == 'onfolder' )
-						<li>   
-						 <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', Auth::user()->email)->first();
-	                    
-							$temp = array();
-							foreach($user as $field => $val ){
-								$temp[$field] = $val;
-							}	                    
-	                    	$user_avatar = $temp['avatar']; $user_name = $temp['first_name'] . ', '.$temp['last_name'];
-								
-							$user_to_name = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first();
-						
-						?>
-						<small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
-						  &nbsp; &nbsp;
-						  {{ $user_to_name->first_name }}, {{ $user_to_name->last_name }}							  
-						</small>
-						<div></span><small class=""><b>{{ $activity->folder_id }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-						<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
-						</div>
-						</li>           
-						@endif
-					@endforeach
+						@foreach($activities as $activity)
+							@if($activity->type == 'onfolder' )													
+								<?php $folder = Illuminate\Support\Facades\DB::table('folders')->where('id', $activity->element_id)->first(); ?>
+								@if($activity->activity_to == Auth::user()->email)
+									<?php $to_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first(); ?>
+									<li>  
+										<small>{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}	  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+										&nbsp; &nbsp;
+										{{ $to_username->first_name }}, {{ $to_username->last_name }}							  
+										</small>
+										<div></span><small class=""><b>{{ $folder->folder_no }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+										<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
+										</div>
+									</li>
+								@endif
+
+								@if($activity->activity_by == Auth::user()->email)
+									<?php $from_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_by)->first(); ?>
+									<li>  
+										<small>{{ $from_username->first_name }}, {{ $from_username->last_name }} &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+										&nbsp; &nbsp;
+										{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}							  
+										</small>
+										<div></span><small class=""><b>{{ $folder->folder_no }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+										<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
+										</div>
+									</li>
+								@endif									
+							@endif
+							@if($activity->type == 'memo' )	
+								@if($activity->activity_by == Auth::user()->email)
+									<li>  
+										<small>{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}</small>
+										<div></span><small class=""><b>{{ $activity->activity }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+										<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
+										</div>
+									</li>
+								@endif
+							@endif
+						@endforeach
 					</ul>
 				</div><!-- /.box-body -->
 				<div class="box-footer text-center">
@@ -217,7 +235,7 @@
 						<div class="box-body no-padding">
 							<div class="mailbox-read-info">
 								<h3>File Name: <b>{{ $folder->name }}</b></h3>
-								<h5>From: {{ $folder->folder_by }} <i class="fa fa-user"></i> <span id="read-time" class="mailbox-read-time pull-right">{{ date('F d, Y', strtotime($folder->created_at)) }}</span></h5>
+								<h6>From: {{ $folder->folder_by }} <i class="fa fa-user"></i> <span id="read-time" class="mailbox-read-time pull-right">{{ date('F d, Y', strtotime($folder->created_at)) }}</span></h6>
 							</div><!-- /.mailbox-read-info getFullNameAttribute() pdf header -->
 						
 							<div class="mailbox-read-message">        
@@ -236,18 +254,35 @@
 							<ul id="attachfile{{$loopindex}}" class="mailbox-attachments clearfix">
 							@foreach($files as $file)
 								@if($file->folder_id == $folder->id)
-								<li>
-									<a href="{{ asset("/docs/files".$folder->name."/".$folder->latest_doc) }}" class="mailbox-attachment-name"></a>
-									<span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i>
-									</span>
-									<div class="mailbox-attachment-info">
-										<i class="fa fa-paperclip"></i> <a href="{{ asset("/docs/files/shares/KDSG-111-CDG-01/59793d0d8b1eb.pdf") }}" style="color: #000000;" target="_blank"> {{ $file->name }}</a><br/> <!-- </a> -->
-										<span class="mailbox-attachment-size">
-											{{ $file->created_at }}
-											<a href="{{ asset("/docs/files".$folder->path."/".$folder->latest_doc) }}" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-										</span>
-									</div>
-								</li>
+					<?php
+                if (strpos($file->name, 'pdf') !== false) {
+                	echo'
+					<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-pdf-o"></i></span>
+							<div class="mailbox-attachment-info">
+							<i class="fa fa-paperclip"></i> <a href="docs/files'.$folder->path.'/'.$file->name.'" style="color: #000000;" target="_blank"> '.$file->original_name.'</a><br/>
+								<span class="mailbox-attachment-size">
+								'.$file->created_at.'
+									<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+								</span>
+							</div>
+					</li>';
+
+				} else{
+				echo '
+					<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-image-o"></i></span>
+						<div class="mailbox-attachment-info">
+						<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$file->original_name.'</a>
+							<span class="mailbox-attachment-size">
+							'.$file->created_at.'
+								<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+							</span>
+						</div>
+					</li>';
+				}
+				?>
+
+
+
 								@endif
 							@endforeach
 							</ul>
@@ -599,7 +634,7 @@
 						@foreach($file_movement as $activity)
 							@if($activity->element_id == $folder->id)
 								<li> 
-									{{ $activity->activity }}                    
+									<small>{{ $activity->activity }}  </small>                  
 									<small class="label label-info"> 
 									<i class="fa fa-clock-o"></i>
 									<b>{{ date('F d, Y', strtotime( $activity->created_at )) }}</b></small>

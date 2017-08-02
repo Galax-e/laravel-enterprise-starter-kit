@@ -103,8 +103,6 @@
                                                    <!-- Message title and timestamp -->
                                                    <h4>
                                                        {{ $user_name }}
-                                                       <small class="label label-primary pull-right">{{ date('F d h:i:s A', strtotime($memo->created_at )) }} </small>
-                                                       <i class="fa fa-clock-o pull-right"></i>
                                                    </h4>
                                                    <!-- The message -->
                                                    <p>{{ $memo->subject}}</p>
