@@ -217,7 +217,7 @@
 						<div class="box-body no-padding">
 							<div class="mailbox-read-info">
 								<h3>File Name: <b>{{ $folder->name }}</b></h3>
-								<h5>From: {{ $folder->folder_by }} <i class="fa fa-user"></i> <span id="read-time" class="mailbox-read-time pull-right">{{ date('F d, Y', strtotime($folder->created_at)) }}</span></h5>
+								<h6>From: {{ $folder->folder_by }} <i class="fa fa-user"></i> <span id="read-time" class="mailbox-read-time pull-right">{{ date('F d, Y', strtotime($folder->created_at)) }}</span></h6>
 							</div><!-- /.mailbox-read-info getFullNameAttribute() pdf header -->
 						
 							<div class="mailbox-read-message">        
@@ -236,18 +236,35 @@
 							<ul id="attachfile{{$loopindex}}" class="mailbox-attachments clearfix">
 							@foreach($files as $file)
 								@if($file->folder_id == $folder->id)
-								<li>
-									<a href="{{ asset("/docs/files".$folder->name."/".$folder->latest_doc) }}" class="mailbox-attachment-name"></a>
-									<span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i>
-									</span>
-									<div class="mailbox-attachment-info">
-										<i class="fa fa-paperclip"></i> <a href="{{ asset("/docs/files/shares/KDSG-111-CDG-01/59793d0d8b1eb.pdf") }}" style="color: #000000;" target="_blank"> {{ $file->name }}</a><br/> <!-- </a> -->
-										<span class="mailbox-attachment-size">
-											{{ $file->created_at }}
-											<a href="{{ asset("/docs/files".$folder->path."/".$folder->latest_doc) }}" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-										</span>
-									</div>
-								</li>
+					<?php
+                if (strpos($file->name, 'pdf') !== false) {
+                	echo'
+					<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-pdf-o"></i></span>
+							<div class="mailbox-attachment-info">
+							<i class="fa fa-paperclip"></i> <a href="docs/files'.$folder->path.'/'.$file->name.'" style="color: #000000;" target="_blank"> '.$file->original_name.'</a><br/>
+								<span class="mailbox-attachment-size">
+								'.$file->created_at.'
+									<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+								</span>
+							</div>
+					</li>';
+
+				} else{
+				echo '
+					<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-image-o"></i></span>
+						<div class="mailbox-attachment-info">
+						<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$file->original_name.'</a>
+							<span class="mailbox-attachment-size">
+							'.$file->created_at.'
+								<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+							</span>
+						</div>
+					</li>';
+				}
+				?>
+
+
+
 								@endif
 							@endforeach
 							</ul>
@@ -599,7 +616,7 @@
 						@foreach($file_movement as $activity)
 							@if($activity->element_id == $folder->id)
 								<li> 
-									{{ $activity->activity }}                    
+									<small>{{ $activity->activity }}  </small>                  
 									<small class="label label-info"> 
 									<i class="fa fa-clock-o"></i>
 									<b>{{ date('F d, Y', strtotime( $activity->created_at )) }}</b></small>
