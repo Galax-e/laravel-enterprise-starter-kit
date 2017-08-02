@@ -110,7 +110,7 @@
 			<div id="activity-timeline" class="box box-primary">
 				<div class="box-header">
 					<i class="ion ion-clipboard"></i>
-					<h3 class="box-title">Activity Timeline</h3>
+					<h3 class="box-title">File Tracking</h3>
 					<div class="box-tools pull-right">
 						<button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 						{{-- <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button> --}}

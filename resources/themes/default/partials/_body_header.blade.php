@@ -48,14 +48,14 @@
 
                         <li class="">
                            <!-- Request File button -->
-                           <a href="{{route('dashboard')}}" class="btn btn-block" title="Home">
+                           <a href="{{route('dashboard')}}" class="btn btn-block" title="e-Desk">
                                <i id="" class="fa fa-home"></i>
                            </a>
                        </li>
 
                        <li class="">
                            <!-- Request File button -->
-                           <a href="{{route('compose')}}" class="btn btn-block" title="eDispatch">
+                           <a href="{{route('compose')}}" class="btn btn-block" title="Memo">
                                <i id="" class="fa fa-send"></i>
                            </a>
                        </li>

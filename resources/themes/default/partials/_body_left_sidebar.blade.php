@@ -69,7 +69,7 @@
                         <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> Position Activities</a></li>
                         <li>
                             <a href="{{url('inbox')}}">
-                                <i class="fa fa-envelope-o"></i><span> eDispatch</span>
+                                <i class="fa fa-envelope-o"></i><span> Memo</span>
                                 <span class="pull-right-container pull-right">
                                     <small id="inbox_on_mailbox" class="label bg-red"></small>
                                 </span>
