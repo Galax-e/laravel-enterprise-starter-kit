@@ -43,7 +43,7 @@
             <table id="example1" class="table table-bordered table-striped">
             <thead>
             <tr>
-                <th>Email From</th>
+                <th>Email To</th>
                 <th>Mail</th>
                 <th>Time</th>
             </tr>
@@ -52,7 +52,7 @@
             
             @foreach($memos as $memo)
             <tr>
-                <td>{{ $memo->emailfrom }}</td>
+                <td>{{ $memo->emailto }}</td>
                 <td><a href="read_memo/{{ $memo->id }}"><b>{{ str_limit($memo->subject, 25) }} </b></a> | {{ str_limit(substr($memo->message, 3, -6), 70) }}</td>
                 <td>{{ date('F d, Y', strtotime($memo->created_at)) }}</td>
             </tr>
