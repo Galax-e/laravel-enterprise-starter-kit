@@ -69,7 +69,7 @@ return [
     */
 
     // If true, the uploaded file will be renamed to uniqid() + file extension.
-    'rename_file' => true,
+    'rename_file' => false,
 
     // If rename_file set to false and this set to true, then non-alphanumeric characters in filename will be replaced.
     'alphanumeric_filename' => false,

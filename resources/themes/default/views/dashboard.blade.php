@@ -52,9 +52,9 @@
   </style>
 
   {{-- <script type="text/javascript" src="file-upload/scripts/jquery.min.js"></script> --}}
-  {{--  <script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
+   <script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
   <script type="text/javascript" src="{{ asset("file-upload/scripts/upload.js") }}"></script>
-  <link type="text/css" rel="stylesheet" href="{{ asset("file-upload/style.css") }}" />  --}}
+  <link type="text/css" rel="stylesheet" href="{{ asset("file-upload/style.css") }}" /> 
 
   <script type="text/javascript" src="{{ asset("bower_components/admin-lte/plugins/moment/moment.min.js") }}"></script>
   
@@ -147,7 +147,7 @@
 									</li>
 								@endif									
 							@endif
-							@if($activity->type == 'memo' )	
+							{{--  @if($activity->type == 'memo' )	
 								@if($activity->activity_by == Auth::user()->email)
 									<li>  
 										<small>{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}</small>
@@ -156,7 +156,7 @@
 										</div>
 									</li>
 								@endif
-							@endif
+							@endif  --}}
 						@endforeach
 					</ul>
 				</div><!-- /.box-body -->
