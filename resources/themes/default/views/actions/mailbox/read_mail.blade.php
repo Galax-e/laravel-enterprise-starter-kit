@@ -26,7 +26,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-3">
-                <a href="{{route('inbox')}}" class="btn btn-primary btn-block margin-bottom">Back to Inbox</a>
+                <a href="{{route('inbox')}}" class="btn btn-primary btn-block margin-bottom">Back to Incoming</a>
                 @include('views.actions.mailbox.left_mail_menu')
             </div><!-- /.col -->
 
@@ -45,12 +45,11 @@
                         <div class="box-body no-padding">
                             <div class="mailbox-read-info">
                                 <h3>{{ $memo->subject}}</h3>
-                                <h6><b>From: </b>{!! $memo->emailfrom !!} 
+                                <h6>From: <em>{!! $memo->emailfrom !!}</em> 
                                     <span class="mailbox-read-time pull-right">
                                         {{ date('l jS \of F Y h:i:s A', strtotime($memo->created_at )) }}
                                     </span>
                                 </h6>
-                                <h6><b>To: </b>{!! $memo->emailto !!}
                             </div><!-- /.mailbox-read-info -->
                             <div class="mailbox-read-message">
                                 <p>{!! $memo->message !!}</p>
@@ -69,39 +68,7 @@
                                            <i class="fa fa-paperclip"></i> <a href="../attachment_file/'.$attachment->name.'" style="color: #000000 ;" target="_blank"> '.$attachment->original_name.'</a><br/> <!-- </a> -->
                                            <span class="mailbox-attachment-size">
                                                '.$attachment->created_at.'
-
-
-<a href="#" data-toggle="modal" data-target="#FileModal" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-
-<!-- Load file modal-->
-   <div class="modal fade" id="FileModal" role="dialog">
-   <div class="modal-dialog">
-     <!-- Modal content-->
-     <div class="modal-content">         
-       <div class="box box-info">
-         <div class="box-header">
-           <i class="fa fa-image"></i>
-           <h3 class="box-title">'.$attachment->original_name.'</h3>
-           <!-- tools box -->
-           <div class="pull-right box-tools">
-             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
-           </div><!-- /. tools -->
-         </div>          
-             <div class="box-body">
-
-                <object data="../attachment_file/'.$attachment->name.'" type="application/pdf" style="width: 100%" height="450">
-                  <!-- support older browsers -->
-                  <!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
-                  <!-- For those without native support, no pdf plugin, or no js -->
-                  <p>It appears you do not have PDF support in this web browser. 
-                  <a href="../attachment_file/'.$attachment->name.'" target="_blank">Click here to download the document.</a></p>
-                </object>  
-              
-           </div>    
-         </div>
-     </div>
-   </div>
- </div>
+                                               <a href="../attachment_file/'.$attachment->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
                                            </span>
                                        </div>
                                </li>';
@@ -114,40 +81,7 @@
                                            <i class="fa fa-paperclip"></i> <a href="../attachment_file/'.$attachment->name.'" style="color: #000000 ;" target="_blank"> '.$attachment->original_name.'</a><br/> <!-- </a> -->
                                            <span class="mailbox-attachment-size">
                                                '.$attachment->created_at.'
-<a href="#" data-toggle="modal" data-target="#FileModal" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-
-<!-- Load file modal-->
-   <div class="modal fade" id="FileModal" role="dialog">
-   <div class="modal-dialog">
-     <!-- Modal content-->
-     <div class="modal-content">         
-       <div class="box box-info">
-         <div class="box-header">
-           <i class="fa fa-file-pdf-o"></i>
-           <h3 class="box-title">'.$attachment->original_name.'</h3>
-           <!-- tools box -->
-           <div class="pull-right box-tools">
-             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
-           </div><!-- /. tools -->
-         </div>          
-             <div class="box-body">
-
-                <object data="../attachment_file/'.$attachment->name.'" type="application/pdf" style="width: 100%" height="450">
-                  <!-- support older browsers -->
-                  <!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
-                  <!-- For those without native support, no pdf plugin, or no js -->
-                  <p>It appears you do not have PDF support in this web browser. 
-                  <a href="../attachment_file/'.$attachment->name.'" target="_blank">Click here to download the document.</a></p>
-                </object>  
-              
-           </div>    
-         </div>
-     </div>
-   </div>
- </div>
-
-
-                                              <!-- <a href="../attachment_file/'.$attachment->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a> -->
+                                               <a href="../attachment_file/'.$attachment->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
                                            </span>
                                        </div>
                                </li>';
@@ -160,13 +94,7 @@
                         @endforeach
                     
                         <div class="box-footer">
-                            <div class="btn-group mailbox-controls with-border pull-right">
-<script>
-function myFunction() {
-    window.print();
-}
-</script>
-                               
+                            <div class="btn-group mailbox-controls with-border pull-right">                               
                                 <button onclick="myFunction()" class="btn btn-primary btn-raised"><i class="fa fa-print"></i> Print</button>
                             </div>
                         </div><!-- /.box-footer -->

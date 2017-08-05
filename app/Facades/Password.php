@@ -2,12 +2,13 @@
 
 namespace App\Facades;
 use Closure;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Password as ParentPassword;
 
 use Illuminate\Contracts\Auth\PasswordBroker as PasswordBrokerContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class Password extends Password {
+class Password extends ParentPassword {
+
     /**
      * Constant representing a successfully sent reminder.
      *
@@ -26,6 +27,6 @@ class Password extends Password {
    // @cpnwaugha: c-e
     public function sendNewUserResetLink(array $credentials, Closure $callback = null, $view = null)
     {
-        \Illuminate\Support\Facades\Password::sendResetLink($credentials, $callback, $view);
+        ParentPassword::sendResetLink($credentials, $callback, $view);
     }
 }

@@ -114,6 +114,20 @@ return [
         'new_user_email' => 'emails.html.new_user_password_reset',
     ],
 
+    // 'passwords' => [
+    //     'users' => [
+    //         'email' => 'emails.html.password_reset',
+    //         'table' => 'password_resets',
+    //         'expire' => 60,
+    //     ],
+    //     'new_user_email' => [
+    //         'provider' => 'users',
+    //         'email' => 'emails.html.new_user_password_reset',
+    //         'table' => 'password_resets',
+    //         'expire' => 60,
+    //     ],
+    // ],
+
 
     /*
     |--------------------------------------------------------------------------

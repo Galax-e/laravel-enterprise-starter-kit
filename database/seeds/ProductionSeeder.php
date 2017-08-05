@@ -395,9 +395,9 @@ class ProductionSeeder extends Seeder
         // Create Dashboard menu
         $menuDashboard = Menu::create([
             'name'          => 'dashboard',
-            'label'         => 'Dashboard',
+            'label'         => 'Home',
             'position'      => 0,
-            'icon'          => 'fa fa-dashboard',
+            'icon'          => 'fa fa-home',
             'separator'     => false,
             'url'           => '/dashboard',
             'enabled'       => true,

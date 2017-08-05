@@ -74,7 +74,7 @@
 					and admin and registry see all the users that are in the system.
 					-->
 					{{--@unless(Auth::user()->isRoot()) --}}
-					<div><h3 class="box-title">Dept: {{ (Auth::user()->department ?? "ICT") }}</h3></div>
+					<div><h3 class="box-title">Dept: {{ substr((Auth::user()->department ?? "ICT"), 0, 15) }}</h3></div>
 					{{--@endunless --}}
 					<div class="box-tools pull-right">
 							{{-- auto fetch the users in the department--}}
@@ -121,10 +121,11 @@
 						@foreach($activities as $activity)
 							@if($activity->type == 'onfolder' )													
 								<?php $folder = Illuminate\Support\Facades\DB::table('folders')->where('id', $activity->element_id)->first(); ?>
-								@if($activity->activity_to == Auth::user()->email)
-									<?php $to_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first(); ?>
+								@if($activity->activity_by && $activity->activity_by == Auth::user()->email)
+									<?php $to_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first();
+									 ?>
 									<li>  
-										<small>{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}	  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+										<small>{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}&nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
 										&nbsp; &nbsp;
 										{{ $to_username->first_name }}, {{ $to_username->last_name }}							  
 										</small>
@@ -134,8 +135,9 @@
 									</li>
 								@endif
 
-								@if($activity->activity_by == Auth::user()->email)
-									<?php $from_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_by)->first(); ?>
+								@if($activity->activity_by && $activity->activity_to == Auth::user()->email)
+									<?php $from_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_by)->first();
+									?>
 									<li>  
 										<small>{{ $from_username->first_name }}, {{ $from_username->last_name }} &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
 										&nbsp; &nbsp;
@@ -542,6 +544,7 @@
 									dataType:"json",
 									data: data
 								}).done(function(returnData){
+									location.href=location.href;
 									console.log('Good, folder forward successful.');
 								}).fail(function(returnData){
 									console.log('Bad, not connected');

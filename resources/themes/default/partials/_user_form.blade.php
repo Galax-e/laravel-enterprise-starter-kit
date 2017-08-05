@@ -47,19 +47,19 @@
             
             <div class="form-group">
                 {!! Form::label('ministry', trans('admin/users/general.columns.ministry')) !!}
-                @if ( $user->isRoot() )
-                    {!! Form::text('ministry', null, ['class' => 'form-control', 'readonly']) !!}
+                @if ( $user->isRoot() )                    
+                    {!!Form::select('ministry', ['agric' => 'Agric', 'education' => 'Education', 'health' => 'Health', 'rural' => 'Rural', 'works' => 'Works', 'budget' => 'Budget', 'environment' => 'Environment', 'justice' => 'Justice', 'water' => 'Water', 'youth' => 'Youth', 'commerce' => 'Commerce', 'finance' => 'Finance', 'localgov' => 'LocalGov', 'women' => 'Women', 'hos' => 'HOS', 'bpsr' => 'BPSR', 'gh' => 'GH', 'csc' => 'CSC', 'asc' => 'ASC'], null, ['class' => 'form-control', 'readonly', 'placeholder' => 'Select...']) !!}
                 @else
-                    {!! Form::text('ministry', null, ['class' => 'form-control']) !!}
+                    {!!Form::select('ministry', ['agric' => 'Agric', 'education' => 'Education', 'health' => 'Health', 'rural' => 'Rural', 'works' => 'Works', 'budget' => 'Budget', 'environment' => 'Environment', 'justice' => 'Justice', 'water' => 'Water', 'youth' => 'Youth', 'commerce' => 'Commerce', 'finance' => 'Finance', 'localgov' => 'LocalGov', 'women' => 'Women', 'hos' => 'HOS', 'bpsr' => 'BPSR', 'gh' => 'GH', 'csc' => 'CSC', 'asc' => 'ASC'], null, ['class' => 'form-control', 'placeholder' => 'Select...']) !!}
                 @endif
             </div>
             
             <div class="form-group">
                 {!! Form::label('department', trans('admin/users/general.columns.department')) !!}
                 @if ( $user->isRoot() )
-                    {!! Form::text('department', null, ['class' => 'form-control', 'readonly']) !!}
+                    {!!Form::select('department', ['secretreg' => 'Secret Registry', 'openreg' => 'Open Registry', 'finance' => 'Finance', 'hr' => 'Human Resources', 'gsl' => 'General Services and Logistics', 'adminsupply' => 'Admin and Supply', 'procurement' => 'Procurement', 'permsec' => 'Permanent Secretary and GOC', 'ict' => 'ICT and Communications', 'legal' => 'Legal'], null, ['class' => 'form-control', 'readonly', 'placeholder' => 'Select...']) !!}
                 @else
-                    {!! Form::text('department', null, ['class' => 'form-control']) !!}
+                    {!!Form::select('department', ['secretreg' => 'Secret Registry', 'openreg' => 'Open Registry', 'finance' => 'Finance', 'hr' => 'Human Resources', 'gsl' => 'General Services and Logistics', 'adminsupply' => 'Admin and Supply', 'procurement' => 'Procurement', 'permsec' => 'Permanent Secretary and GOC', 'ict' => 'ICT and Communications', 'legal' => 'Legal'], null, ['class' => 'form-control', 'placeholder' => 'Select...']) !!}
                 @endif
             </div>
             

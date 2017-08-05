@@ -58,7 +58,7 @@ class MemoController extends Controller
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+        $page_description = "Compose New Memo"; //trans('admin/users/general.page.index.description'); // 
         
         $user_id = Auth::user()->email;
 
@@ -72,38 +72,29 @@ class MemoController extends Controller
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+        $page_description = "Incomings"; //trans('admin/users/general.page.index.description'); // 
         
         $user_id = Auth::user()->email;
-        $memos = DB::table('memos')->where('emailto', $user_id)->orderBy('created_at', 'DESC')->paginate(4);  
+        $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14);  
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
     }
     
-    public function read_memo($id) {
+    public function read_memo(Request $request, $id) {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+        $page_description = "New Memo"; // trans('admin/users/general.page.index.description'); // "List of users";
         
         $user_id = Auth::user()->email;
-        $memos = DB::select('select * from memos where id = ?',[$id]);
+        $memos = DB::select('select * from memos where id = ?', [$id]);
         $attachments = DB::select('select * from attachments');
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+        
         return view('views.actions.mailbox.read-mail', compact('users', 'page_title', 'page_description', 'memos', 'attachments'));
    }
 
-    public function store_memo()
-    {  
-        $user = new Memo;
-        $user->email_name= Input::get('email_name');
-        $user->emailfrom= Input::get('emailfrom');
-        $user->emailto= Input::get('emailto');
-        $user->subject= Input::get('subject');
-        $user->message= Input::get('message');
-        $user->save();
-        return 'inbox';
-    }
+    
 
     public function dataphp(){
 
@@ -128,12 +119,12 @@ class MemoController extends Controller
        Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-       $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+       $page_description = "Outgoings"; //trans('admin/users/general.page.index.description'); // 
        
        $user_id = Auth::user()->email;
-       $memos = DB::table('memos')->where('emailfrom', $user_id)->orderBy('created_at', 'DESC')->paginate(20);  
+       $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14); 
        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
-       return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
+       return view('views.actions.mailbox.sent', compact('users', 'page_title', 'page_description', 'memos'));
     }
 
 }

@@ -17,11 +17,11 @@
     });
 
     // @cpnwaugha: c-e
-    $("#cpn-email-field").val('@hallowgate.com'); // initial value is domain name;
+    $("#cpn-email-field").val('@kdsg.gov.ng'); // initial value is domain name;
     $("#cpn-email-field").on("blur",function(){
 
         var email_regex = /^[\w]+(\.[\w]+)*@([\w]+\.)+[a-z]{2,7}$/i;
-        var domain_regex = /^[\w]+(\.[\w]+)*(@hallowgate\.com)+$/i;
+        var domain_regex = /^[\w]+(\.[\w]+)*(@kdsg\.gov\.ng)+$/i;
         if (email_regex.test($("#cpn-email-field").val())){
 
             if (domain_regex.test($("#cpn-email-field").val())){
@@ -38,12 +38,12 @@
                 return true;
             }
             else{
-                //console.log("email domain must end with @hallowgate.com");
-                $("#cpn-email-field").val("@hallowgate.com");
+                //console.log("email domain must end with @kdsg.gov.ng");
+                $("#cpn-email-field").val("@kdsg.gov.ng");
                 $("#cpn-email-field").focus();
                 $.toast({
                     heading: 'Error',
-                    text: 'email domain must end with @hallowgate.com',
+                    text: 'email domain must end with @kdsg.gov.ng',
                     icon: 'error',
                     showHideTransition: 'slide',
                     loader: false,       // Change it to false to disable loader
@@ -55,7 +55,7 @@
         }
         else{
             //console.log("Invalid email. Ensure the email is a valid email.");
-            $("#cpn-email-field").val("@hallowgate.com");
+            $("#cpn-email-field").val("@kdsg.gov.ng");
             $("#cpn-email-field").focus();
             $.toast({
                 heading: 'Error',
