@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddActivitybypostToActivities' => $baseDir . '/database/migrations/2017_07_23_022553_add_activitybypost_to_activities.php',
+    'AddAttachmentIdToMemo' => $baseDir . '/database/migrations/2017_08_04_181130_add_attachment_id_to_memo.php',
     'AddClearanceLevelToUsers' => $baseDir . '/database/migrations/2017_07_25_070057_add_clearance_level_to_users.php',
     'AddCommentToActivities' => $baseDir . '/database/migrations/2017_07_23_015536_add_comment_to_activities.php',
     'AddCustomFieldsToExistingTables' => $baseDir . '/database/migrations/2017_05_28_140842_add_custom_fields_to_existing_tables.php',

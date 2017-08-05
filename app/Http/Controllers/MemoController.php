@@ -75,7 +75,7 @@ class MemoController extends Controller
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
         
         $user_id = Auth::user()->email;
-        $memos = DB::table('memos')->where('emailto', $user_id)->orderBy('created_at', 'DESC')->paginate(4);  
+        $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14);  
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
     }
@@ -93,17 +93,7 @@ class MemoController extends Controller
         return view('views.actions.mailbox.read-mail', compact('users', 'page_title', 'page_description', 'memos', 'attachments'));
    }
 
-    public function store_memo()
-    {  
-        $user = new Memo;
-        $user->email_name= Input::get('email_name');
-        $user->emailfrom= Input::get('emailfrom');
-        $user->emailto= Input::get('emailto');
-        $user->subject= Input::get('subject');
-        $user->message= Input::get('message');
-        $user->save();
-        return 'inbox';
-    }
+    
 
     public function dataphp(){
 
@@ -131,9 +121,9 @@ class MemoController extends Controller
        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
        
        $user_id = Auth::user()->email;
-       $memos = DB::table('memos')->where('emailfrom', $user_id)->orderBy('created_at', 'DESC')->paginate(20);  
+       $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14); 
        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
-       return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
+       return view('views.actions.mailbox.sent', compact('users', 'page_title', 'page_description', 'memos'));
     }
 
 }

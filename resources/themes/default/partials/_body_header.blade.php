@@ -82,9 +82,8 @@
                             <ul class="dropdown-menu">
                                 <li class="header">Messages</li>
                                 <li>
-                                   <!-- inner menu: contains the messages -->
                                    <ul class="menu">
-                                       <?php $useremail = Auth::user()->email; $memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto = ? order by created_at desc limit 5', [$useremail]); ?>
+                                       <?php $useremail = Auth::user()->email; $memos = Illuminate\Support\Facades\DB::table('memos')->where('emailto', 'like', '%'.$useremail.'%')->orderBy('created_at', 'DESC')->paginate(14); ?>
                                        @foreach($memos as $memo)
                                            <li><!-- start message -->
                                                <a href="{{url('read_memo/'.$memo->id) }}">

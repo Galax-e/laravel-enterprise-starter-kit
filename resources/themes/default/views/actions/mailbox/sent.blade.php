@@ -60,7 +60,7 @@
             </tbody>
             <tfoot>
             <tr>
-                <th>Email From</th>
+                <th>Email To</th>
                 <th>Mail</th>
                 <th>Time</th>
             </tr>
