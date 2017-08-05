@@ -212,8 +212,7 @@
                                     <ul class="menu">                                        
                                         <?php $usertoemail = Auth::user()->email; 
                                         $query = "%Forward%";
-                                        $activities = Illuminate\Support\Facades\DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$query]); 
-                                        $from_user = Illuminate\Support\Facades\DB::select('select * from users where email=?', [$activity->activity_by]);
+                                        $activities = Illuminate\Support\Facades\DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$query]);                                        
                                         $loopindex = 0;
                                         ?>
                                         
