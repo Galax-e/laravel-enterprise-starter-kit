@@ -1,7 +1,8 @@
-@extends('layouts.special_master')
+@extends('layouts.master')
 
 @section('head_extra')
     <!-- jVectorMap 1.2.2 -->
+    <link href="{{ asset("/bower_components/admin-lte/plugins/jvectormap/jquery-jvectormap-1.2.2.css") }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')

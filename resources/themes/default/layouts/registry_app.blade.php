@@ -86,6 +86,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
 
+      <!-- AdminLTE Select2 -->
+      <script src="{{asset("/bower_components/admin-lte/select2/dist/js/select2.full.min.js")}}"></script>
+
+
       <!-- Application JS-->
       <script src="{{ asset(elixir('js/all.js')) }}"></script>
 

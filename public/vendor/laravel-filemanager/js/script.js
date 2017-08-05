@@ -274,6 +274,9 @@ function createFolder(folder_name) {
 function share(item_name) {
 
     // $('#folder_no').val(item_name);
+    
+    //var fold_name = item_name;   
+
     $('#shareModal').modal('show');
 
     $('#share-btn').click(function() {

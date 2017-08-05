@@ -114,6 +114,7 @@ Route::group(['middleware' => 'authorize'], function () {
 
     Route::post('forward',['as'=>'forward', 'uses'=>'FilesController@forward']); // remove the id
     Route::post('share',['as'=>'share', 'uses'=>'FilesController@share']);
+    Route::get('share_clearance_level',['as'=>'share_clearance_level', 'uses'=>'FilesController@shareClearanceLevel']);
 
 
     // creating documents and uploading file

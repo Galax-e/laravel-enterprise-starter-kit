@@ -294,6 +294,17 @@ class FilesController extends Controller {
 		Flash::success('File has been sent to '. Input::get('share-input'));
 		return redirect()->back()->with('comment saved');
     }
+
+	public function shareClearanceLevel(Request $request){
+		
+		$folder_no = request('item_name');
+		$folder = DB::table('folders')->where('folder_no', $folder_no)->first();
+		
+		$folder_clearance = $folder->clearance_level;          
+
+		$data = array('clearance_level'=>$folder_clearance);
+		return response()->json($data);
+	}
 	
 	public function requestform(){
 

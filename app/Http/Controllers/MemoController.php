@@ -62,7 +62,7 @@ class MemoController extends Controller
         
         $user_id = Auth::user()->email;
 
-        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+        $users = DB::select('select * from users');
         return view('views.actions.mailbox.compose', compact('users', 'page_title', 'page_description'));
     }
     

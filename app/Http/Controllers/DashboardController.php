@@ -73,6 +73,8 @@ class DashboardController extends Controller
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
 		
+		$forward_to_users = DB::select('select * from users');
+
 		$dept_users = DB::select('select * from users');
 		$user_email = Auth::user()->email;
 
@@ -90,7 +92,7 @@ class DashboardController extends Controller
 		$dept_size = DB::select('select * from users where department =?', [Auth::user()->department]);
 		$dept_size = count($dept_size);
 
-        return view('dashboard', compact('users', 'dept_users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size', 'file_movement'));
+        return view('dashboard', compact('users', 'forward_to_users', 'dept_users', 'page_title', 'page_description', 'folders', 'files', 'comments', 'activities', 'dept_size', 'file_movement'));
     }
     
     public function viewallcontacts()

@@ -52,7 +52,7 @@
   </style>
 
   {{-- <script type="text/javascript" src="file-upload/scripts/jquery.min.js"></script> --}}
-   <script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
+  <script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
   <script type="text/javascript" src="{{ asset("file-upload/scripts/upload.js") }}"></script>
   <link type="text/css" rel="stylesheet" href="{{ asset("file-upload/style.css") }}" /> 
 
@@ -206,8 +206,11 @@
 
 				$( function() {
 				var availableTags = [
-					@foreach($users as $user) 
-						@if( $user->clearance_level >= $folder->clearance_level && $user->id !== Auth::user()->id) 
+					@foreach($forward_to_users as $user) 
+						@if($user->id == Auth::user()->id)
+							@continue;
+						@endif
+						@if( $user->clearance_level >= $folder->clearance_level) 
 							"{{ $user->first_name }}, {{ $user->last_name }}",
 						@endif
 					@endforeach

@@ -1,5 +1,10 @@
 @extends('layouts.registry_app')
 
+@section('head_extra')   
+    @include('partials._head_extra_jstree_css') 
+    @include('partials._head_extra_select2_css')
+@endsection
+
 @section('content')
 <!-- think of removing the wrapper id and container fluid class-->
 
@@ -409,6 +414,29 @@
     </div>
   </div>
 
+  {{-- select script for forwarding --}}
+  <script>
+
+    $( function() {
+
+      function shareClearanceLevel(item_name){
+          $.ajax({
+            url:"share_clearance_level",
+            method:"GET",
+            dataType:"json",
+            data: {item_name, item_name}
+          }).done(function(returnVal){
+              console.log(returnVal);
+          }).fail(function(returnData){
+            console.log('bad request');
+          });
+      }
+
+      
+    
+    })
+  </script>
+
   {{-- eoluwafemi share --}}
   <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -433,6 +461,20 @@
               <input type="hidden" name="activity" value="">
               <input type='hidden' name='_token' value='{{csrf_token()}}'>
 
+              <div class="box-footer">
+							<div style="margin-left:5px"><label><b>Enter Recipient Email:</b></label></div>
+							<div class="form-group">														              
+								<div class="input-group">					 
+									<div class="pmd-textfield pmd-textfield-floating-label img-responsive">       
+										<select id="forward_to_user" class="form-control select-with-search select2" name="share-input" placeholder="Recipient Email..."></select>
+									</div> 
+									<div class="input-group-btn">
+										<button id='forwardBtn' class="btn btn-success"><i class="fa fa-share"></i> Forward</button>
+									</div>
+								</div>                   
+							</div>
+						</div>
+
             </form>
           </div>
           <div class="modal-footer">
@@ -455,17 +497,7 @@
               <ul id="showactivities" class="todo-list">
 
                 {{--  Folder hostory comes here.
-                
-                @foreach($activities as $activity)
-                  @if($activity->folder_id == strval("555"))
-                    <li>                     
-                      <small>{{ $activity->activity }} 
-                        <i class="fa fa-clock-o"></i>
-                        <b>{{ $activity->created_at }}</b>
-                      </small>
-                    </li>             
-                  @endif
-                @endforeach  --}}
+                  --}}
 
               </ul>
             </div><!-- /.box-body -->
