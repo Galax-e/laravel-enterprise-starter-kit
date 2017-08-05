@@ -46,12 +46,12 @@
                         <div class="box-body no-padding">
                             <div class="mailbox-read-info">
                                 <h3>{{ $memo->subject}}</h3>
-                                <h6><b>From: </b><em>{!! $memo->emailfrom !!}</em> 
+                                <h6><b>From: </b>{!! $memo->emailfrom !!} 
                                     <span class="mailbox-read-time pull-right">
                                         {{ date('l jS \of F Y h:i:s A', strtotime($memo->created_at )) }}
                                     </span>
                                 </h6>
-                                <h6><b>To: </b><em>{!! $memo->emailto !!}</em>
+                                <h6><b>To: </b>{!! $memo->emailto !!}
                             </div><!-- /.mailbox-read-info -->
                             <div class="mailbox-read-message">
                                 <p>{!! $memo->message !!}</p>
