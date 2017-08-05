@@ -94,9 +94,7 @@
                         @endforeach
                     
                         <div class="box-footer">
-                            <div class="btn-group mailbox-controls with-border pull-right">
-
-                               
+                            <div class="btn-group mailbox-controls with-border pull-right">                               
                                 <button onclick="myFunction()" class="btn btn-primary btn-raised"><i class="fa fa-print"></i> Print</button>
                             </div>
                         </div><!-- /.box-footer -->

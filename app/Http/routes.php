@@ -92,6 +92,10 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::get( 'request_file_seen',    ['as' => 'request_file_seen',   'uses' => 'RequestFileNotificationController@notificationseen']);
 
     Route::get( 'seen_memo',            ['as' => 'seen_memo',           'uses' => 'MemoNotificationController@seenMemo']);
+
+    Route::get( 'seen_folder_req',      ['as' => 'seen_folder_req',     'uses' => 'RequestFileNotificationController@seenFolderReq']);
+
+    Route::get( 'seen_folder',          ['as' => 'seen_folder',         'uses' => 'FolderNotificationController@seenFolder']);
     
     Route::get(   'user/profile/photo', ['as' => 'user.profile.photo',       'uses' => 'UsersController@profilePhoto']);
     Route::patch( 'user/profile/photo', ['as' => 'user.profile.photo.patch', 'uses' => 'UsersController@profilePhotoUpdate']);

@@ -122,10 +122,15 @@ class DashboardController extends Controller
 		
 		$emailto = Input::get('emailto');
 
+		$memo = new Memo;
+		$memo->email_name = Input::get('email_name');
+		$memo->emailfrom = Input::get('emailfrom');
+		$memo->subject = Input::get('subject');
+		$memo->message = Input::get('message');
+		$memo->emailto = "";
+		$memo->save();
+
 		foreach($emailto as $key => $user_name){
-			$memo = new Memo;
-			$memo->email_name = Input::get('email_name');
-			$memo->emailfrom = Input::get('emailfrom');
 
 			// Create memonotification for each user.
 			$temp = preg_replace('/\s+/', '', $user_name);
@@ -143,15 +148,14 @@ class DashboardController extends Controller
 			$receiver_user = $temp_arr;  // receiver user. It's now easy to get the fields
 			
 			$receiver_email=  $receiver_user['email'];
-			$memo->emailto = $receiver_email;
-			$memo->subject = Input::get('subject');
-			$memo->message = Input::get('message');
-			$memo->save();
+			$memo->emailto .= $receiver_email.', ';
+			
+			
 
 			// call attachment...
 			$attachment_name = Input::get('attachment_name');
 			//$attachment = DB::select('select * from attachments where name=?', [$attachment_name]);
-			DB::update("update attachments set memo_id=? where name=?", [$memo->id, $attachment_name]);
+			//DB::update("update attachments set memo_id=? where name=?", [$memo->id, $attachment_name]);
 			
 
 			$memo_id = $memo->id;
@@ -171,6 +175,10 @@ class DashboardController extends Controller
 			// create notification
 			MemoNotification::create(['memo_id'=>$memo_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);
 		}
+		// db update $memo->save();
+		DB::update("update memos set emailto=? where id=?", [$memo->emailto, $memo->id]);
+		$attachment_id = Input::get('attachment_id');
+		DB::update("update attachments set memo_id=? where id=?", [$memo->id, $attachment_id]);
 
 		// return to inbox with properties
 		Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
@@ -179,11 +187,11 @@ class DashboardController extends Controller
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
         
         $user_email = Auth::user()->email;
-        $memos = DB::table('memos')->where('emailto', $user_email)->orderBy('created_at', 'DESC')->paginate(4);  
+        $memos = DB::table('memos')->where('emailto', $user_email)->orderBy('created_at', 'DESC')->paginate(14);  
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         
 		Flash::success('Email sent');
-		return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'))->with('Memo Sent');
+		return redirect()->route('inbox');  //view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'))->with('Memo Sent');
     }
 
 
@@ -472,7 +480,7 @@ class DashboardController extends Controller
 				$attach->memo_by = Auth::user()->email;
 				$attach->save();
 
-				DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
+				//DB::update('update folders set latest_doc=? where id=?', [$image_name, $attach->folder_id]);
 
 				$activity = new Activity;
 				$activity->activity_by= Auth::user()->email;
@@ -482,7 +490,7 @@ class DashboardController extends Controller
 				$activity->save();
 				
 				if($ext !== "pdf"){
-					echo '<input type="hidden" name="attachment_name" value="'.$image_name.'">';
+					echo '<input type="hidden" name="attachment_id" value="'.$attach->id.'">';
 					echo'
 					<ul id="attach_image" class="mailbox-attachments clearfix attachdoc">
 					<li>
@@ -496,7 +504,7 @@ class DashboardController extends Controller
 					</li>
 					</ul>';
 				} else {
-				echo '<input type="hidden" name="attachment_name" value="'.$image_name.'">';
+				echo '<input type="hidden" name="attachment_id" value="'.$attach->id.'">';
 				echo'<ul id="attach_pdf" class="mailbox-attachments clearfix attachdoc">
 			
 					<li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>

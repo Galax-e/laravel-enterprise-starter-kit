@@ -544,6 +544,7 @@
 									dataType:"json",
 									data: data
 								}).done(function(returnData){
+									location.href=location.href;
 									console.log('Good, folder forward successful.');
 								}).fail(function(returnData){
 									console.log('Bad, not connected');
