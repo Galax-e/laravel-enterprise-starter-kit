@@ -104,7 +104,11 @@
           </div><!-- /.box-header -->
           <div class="box-body">
             <ul class="todo-list">
+            <?php $loopindex = 0; ?>
             @foreach($activities as $activity)
+            @if (++$loopindex >=3)
+              @break;
+            @endif
               {{--  @if($activity->activity_by == Auth::user()->email || Auth::user()->username)  --}}
               <li>   
               <?php 
@@ -197,9 +201,9 @@
             @endforeach
             </ul>
           </div><!-- /.box-body -->
-          <div class="box-footer text-center">
+          {{--  <div class="box-footer text-center">
             <a href="viewall" class="uppercase">View All Activity</a>
-          </div><!-- /.box-footer -->
+          </div><!-- /.box-footer -->  --}}
         </div><!-- /.box -->
       </div>
 
