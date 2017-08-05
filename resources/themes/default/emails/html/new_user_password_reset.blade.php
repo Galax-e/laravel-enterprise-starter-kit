@@ -48,7 +48,7 @@
 
 <h3 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 13px; font-weight: bold; margin-top: 0; text-align: left;">Name: {{ $user->last_name }} {{ $user->first_name }} {{ $user->middle_name }} <br>Position: {{ $user->position }} <br>Ministry: {{ $user->ministry }} <br>Department: {{ $user->department }}</h3>
 
-You are required to reset your password on first login. To do this, click the button below.</p>
+You are required to reset your password on first login and PIN from default 0000. To do this, click the button below.</p>
                         <table border="0" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;"><tr>
                         
 <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
@@ -60,7 +60,7 @@ You are required to reset your password on first login. To do this, click the bu
 </td>
     </tr></table>
 <!-- Salutation -->
-<p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Regards,<br>Peter Emmanuel (PhD),</br> <br>Kaduna State Government.</p>
+<p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Regards,<br>System Admin,</br> <br>Kaduna State Government.</p>
 <!-- Subcopy -->
 <table class="subcopy" width="100%" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-top: 1px solid #EDEFF2; margin-top: 25px; padding-top: 25px;"><tr>
 <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
