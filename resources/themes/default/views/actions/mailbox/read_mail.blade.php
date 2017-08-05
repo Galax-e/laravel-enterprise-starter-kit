@@ -26,7 +26,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-3">
-                <a href="{{route('inbox')}}" class="btn btn-primary btn-block margin-bottom">Back to Inbox</a>
+                <a href="{{route('inbox')}}" class="btn btn-primary btn-block margin-bottom">Back to Incoming</a>
                 @include('views.actions.mailbox.left_mail_menu')
             </div><!-- /.col -->
 
@@ -95,11 +95,7 @@
                     
                         <div class="box-footer">
                             <div class="btn-group mailbox-controls with-border pull-right">
-<script>
-function myFunction() {
-    window.print();
-}
-</script>
+
                                
                                 <button onclick="myFunction()" class="btn btn-primary btn-raised"><i class="fa fa-print"></i> Print</button>
                             </div>
