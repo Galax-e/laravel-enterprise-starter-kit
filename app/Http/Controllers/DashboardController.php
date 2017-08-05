@@ -77,11 +77,9 @@ class DashboardController extends Controller
 		$user_email = Auth::user()->email;
 
 		$activity = '%Forward%';
-		$memo_activity = 'memo';
 		
 		//$folder = Folder::all();	
-		$activities = DB::select('select * from activities where activity like ? or type=? order by created_at desc limit 5', [$activity, $memo_activity]);
-		//$activities = DB::select('select * from activities order by created_at desc limit 5');
+		$activities = DB::select('select * from activities where activity like ?  order by created_at desc limit 5', [$activity]);	
 		$file_movement = DB::select('select * from activities');
 
 		$folders = DB::select('select * from folders where folder_to = ? order by created_at desc', [$user_email]);
@@ -124,7 +122,7 @@ class DashboardController extends Controller
 		
 		$emailto = Input::get('emailto');
 
-		$memo = new memo;
+		$memo = new Memo;
 		$memo->email_name = Input::get('email_name');
 		$memo->emailfrom = Input::get('emailfrom');
 		$memo->subject = Input::get('subject');
@@ -193,7 +191,7 @@ class DashboardController extends Controller
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         
 		Flash::success('Email sent');
-		return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'))->with('Memo Sent');
+		return redirect()->route('inbox');  //view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'))->with('Memo Sent');
     }
 
 

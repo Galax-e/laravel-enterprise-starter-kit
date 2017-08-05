@@ -60,7 +60,7 @@
   </div><!-- /.box-header -->
   <div class="box-body no-padding">
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="{{url('dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+      <li><a href="{{url('dashboard')}}"><i class="fa fa-home"></i> Home</a></li>
       <li><a href="{{url('viewall')}}"><i class="fa fa-exchange"></i> Activity Timeline</a></li>
     </ul>
   </div><!-- /.box-body -->

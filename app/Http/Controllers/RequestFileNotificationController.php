@@ -49,4 +49,17 @@ class RequestFileNotificationController extends Controller
         return response()->json((array) $notifications); //redirect()->back();
     }
 
+    public function seenFolderReq(Request $request){
+
+        $request_folder_id = request('folder_req_id');
+
+        DB::update('update folder_requests set treated=1 where id=?', [$request_folder_id]);
+
+        $data = array('done'=>'Success');
+
+        return response()->json($data); //redirect()->back();
+    }
+
 }
+
+

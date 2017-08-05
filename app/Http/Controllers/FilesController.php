@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
+use View;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Flash;
@@ -214,11 +215,15 @@ class FilesController extends Controller {
 			}
 		}
 		$receiver_user = $temp_arr;  // receiver user. It's now easy to get the fields
-		$receiver_email=  $receiver_user['email'];
+		$receiver_email =  $receiver_user['email'];
 
 		$folder_to = $receiver_email; // $temp;
-        DB::update('update folders set folder_to = ?, forwarded_by=? where name = ?', [$folder_to, $user->email, $fold_name]);
-    
+		try{
+        	DB::update('update folders set folder_to = ?, forwarded_by=? where name = ?', [$folder_to, $user->email, $fold_name]);
+		}catch(\Exception $e){
+			echo ("Error forwarding");
+		}
+
 	    $folder = DB::select('select id from folders where name = ?', [$fold_name]);
 		$folder_id = 0;
 		foreach($folder as $fid){
@@ -232,21 +237,23 @@ class FilesController extends Controller {
         FolderNotification::create(['folder_id'=>$folder_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);        
 		
 		// create activity for sharing the folder
-        $activity = new Activity;
+        $activity   = new Activity;
         $shareInput = $receiver_user['first_name'].', '.$receiver_user['last_name'];
-        $activity->activity_by= $user->email;
-        $activity->folder_id= Input::get('fold_name');
-		$activity->element_id = $folder_id;
-		$activity->fileinfo= Input::get('fileinfo');
-        $activity->activity = $user->full_name.' Forwarded this folder: '.Input::get('activity').', to '. $shareInput;
+        $activity->activity_by = $user->email;
+		$activity->activity_to = $receiver_email;
+        $activity->folder_id   = Input::get('fold_name');
+		$activity->element_id  = $folder_id;
+		$activity->fileinfo    = Input::get('fileinfo');
+        $activity->activity    = $user->full_name.' Forwarded this folder: '.Input::get('activity').', to '. $shareInput;
         $activity->save();  
 
 		//return 'session';
         Flash::success('File has been sent to '. $first_name . ', '. $last_name);
         //return redirect()->back()->with('Dashboard up-to-date');
-		return response()->json(['message'=>'Success']);
+
+		$html = view('dashboard');		
+		return response()->json(['body'=>"$html->render()", 'message'=>'Success']);
     }
-	
 	
 	public function share()
     {

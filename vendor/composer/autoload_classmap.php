@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddActivitybypostToActivities' => $baseDir . '/database/migrations/2017_07_23_022553_add_activitybypost_to_activities.php',
-    'AddAttachmentIdToMemo' => $baseDir . '/database/migrations/2017_08_04_181130_add_attachment_id_to_memo.php',
     'AddClearanceLevelToUsers' => $baseDir . '/database/migrations/2017_07_25_070057_add_clearance_level_to_users.php',
     'AddCommentToActivities' => $baseDir . '/database/migrations/2017_07_23_015536_add_comment_to_activities.php',
     'AddCustomFieldsToExistingTables' => $baseDir . '/database/migrations/2017_05_28_140842_add_custom_fields_to_existing_tables.php',
@@ -15,6 +14,7 @@ return array(
     'AddEnabledFieldToAuthorizationTables' => $baseDir . '/database/migrations/2015_07_07_170139_add_enabled_field_to_authorization_tables.php',
     'AddFileinfoToActivities' => $baseDir . '/database/migrations/2017_07_22_222110_add_fileinfo_to_activities.php',
     'AddFolderNoToFolders' => $baseDir . '/database/migrations/2017_07_23_075039_add_folder_no_to_folders.php',
+    'AddFolderNotifSeenToActivities' => $baseDir . '/database/migrations/2017_08_05_104637_add_folder_notif_seen_to_activities.php',
     'AddMemoAndActivityToActivities' => $baseDir . '/database/migrations/2017_07_29_144827_add_memo_and_activity_to_activities.php',
     'AddNotifyToUsersTable' => $baseDir . '/database/migrations/2017_05_29_040142_add_notify_to_users_table.php',
     'AddOriginalNameToAttachments' => $baseDir . '/database/migrations/2017_08_02_093323_add_original_name_to_attachments.php',
@@ -146,6 +146,7 @@ return array(
     'Maatwebsite\\Excel\\Writers\\CellWriter' => $vendorDir . '/maatwebsite/excel/src/Maatwebsite/Excel/Writers/CellWriter.php',
     'Maatwebsite\\Excel\\Writers\\LaravelExcelWriter' => $vendorDir . '/maatwebsite/excel/src/Maatwebsite/Excel/Writers/LaravelExcelWriter.php',
     'Mobile_Detect' => $vendorDir . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
+    'ModifyTreatedColumnInMemo' => $baseDir . '/database/migrations/2017_08_03_062430_modify_treated_column_in_memo.php',
     'PHPUnit\\Framework\\Assert' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
     'PHPUnit\\Framework\\AssertionFailedError' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/AssertionFailedError.php',
     'PHPUnit\\Framework\\BaseTestListener' => $vendorDir . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',

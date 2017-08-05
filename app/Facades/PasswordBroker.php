@@ -1,70 +1,18 @@
-<?php
-
-namespace Illuminate\Auth\Passwords;
+<?php namespace App\Facades;
 
 use Closure;
-use Illuminate\Support\Arr;
-use UnexpectedValueException;
-use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Contracts\Mail\Mailer as MailerContract;
-use Illuminate\Contracts\Auth\PasswordBroker as PasswordBrokerContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class PasswordBroker implements PasswordBrokerContract
-{
-    /**
-     * The password token repository.
-     *
-     * @var \Illuminate\Auth\Passwords\TokenRepositoryInterface
-     */
-    protected $tokens;
+use Illuminate\Auth\Passwords\PasswordBroker as ParentPasswordBroker;
 
-    /**
-     * The user provider implementation.
-     *
-     * @var \Illuminate\Contracts\Auth\UserProvider
-     */
-    protected $users;
+class PasswordBroker extends ParentPasswordBroker {
 
-    /**
-     * The mailer instance.
-     *
-     * @var \Illuminate\Contracts\Mail\Mailer
-     */
-    protected $mailer;
-
-    /**
-     * The view of the password reset link e-mail.
-     *
-     * @var string
-     */
-    protected $emailView;
-
-    /**
-     * The custom password validator callback.
-     *
-     * @var \Closure
-     */
-    protected $passwordValidator;
-
-    /**
-     * Create a new password broker instance.
-     *
-     * @param  \Illuminate\Auth\Passwords\TokenRepositoryInterface  $tokens
-     * @param  \Illuminate\Contracts\Auth\UserProvider  $users
-     * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
-     * @param  string  $emailView
-     * @return void
-     */
     public function __construct(TokenRepositoryInterface $tokens,
                                 UserProvider $users,
                                 MailerContract $mailer,
                                 $emailView)
     {
-        $this->users = $users;
-        $this->mailer = $mailer;
-        $this->tokens = $tokens;
-        $this->emailView = $emailView;;
+
+        Parent::__construct($tokens, $users, $mailer, $emailView);
     }
 
     /**
@@ -258,5 +206,5 @@ class PasswordBroker implements PasswordBrokerContract
     {
         return $this->tokens;
     }
-
+   
 }

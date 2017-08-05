@@ -58,7 +58,7 @@ class MemoController extends Controller
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+        $page_description = "Compose New Memo"; //trans('admin/users/general.page.index.description'); // 
         
         $user_id = Auth::user()->email;
 
@@ -72,7 +72,7 @@ class MemoController extends Controller
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+        $page_description = "Incomings"; //trans('admin/users/general.page.index.description'); // 
         
         $user_id = Auth::user()->email;
         $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14);  
@@ -80,17 +80,18 @@ class MemoController extends Controller
         return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
     }
     
-    public function read_memo($id) {
+    public function read_memo(Request $request, $id) {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+        $page_description = "New Memo"; // trans('admin/users/general.page.index.description'); // "List of users";
         
         $user_id = Auth::user()->email;
-        $memos = DB::select('select * from memos where id = ?',[$id]);
+        $memos = DB::select('select * from memos where id = ?', [$id]);
         $attachments = DB::select('select * from attachments');
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
-        return view('views.actions.mailbox.read-mail', compact('users', 'page_title', 'page_description', 'memos', 'attachments'));
+        
+        return view('views.actions.mailbox.read_mail', compact('users', 'page_title', 'page_description', 'memos', 'attachments'));
    }
 
     
@@ -118,7 +119,7 @@ class MemoController extends Controller
        Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-       $page_description = trans('admin/users/general.page.index.description'); // "List of users";
+       $page_description = "Outgoings"; //trans('admin/users/general.page.index.description'); // 
        
        $user_id = Auth::user()->email;
        $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14); 
