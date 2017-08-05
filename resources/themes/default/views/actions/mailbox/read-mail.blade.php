@@ -46,11 +46,12 @@
                         <div class="box-body no-padding">
                             <div class="mailbox-read-info">
                                 <h3>{{ $memo->subject}}</h3>
-                                <h6>From: <em>{!! $memo->emailfrom !!}</em> 
+                                <h6><b>From: </b><em>{!! $memo->emailfrom !!}</em> 
                                     <span class="mailbox-read-time pull-right">
                                         {{ date('l jS \of F Y h:i:s A', strtotime($memo->created_at )) }}
                                     </span>
                                 </h6>
+                                <h6><b>To: </b><em>{!! $memo->emailto !!}</em>
                             </div><!-- /.mailbox-read-info -->
                             <div class="mailbox-read-message">
                                 <p>{!! $memo->message !!}</p>
@@ -71,9 +72,7 @@
                                                '.$attachment->created_at.'
 
 
-                                               <a href="#" class="btn btn-block" title="Request file" data-toggle="modal" data-target="#FileModal">
-                               <i id="" class="fa fa-file"></i>
-                           </a>
+<a href="#" data-toggle="modal" data-target="#FileModal" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
 
 <!-- Load file modal-->
    <div class="modal fade" id="FileModal" role="dialog">
@@ -82,8 +81,8 @@
      <div class="modal-content">         
        <div class="box box-info">
          <div class="box-header">
-           <i class="fa fa-envelope"></i>
-           <h3 class="box-title">Request for file</h3>
+           <i class="fa fa-image"></i>
+           <h3 class="box-title">'.$attachment->original_name.'</h3>
            <!-- tools box -->
            <div class="pull-right box-tools">
              <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
@@ -91,12 +90,12 @@
          </div>          
              <div class="box-body">
 
-                <object data="/attachment_file/'.$attachment->name.'" type="application/pdf" style="width: 100%" height="450">
+                <object data="../attachment_file/'.$attachment->name.'" type="application/pdf" style="width: 100%" height="450">
                   <!-- support older browsers -->
                   <!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
                   <!-- For those without native support, no pdf plugin, or no js -->
                   <p>It appears you do not have PDF support in this web browser. 
-                  <a href="{{ asset("/docs/files".$folder->path."/".$folder->latest_doc) }}" target="_blank">Click here to download the document.</a></p>
+                  <a href="../attachment_file/'.$attachment->name.'" target="_blank">Click here to download the document.</a></p>
                 </object>  
               
            </div>    
@@ -104,8 +103,6 @@
      </div>
    </div>
  </div>
-
-                                               <a href="../attachment_file/'.$attachment->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
                                            </span>
                                        </div>
                                </li>';
@@ -118,10 +115,7 @@
                                            <i class="fa fa-paperclip"></i> <a href="../attachment_file/'.$attachment->name.'" style="color: #000000 ;" target="_blank"> '.$attachment->original_name.'</a><br/> <!-- </a> -->
                                            <span class="mailbox-attachment-size">
                                                '.$attachment->created_at.'
-
-                                                                                            <a href="#" class="btn btn-block" title="Request file" data-toggle="modal" data-target="#FileModal">
-                               <i id="" class="fa fa-file"></i>
-                           </a>
+<a href="#" data-toggle="modal" data-target="#FileModal" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
 
 <!-- Load file modal-->
    <div class="modal fade" id="FileModal" role="dialog">
@@ -130,8 +124,8 @@
      <div class="modal-content">         
        <div class="box box-info">
          <div class="box-header">
-           <i class="fa fa-envelope"></i>
-           <h3 class="box-title">Request for file</h3>
+           <i class="fa fa-file-pdf-o"></i>
+           <h3 class="box-title">'.$attachment->original_name.'</h3>
            <!-- tools box -->
            <div class="pull-right box-tools">
              <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
@@ -139,12 +133,12 @@
          </div>          
              <div class="box-body">
 
-                <object data="http://localhost/lesk-pack/lesk-pack/public/attachment_file/15019200551.pdf" type="application/pdf" style="width: 100%" height="450">
+                <object data="../attachment_file/'.$attachment->name.'" type="application/pdf" style="width: 100%" height="450">
                   <!-- support older browsers -->
                   <!-- <embed src="uploads/C_TAW12_731.pdf" type="application/pdf" width="900" height="500"/> -->
                   <!-- For those without native support, no pdf plugin, or no js -->
                   <p>It appears you do not have PDF support in this web browser. 
-                  <a href="{{ asset("/docs/files".$folder->path."/".$folder->latest_doc) }}" target="_blank">Click here to download the document.</a></p>
+                  <a href="../attachment_file/'.$attachment->name.'" target="_blank">Click here to download the document.</a></p>
                 </object>  
               
            </div>    
@@ -154,7 +148,7 @@
  </div>
 
 
-                                               <a href="../attachment_file/'.$attachment->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+                                              <!-- <a href="../attachment_file/'.$attachment->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a> -->
                                            </span>
                                        </div>
                                </li>';

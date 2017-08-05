@@ -57,7 +57,30 @@
         @if (Auth::check())
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
-                <li class="treeview menu-open">
+               
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-envelope"></i>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                            <span> Memo</span>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                    <li><a href="{{ url('/compose') }}"><i class="fa fa-exchange"></i> eDispatch</a></li>
+                        <li>
+                            <a href="{{url('inbox')}}">
+                                <i class="fa fa-envelope-o"></i><span> Incoming</span>
+                                <span class="pull-right-container pull-right">
+                                    <small id="inbox_on_mailbox" class="label bg-red"></small>
+                                </span>
+                            </a>
+                        </li>
+                        <li><a href="{{ url('/sent') }}"><i class="fa fa-exchange"></i> Outgoing</a></li>
+                    </ul>
+                </li>
+
+                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-tag"></i> <span>Actions</span>
                         <span class="pull-right-container">
@@ -67,14 +90,6 @@
                     <ul class="treeview-menu">
                         <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> My Activities</a></li>
                         <li><a href="{{ url('/viewall') }}"><i class="fa fa-exchange"></i> Position Activities</a></li>
-                        <li>
-                            <a href="{{url('inbox')}}">
-                                <i class="fa fa-envelope-o"></i><span> Memo</span>
-                                <span class="pull-right-container pull-right">
-                                    <small id="inbox_on_mailbox" class="label bg-red"></small>
-                                </span>
-                            </a>
-                        </li>
                         <li class="">
                             <a href="#" data-toggle="modal" data-target="#createPinModal">
                                <i class="fa fa-key"></i> Change Pin
@@ -83,6 +98,14 @@
                         <li class=""><a href="#" data-toggle="modal" data-target="#requestFileModal"><i class="fa fa-file-o"></i> Request File</a></li>
                     </ul>
                 </li>
+
+                <li class="treeview">
+                   <a href="#" data-toggle="modal" data-target="#createPinModal">
+                               <i class="fa fa-key"></i> <span>Change Pin</span>
+                            </a>
+                        </li>
+
+
                 
                 @if(Auth::user()->roles->count() > 1)
                     <li class="treeview">

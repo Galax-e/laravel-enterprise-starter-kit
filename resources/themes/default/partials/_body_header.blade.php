@@ -165,7 +165,8 @@
                                 <li>
                                     <!-- Inner menu: contains the tasks -->
                                     <ul class="menu">                                        
-                                        <?php $usertoemail = Auth::user()->email; $query = "%to $usertoemail%";  $activity = Illuminate\Support\Facades\DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$query]); ?>
+                                        <?php $usertoemail = Auth::user()->email; 
+                                        $query = "%to $usertoemail%";  $activity = Illuminate\Support\Facades\DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$query]); ?>
                                         
                                         @foreach($activity as $activity_by)
                                             @if($activity_by->activity_by == Auth::user()->email || Auth::user()->username)

@@ -397,7 +397,6 @@ class DashboardController extends Controller
 		if(strlen($name)) {
 			list($txt, $ext) = explode(".", $name);
 			if(in_array($ext,$valid_formats)) {
-				if($size<(100024*100024)) {
 
 				$image_name = time().$session_id.".".$ext;
 				$tmp = $_FILES['photo']['tmp_name'];
@@ -415,7 +414,7 @@ class DashboardController extends Controller
 				$activity->activity_by= Auth::user()->email;
 				$activity->activity_by_post = Auth::user()->position;
 				$activity->folder_id= Input::get('folder_id');
-				$activity->fileinfo= $image_name;
+				$activity->fileinfo= $name;
 				$activity->activity= ' Added new Document';
 				$activity->save();
 				
@@ -446,16 +445,13 @@ class DashboardController extends Controller
 					</li></ul>';
 				}
 				else
-				echo "Image Upload failed";
-				}
-				else
-				echo "Image file size max 1 MB";
+				echo "File Upload fail";
 			}
 			else
 			echo "Invalid file format..";
 		}
 		else
-		echo "Please select image..!";
+		echo "Please select image or pdf..!";
 		exit;      
     }
 
@@ -470,7 +466,6 @@ class DashboardController extends Controller
 		if(strlen($name)) {
 			list($txt, $ext) = explode(".", $name);
 			if(in_array($ext,$valid_formats)) {
-				if($size<(100024*100024)) {
 
 				$image_name = time().$session_id.".".$ext;
 				$tmp = $_FILES['photo']['tmp_name'];
@@ -487,7 +482,7 @@ class DashboardController extends Controller
 				$activity = new Activity;
 				$activity->activity_by= Auth::user()->email;
 				$activity->activity_by_post = Auth::user()->position;
-				$activity->fileinfo= $image_name;
+				$activity->fileinfo= $name;
 				$activity->activity= ' Added new Document';
 				$activity->save();
 				
@@ -520,16 +515,13 @@ class DashboardController extends Controller
 					}
 				}
 				else
-				echo "Image Upload failed";
-				}
-				else
-				echo "Image file size max 1 MB";
+				echo "File Upload failed";
 			}
 			else
 			echo "Invalid file format..";
 		}
 		else
-		echo "Please select image..!";
+		echo "Please select image or pdf..!";
 		exit; 
 	}
 }
