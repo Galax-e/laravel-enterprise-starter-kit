@@ -91,7 +91,7 @@ class MemoController extends Controller
         $attachments = DB::select('select * from attachments');
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         
-        return view('views.actions.mailbox.read_mail', compact('users', 'page_title', 'page_description', 'memos', 'attachments'));
+        return view('views.actions.mailbox.read-mail', compact('users', 'page_title', 'page_description', 'memos', 'attachments'));
    }
 
     
