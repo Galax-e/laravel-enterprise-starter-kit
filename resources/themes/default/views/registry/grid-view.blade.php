@@ -39,7 +39,7 @@
                   <li class="divider"></li>
                 @endif
             @else
-            <li><a href="javascript:share('{{ $item_name }}'); javascript:shareClearanceLevel('{{ $item_name }}');"><i class="fa fa-share-square-o fa-fw"></i> Share</a></li> 
+            <li><a href="javascript:share('{{ $item_name }}')"><i class="fa fa-share-square-o fa-fw"></i> Share</a></li> 
             <li><a href="javascript:move('{{ $item_name }}')"><i class="fa fa-external-link fa-fw"></i> Move</a></li>          
             @endif
             <li class="divider"></li>

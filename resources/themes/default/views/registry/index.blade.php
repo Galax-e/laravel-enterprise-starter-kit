@@ -419,18 +419,6 @@
 
     $( function() {
 
-      function shareClearanceLevel(item_name){
-          $.ajax({
-            url:"share_clearance_level",
-            method:"GET",
-            dataType:"json",
-            data: {item_name, item_name}
-          }).done(function(returnVal){
-              console.log(returnVal);
-          }).fail(function(returnData){
-            console.log('bad request');
-          });
-      }
 
       
     
@@ -447,40 +435,26 @@
           </div>
           <div class="modal-body">
             <form action="{{route('share')}}" role='form' id='shareForm' name='shareForm' method='post'>
-              <div class="form-group" id="attachment">
-                <label for='upload' class='control-label'>{{ trans('registry/lfm.file-to') }}</label>
-                <div class="controls">
-                  <div class="input-group" style="width: 100%">
-                    <input type="text" id="share-input" name="share-input">
-                  </div>
-                </div>
-              </div>
-
+              
               <input type='hidden' name='folder_no' id='share_folder_no'>
               <input type='hidden' name='working_dir'>
               <input type="hidden" name="activity" value="">
               <input type='hidden' name='_token' value='{{csrf_token()}}'>
 
-              <div class="box-footer">
-							<div style="margin-left:5px"><label><b>Enter Recipient Email:</b></label></div>
+              <div style="margin-left:5px"><label><b>Enter Recipient Email:</b></label></div>
 							<div class="form-group">														              
 								<div class="input-group">					 
 									<div class="pmd-textfield pmd-textfield-floating-label img-responsive">       
-										<select id="forward_to_user" class="form-control select-with-search select2" name="share-input" placeholder="Recipient Email..."></select>
-									</div> 
-									<div class="input-group-btn">
-										<button id='forwardBtn' class="btn btn-success"><i class="fa fa-share"></i> Forward</button>
-									</div>
+										<select id="share-input" class="form-control select-with-search select2" name="share-input" placeholder="Recipient Email..."></select>
+                  </div> 									
 								</div>                   
 							</div>
-						</div>
-
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
+                <button type="button" class="btn btn-primary" id="share-btn">{{ trans('registry/lfm.btn-share') }} <i class="fa fa-arrow-circle-right"></i></button>
+              </div>			
             </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
-            <button type="button" class="btn btn-primary" id="share-btn">{{ trans('registry/lfm.btn-share') }} <i class="fa fa-arrow-circle-right"></i></button>
-          </div>
+          </div>          
         </div>
       </div>
     </div>

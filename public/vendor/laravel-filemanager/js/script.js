@@ -273,9 +273,32 @@ function createFolder(folder_name) {
 
 function share(item_name) {
 
-    // $('#folder_no').val(item_name);
-    
-    //var fold_name = item_name;   
+    $.ajax({
+        url:"share_clearance_level",
+        method:"GET",
+        dataType:"json",
+        data: {item_name, item_name}
+    }).done(function(returnVal){
+        
+        var availableTags = [];       
+        $.each(returnVal, function(index, value){            
+            $.each(value, function(key, val){
+                availableTags.push(val.first_name+ ', '+val.last_name);
+            });            
+        });
+
+        $(".js-parents").select2();
+        $(".select-with-search").select2({
+            theme: "bootstrap",
+            placeholder: "Select Recipient",
+            //minimumInputLength: 3,
+            allowClear: true,
+            data: availableTags,
+            tags: false
+        });
+    }).fail(function(returnData){
+        console.log('bad request');
+    });
 
     $('#shareModal').modal('show');
 

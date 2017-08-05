@@ -255,11 +255,29 @@ class FilesController extends Controller {
 		return response()->json(['body'=>"$html->render()", 'message'=>'Success']);
     }
 	
-	public function share()
+	public function share(Request $request)
     {
 		$user = Auth::user();
 		$folder_no = Input::get('folder_no');
-		$folder_to = Input::get('share-input');
+		
+		$temp = Input::get('share-input');
+        // remove white spaces...
+        $temp = preg_replace('/\s+/', '', $temp);
+        $fullname_array = explode(',', $temp);
+        $first_name = $fullname_array[0];
+        $last_name  = $fullname_array[1];
+
+		$receiver_object = DB::select('select * from users where first_name=? and last_name=?', [$first_name, $last_name]);		
+		$temp_arr = array();
+		foreach($receiver_object as $key => $value){
+			foreach($value as $field => $data){
+				$temp_arr[$field] = $data;
+			}
+		}
+		$receiver_user = $temp_arr;  // receiver user. It's now easy to get the fields
+		$folder_to = $receiver_user['email'];
+
+
 		$shared_by = $user->email;
 		DB::update('update folders set folder_to = ?, shared_by = ? where folder_no = ?', [$folder_to, $shared_by, $folder_no]);
 		
@@ -285,9 +303,9 @@ class FilesController extends Controller {
 		$activity->folder_id = $folder_no; // Input::get('folder_no');
 		$activity->element_id = $folder_id;
 		$activity->fileinfo = Input::get('folder_no');
-		$activity->activity_to = Input::get('share-input');
+		$activity->activity_to = $folder_to; //Input::get('share-input');
 		$activity->activity_by_post = Auth::user()->position;
-		$activity->activity = $user->email.' Forwarded this folder to '. $shareInput;
+		$activity->activity = 'Registry Forwarded this folder to '. $shareInput;
 		$activity->save();
 		
 		//return 'session';
@@ -300,9 +318,10 @@ class FilesController extends Controller {
 		$folder_no = request('item_name');
 		$folder = DB::table('folders')->where('folder_no', $folder_no)->first();
 		
-		$folder_clearance = $folder->clearance_level;          
+		$folder_clearance = $folder->clearance_level; 
+		$users = DB::table('users')->where('clearance_level', '>=', $folder_clearance)->get();        
 
-		$data = array('clearance_level'=>$folder_clearance);
+		$data = array('users'=>$users);
 		return response()->json($data);
 	}
 	
