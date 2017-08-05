@@ -11,6 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Set a meta reference to the CSRF token for use in AJAX request -->
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link rel="shortcut icon" href="{{ URL::asset('assets/themes/default/img/favicon.png') }}" />
 
     <!-- Material design Icons -->
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/material-design-icons/iconfont/material-icons.css") }}">

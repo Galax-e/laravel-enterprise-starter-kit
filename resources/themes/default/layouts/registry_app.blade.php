@@ -23,7 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="msapplication-navbutton-color" content="#75C7C3">
     <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#75C7C3">
-
+    <link rel="shortcut icon" href="{{ URL::asset('assets/themes/default/img/favicon.png') }}" />
 
     <!-- Material Design fonts -->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
