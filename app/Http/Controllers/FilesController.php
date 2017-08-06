@@ -7,6 +7,7 @@ use View;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Flash;
+use Response;
 
 /** base table*/
 use Auth;
@@ -251,8 +252,14 @@ class FilesController extends Controller {
         Flash::success('File has been sent to '. $first_name . ', '. $last_name);
         //return redirect()->back()->with('Dashboard up-to-date');
 
-		$html = view('dashboard');		
-		return response()->json(['body'=>"$html->render()", 'message'=>'Success']);
+		//$html = View::make('welcome_new_user', array('first_name' => Input::get('first_name')));
+		// 'body' => View::make('audit.create')->render()
+		//$data = array('message' => 'Success', 'body' => "$html");
+		// return response()->json($data)->view('hello')->header('Content-Type', $type);
+    	
+		$html = View::make('dashboard');
+
+		return Response::json(array('message' => 'Success', 'body' => "$html"));
     }
 	
 	public function share(Request $request)
@@ -444,6 +451,9 @@ class FilesController extends Controller {
 		$postPinToAuth = request('post_pin_input');
 
 		if($postPinToAuth){
+			if(strlen(strval($postPinToAuth)) > 4){
+				return "false";
+			}
 			if($currentPin == strval($postPinToAuth)){
 				return "true";
 			}else{
@@ -455,6 +465,9 @@ class FilesController extends Controller {
 		$forwardPinToAuth = request('forward_pin_input');
 
 		if($forwardPinToAuth){
+			if(strlen(strval($forwardPinToAuth)) > 4){
+				return "false";
+			}
 			if($currentPin == strval($forwardPinToAuth)){
 				return "true";
 			}else{

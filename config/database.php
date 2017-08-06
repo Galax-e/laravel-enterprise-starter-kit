@@ -55,9 +55,9 @@ return [
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => env('DB_HOST', 'localhost'),
-            'database'  => env('DB_DATABASE', 'lesk'),
-            'username'  => env('DB_USERNAME', 'homestead'),
-            'password'  => env('DB_PASSWORD', 'homestead'),
+            'database'  => env('DB_DATABASE', 'lesk-pack'),
+            'username'  => env('DB_USERNAME', 'admin_user'),
+            'password'  => env('DB_PASSWORD', 'Physob@99'),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

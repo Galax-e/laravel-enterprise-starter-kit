@@ -94,118 +94,149 @@
       <div class="col-md-3 col-sm-3 hidden-xs">
         <div id="tree" class="list-group-item"></div>
         <!-- Activities -->
-        <div id="activity-timeline" class="box box-primary" style="margin-top: 10px;">
+
+        <div id="activity-timeline" class="box box-primary active tab-pane" style="margin-top: 10px;">
           <div class="box-header">
             <i class="ion ion-clipboard"></i>
-            <h3 class="box-title">Activity</h3>
+            <h3 class="box-title">File Tracking</h3>
             <div class="box-tools pull-right">
               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-              </div>
+            </div>
           </div><!-- /.box-header -->
-          <div class="box-body">
-            <ul class="todo-list">
-            <?php $loopindex = 0; ?>
-            @foreach($activities as $activity)
-            @if (++$loopindex >=3)
-              @break;
-            @endif
-              {{--  @if($activity->activity_by == Auth::user()->email || Auth::user()->username)  --}}
-              <li>   
-              <?php 
-                
-                $folder = Illuminate\Support\Facades\DB::select('select folder_by, shared_by, forwarded_by, folder_to from folders where folder_no=?', [$activity->folder_id] );  
-                $folder_to = null;
-                $shared_by = null;
-                $forwarded_by = null;
-                $folder_by = null;
-                foreach($folder as $fold ){
-                    $folder_to = ((array)$fold)['folder_to'];
-                    $shared_by = ((array)$fold)['shared_by'];
-                    $forwarded_by = ((array)$fold)['forwarded_by'];
-                    $folder_by = ((array)$fold)['folder_by'];
-                }     
-                
-              ?>
-              @if($folder_by)
-                <?php  
-                  $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$folder_by] );  
-                  foreach($temp_user as $us ){
-                      $user_avatar = ((array)$us)['avatar'];
-                  }
-                ?>
-                <div>
-                  <div class="pull-left" style="margin-right: 5px;">
-                    <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-                  </div>
-                  <small class="">{{ $activity->folder_id }}&nbsp; created by &nbsp; {{ $folder_by }}                
-                  </small>
-                  <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-                    <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
-                  </small>
-                </div>
-              @endif
 
-              @if($shared_by && $shared_by != 'pet@hallowgate.com' )
-                <?php  
-                  $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$shared_by] );  
-                  foreach($temp_user as $us ){
-                      $user_avatar = ((array)$us)['avatar'];
-                  }
-                ?>
-                </li>
-                <li>
-                <div>
-                  <div class="pull-left" style="margin-right: 5px;">
-                    <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-                  </div>
-                  <small>{{ $shared_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
-                    class="offline" style="width: 30px;" alt="User Image"/>  
-                    &nbsp; &nbsp; {{$folder_to}}
-                  </small>
-                  <small class="pull-left">
-                    {{ $activity->folder_id }}
-                  </small>
-                  <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-                    <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
-                  </small>
-                </div>
-              @endif
-              @if($forwarded_by && $forwarded_by != 'root@hallowgate.com')
-
-                <?php  
-                  $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$forwarded_by] );  
-                  foreach($temp_user as $us ){
-                      $user_avatar = ((array)$us)['avatar'];
-                  }
-                ?>
-                </li>
-                <li>
-                <div>
-                  <div class="pull-left" style="margin-right: 5px;">
-                    <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-                  </div>
-                  <small>{{ $forwarded_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
-                    class="offline" style="width: 30px;" alt="User Image"/>  
-                    &nbsp; &nbsp; {{$folder_to}}
-                  </small>
-                  <small class="label pull-left">
-                    {{ $activity->folder_id }}
-                  </small>
-                  <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-                    <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
-                  </small>
-                </div>
-              @endif   
-              </li>           
-              {{--  @endif  --}}
-            @endforeach
+          <div class="box-body nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#activity" data-toggle="tab">Forwarded</a></li>
+              <li><a href="#shared" data-toggle="tab">Shared</a></li>
             </ul>
-          </div><!-- /.box-body -->
-          {{--  <div class="box-footer text-center">
-            <a href="viewall" class="uppercase">View All Activity</a>
-          </div><!-- /.box-footer -->  --}}
+            <div class="tab-content">
+              <div class="active tab-pane" id="activity">
+                <ul class="todo-list">
+                
+                <?php $loopindex = 0; ?>
+                @foreach($activities as $activity)
+                  @if (++$loopindex >= 5)
+                    @break;
+                  @endif
+                    
+                  <?php                     
+                    $folder = Illuminate\Support\Facades\DB::select('select forwarded_by, folder_to from folders where folder_no=?', [$activity->folder_id] );  
+                    $folder_to = null;
+                    $forwarded_by = null;
+
+                    foreach($folder as $fold ){
+                        $folder_to = ((array)$fold)['folder_to'];
+                        $forwarded_by = ((array)$fold)['forwarded_by'];
+                    }                         
+                  ?>                 
+                  @if($forwarded_by)
+                  <li>
+                    <?php  
+                      $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$forwarded_by] );  
+                      foreach($temp_user as $us ){
+                          $user_avatar = ((array)$us)['avatar'];
+                      }
+                    ?>
+                    
+                    <div>
+                      <div class="pull-left" style="margin-right: 5px;">
+                        <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+                      </div>
+                      <small>{{ $forwarded_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
+                        class="offline" style="width: 30px;" alt="User Image"/>  
+                        &nbsp; &nbsp; {{$folder_to}}
+                      </small>
+                      <small class="label pull-left">
+                        {{ $activity->folder_id }}
+                      </small>
+                      <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+                        <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
+                      </small>
+                    </div>
+                    </li>
+                  @endif            
+                  {{--  @endif  --}}
+                @endforeach
+                </ul>
+              </div><!-- /.box-body active tab-pane -->
+              <div class="tab-pane" id="shared">
+                <ul class="todo-list">
+                
+                <?php $loopindex = 0; ?>
+                @foreach($activities as $activity)
+                  @if (++$loopindex >= 5)
+                    @break;
+                  @endif
+                    
+                  <?php 
+                    
+                    $folder = Illuminate\Support\Facades\DB::select('select folder_by, shared_by, folder_to from folders where folder_no=?', [$activity->folder_id] );  
+                    $folder_to = null;
+                    $shared_by = null;
+                    $folder_by = null;
+                    foreach($folder as $fold ){
+                        $folder_to = ((array)$fold)['folder_to'];
+                        $shared_by = ((array)$fold)['shared_by'];
+                        $folder_by = ((array)$fold)['folder_by'];
+                    }     
+                    
+                  ?>
+                  @if($folder_by)
+                  <li>
+                    <?php  
+                      $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$folder_by] );  
+                      foreach($temp_user as $user ){
+                          $user_avatar = ((array)$user)['avatar'];
+                      }
+                    ?>
+                    <div>
+                      <div class="pull-left" style="margin-right: 5px;">
+                        <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+                      </div>
+                      <small class="">{{ $activity->folder_id }}&nbsp; created by &nbsp; {{ $folder_by }}                
+                      </small>
+                      <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+                        <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
+                      </small>
+                    </div>
+                  </li>
+                  @endif
+
+                  @if($shared_by)
+                    <li>
+                    <?php  
+                      $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$shared_by] );  
+                      foreach($temp_user as $us ){
+                          $user_avatar = ((array)$us)['avatar'];
+                      }
+                    ?>
+                    <div>
+                      <div class="pull-left" style="margin-right: 5px;">
+                        <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+                      </div>
+                      <small>{{ $shared_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
+                        class="offline" style="width: 30px;" alt="User Image"/>  
+                        &nbsp; &nbsp; {{$folder_to}}
+                      </small>
+                      <small class="pull-left">
+                        {{ $activity->folder_id }}
+                      </small>
+                      <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
+                        <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
+                      </small>
+                    </div>
+                  </li>
+                  @endif
+                @endforeach
+                </ul>
+              </div>
+            </div> <!-- ./tab content -->
+          </div> <!-- ./box-body nav-tab custom -->
+          <div class="box-footer text-center">
+            <a href="{{route('registry_viewall')}}" class="uppercase">View All</a>
+          </div><!-- /.box-footer -->
         </div><!-- /.box -->
-      </div>
+      </div> <!-- ./col-md-3 -->
 
       <div class="col-md-9 col-sm-9 col-xs-12" id="main">
         <nav class="navbar navbar-default" id="nav">
@@ -344,14 +375,15 @@
           <div class="pull-right box-tools">
             <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
           </div><!-- /. tools -->
-        </div>        
-        <form action="{{route('newfolder')}}" role='form' id='add-folderForm' name='uploadForm' method='post' enctype='multipart/form-data'>
+        </div> 
+        <div class="box-body">       
+        <form action="{{route('newfolder')}}" role='form' id='add-folderForm' role="form" name='uploadForm' method='post' enctype='multipart/form-data'>
             {{ csrf_field() }}
             <input type="hidden" name="activity" value="new folder created by system">
             <input type='hidden' name='working_dir'>
             <input type='hidden' name='folder_by' id='folder_by' value='{{ Auth::user()->email }}'>
 
-            <div class="box-body">
+            
               <div class="form-group">
                 <input type="text" class="form-control" id="folder_no" name="folder_no" placeholder="File No"/>
               </div>
@@ -359,7 +391,8 @@
                 <input type="text" class="form-control" id="fold_name" name="fold_name" placeholder="File name/ Subject"/>
               </div>               
               <div>
-                <textarea class="form-control" name="add_folder_description" id="add_folder_description" placeholder="Folder description..." style="width: 100%; height: 125px; font-size: 14px;">
+                <label>Enter Description</label>
+                <textarea class="form-control" id="add_folder_description" name="add_folder_description" rows="3" style="">
                 </textarea>
               </div>               
               <div class="form-group">                
@@ -405,10 +438,10 @@
                 </select>
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" id="category" name="category" placeholder="Category"/>
+                <input type="text" class="form-control" id="category" name="category" placeholder="Tag"/>
               </div>
-          </div>
-          </form>
+            </form>
+          </div><!-- box-body -->          
           <div class="box-footer clearfix">
             <button type="button" style="margin: 5px;" class="btn btn-primary pull-right" id="add-folder-btn">{{ trans('registry/lfm.btn-folder') }} <i class="fa fa-arrow-circle-right"></i></button>
             <button type="button" style="margin: 5px;" class="btn btn-warning pull-right" data-dismiss="modal">{{ trans('registry/lfm.btn-close') }}</button>
