@@ -23,7 +23,7 @@ class CreateUserRequest extends Request {
     public function rules()
     {
         return [
-            'email'    => 'required|unique:users|regex:/^[\w]+(\.[\w]+)*(@hallowgate\.com)+$/i',
+            'email'    => 'required|unique:users|regex:/^[\w]+(\.[\w]+)*(@kdsg\.gov\.ng)+$/i',
             'username' => 'required|unique:users',
             'password' => 'required|confirmed',
         ];

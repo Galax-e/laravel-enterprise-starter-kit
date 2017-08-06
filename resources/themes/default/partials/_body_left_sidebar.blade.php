@@ -127,7 +127,7 @@
                                 </a>
                             </li>
                             <li><a href="{{ url('registry') }}"><i class="fa fa-folder"></i> File Manager</a></li>
-                            <li><a href="pages/layout/fixed.html"><i class="fa fa-share-square-o"></i> Shared</a></li>
+                            <li><a href="{{ url('shared') }}"><i class="fa fa-share-square-o"></i> Shared</a></li>
                         </ul>
                     </li>
                 @endif

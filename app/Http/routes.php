@@ -65,6 +65,7 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::post(   'searchactivity',      ['as' => 'searchactivity',          'uses' => 'DashboardController@searchactivity']);
     Route::post(   'searchcontact',      ['as' => 'searchcontact',          'uses' => 'DashboardController@searchcontact']);
     Route::post(  'store',          ['as' => 'store',          'uses' => 'DashboardController@store']);
+    Route::get(   'shared',        ['as' => 'shared',          'uses' => 'DashboardController@shared']);
     Route::get(   'viewall',        ['as' => 'viewall',          'uses' => 'DashboardController@viewall']);
     Route::get(   'viewallcontacts',        ['as' => 'viewallcontacts',          'uses' => 'DashboardController@viewallcontacts']);
     Route::get(   'viewallrequest', ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
