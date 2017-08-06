@@ -445,7 +445,6 @@
 												loader: false,        // Change it to false to disable loader
 												loaderBg: '#9EC600'  // To change the background
 											});
-											console.log('bad, wrong pin.');
 										}
 									}).fail(function(){										
 										console.log('No connection to pin controller');
@@ -547,7 +546,7 @@
 									dataType:"json",
 									data: data
 								}).done(function(returnData){
-									location.href=location.href;
+									//location.href=location.href;
 									console.log('Good, folder forward successful.');
 								}).fail(function(returnData){
 									console.log('Bad, not connected');
@@ -612,6 +611,7 @@
 									<div class="pmd-textfield pmd-textfield-floating-label img-responsive">       
 										<select id="forward_to_user" class="form-control select-with-search select2" name="share-input" placeholder="Recipient Email..."></select>
 									</div> 
+									<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
 									<div class="input-group-btn">
 										<button id='forwardBtn{{$loopindex}}' class="btn btn-success"><i class="fa fa-share"></i> Forward</button>
 									</div>

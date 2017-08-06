@@ -117,12 +117,12 @@ Route::group(['middleware' => 'authorize'], function () {
     Route::post('share',['as'=>'share', 'uses'=>'FilesController@share']);
     Route::get('share_clearance_level',['as'=>'share_clearance_level', 'uses'=>'FilesController@shareClearanceLevel']);
 
+    Route::get('registry_viewall',['as'=>'registry_viewall', 'uses'=>'FileManagement\RegistryController@viewAll']);
+
 
     // creating documents and uploading file
     Route::post('newdocument',['as'=>'newdocument', 'uses'=>'FileManagement\UploadController@upload']);
     Route::post('newfolder',['as'=>'newfolder', 'uses'=>'FileManagement\UploadController@newfolder']);
-
-    Route::get( 'scandir',    ['as' => 'scandir',    'uses' => 'FileManagement\SearchFolderController@scanDirectory']);
 
     // Site administration section
     Route::group(['prefix' => 'admin'], function () {

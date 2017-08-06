@@ -21,17 +21,39 @@
       <td>{{ $item->time }}</td>
       <td>
         @if($item->is_file)
-        <a href="javascript:trash('{{ $item->name }}')">
-          <i class="fa fa-trash fa-fw"></i>
-        </a>
-        @if($item->thumb)
-        <a href="javascript:cropImage('{{ $item->name }}')">
-          <i class="fa fa-crop fa-fw"></i>
-        </a>
-        <a href="javascript:resizeImage('{{ $item->name }}')">
-          <i class="fa fa-arrows fa-fw"></i>
-        </a>
-        @endif
+          <a href="javascript:trash('{{ $item->name }}')">
+            <i class="fa fa-trash fa-fw"></i>
+          </a>
+          @if($item->thumb)
+          <a href="javascript:cropImage('{{ $item->name }}')">
+            <i class="fa fa-crop fa-fw"></i>
+          </a>
+          <a href="javascript:resizeImage('{{ $item->name }}')">
+            <i class="fa fa-arrows fa-fw"></i>
+          </a>
+          @endif
+        @else
+          @if(Auth::user()->isRoot())
+            <a href="javascript:trash('{{ $item->name }}')">
+              <i class="fa fa-trash fa-fw"></i>
+            </a>
+            <a href="javascript:share('{{ $item->name }}')">
+              <i class="fa fa-share-square-o fa-fw"></i>
+            </a>
+            <a href="javascript:history('{{ $item->name }}')">
+              <i class="fa fa-arrows fa-fw"></i>
+            </a>
+          @else
+            <a href="javascript:trash('{{ $item->name }}')" disabled="true">
+              <i class="fa fa-trash fa-fw" style="color: red"></i>
+            </a>
+            <a href="javascript:share('{{ $item->name }}')">
+              <i class="fa fa-share-square-o fa-fw"></i>
+            </a>
+            <a href="javascript:history('{{ $item->name }}')">
+              <i class="fa fa-arrows fa-fw"></i>
+            </a>
+          @endif
         @endif
       </td>
     </tr>
