@@ -209,28 +209,6 @@ class DashboardController extends Controller
 
     }
 
-     public function shared()
-    {
-        Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
-
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = trans('admin/users/general.page.index.description'); // "List of users";
-
-        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
-		$user_id = Auth::user()->email;
-		$user_position = Auth::user()->position;
-		$user_id2 = Auth::user()->username;
-		
-		$act = '%Forward%';
-		
-		//$folder = Folder::all();	
-		$folderactivity = DB::table('activities')->where('activity', 'like', $act)->orderBy('created_at', 'DESC')->paginate(5);
-
-		//$folder = Folder::all();	
-		$activity = DB::table('activities')->where('activity_by', $user_id)->orwhere('activity_by', $user_id2)->orwhere('activity_by_post', $user_position)->orderBy('created_at', 'DESC')->paginate(12);
-        return view('views.actions.activity.shared', compact('users', 'page_title', 'page_description', 'activity', 'folderactivity'));
-    }
-
     public function viewall()
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));

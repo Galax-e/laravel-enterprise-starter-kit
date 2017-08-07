@@ -28,25 +28,7 @@
       margin-top: -15px !important;
     }
   </style>
-  <script>
-    $( function() {
-      var availableTags = [
-          @foreach($users as $user)   
-             "@if($user->position){{$user->position}} - @endif {{ $user->first_name }}, {{$user->last_name}}",
-          @endforeach
-          ""
-        ];
-
-      availableTags.splice(0, 0,'Select Recipient');
-      
-      $(".select-with-search").select2({
-        data: availableTags,
-        placeholder: "Select Recipient",
-        theme: "bootstrap",
-        minimumResultsForSearch: Infinity
-      });
-    });
-  </script>
+  
 
   <style type="text/css">
     .column{margin-top: -10px; float: right; }
@@ -96,25 +78,25 @@
                       <ul class="mailbox-attachments clearfix">
 
 
-        @foreach($activity as $activity_by)
+        @foreach($folders as $folder)
                 <?php
-                  if (strpos($activity_by->activity, 'Document') !== false) {
+
                 echo '
                  
-                 <li><span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+                 <li><span class="mailbox-attachment-icon"><i class="fa fa-folder-open"></i></span>
                         <div class="mailbox-attachment-info">
-                          <a href="#" class="mailbox-attachment-name"><i class="fa fa-paperclip"></i> '.$activity_by->fileinfo.'</a>
+                          <a href="#" class="mailbox-attachment-name"><i class="fa fa-folder"></i> '.$folder->name.'</a>
                               <span class="mailbox-attachment-size">'
-                                .date('H:i A | F d, Y', strtotime($activity_by->created_at )).'
+                                .date('H:i A | F d, Y', strtotime($folder->created_at )).'
                               </span>
                         </div>
                  </li>';
-                  }
+
                 ?>
         @endforeach
 
               </ul>
-             <div align="center"> <?php echo $activity->render(); ?></div>
+             <div align="center"> </div>
 
                 </div>
                   </div>
