@@ -451,8 +451,9 @@ class FilesController extends Controller {
 		$postPinToAuth = request('post_pin_input');
 
 		if($postPinToAuth){
+
 			if(strlen(strval($postPinToAuth)) > 4){
-				return "false";
+				return "longerpin";
 			}
 			if($currentPin == strval($postPinToAuth)){
 				return "true";
