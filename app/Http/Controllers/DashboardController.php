@@ -69,7 +69,7 @@ class DashboardController extends Controller
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = "Users | Dashboard"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
-        $page_description = "Your Desk"; // trans('admin/users/general.page.index.description'); // "List of users";
+        $page_description = "e-Desk"; // trans('admin/users/general.page.index.description'); // "List of users";
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
 		
@@ -115,7 +115,7 @@ class DashboardController extends Controller
 		
 		Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
 		
 		$user_id = Auth::user()->email;
@@ -150,16 +150,13 @@ class DashboardController extends Controller
 			$receiver_user = $temp_arr;  // receiver user. It's now easy to get the fields
 			
 			$receiver_email=  $receiver_user['email'];
-			$memo->emailto .= $receiver_email.', ';
+			$memo->emailto .= $receiver_email.', ';		
 			
-			
-
 			// call attachment...
 			$attachment_name = Input::get('attachment_name');
 			//$attachment = DB::select('select * from attachments where name=?', [$attachment_name]);
 			//DB::update("update attachments set memo_id=? where name=?", [$memo->id, $attachment_name]);
 			
-
 			$memo_id = $memo->id;
 			$sender_id = Auth::user()->id;
 			$receiver_id =  $receiver_user['id'];
@@ -206,14 +203,13 @@ class DashboardController extends Controller
 		DB::update('update request_file_notifications set status = 1 where id = ?', [$id]);
 
         return 'true';
-
     }
 
     public function viewall()
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
@@ -235,7 +231,7 @@ class DashboardController extends Controller
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
@@ -256,7 +252,8 @@ class DashboardController extends Controller
 
 	public function searchcontact()
     {
-         $page_title = "Users | All Contact"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
+        
+		$page_title = "Users | All Contact"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = "All contact based on Department"; // trans('admin/users/general.page.index.description'); // "List of users";
         $user_id = Auth::user()->email;
 		$users = DB::select('select * from users'); 
@@ -271,7 +268,7 @@ class DashboardController extends Controller
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
@@ -296,7 +293,7 @@ class DashboardController extends Controller
 		
 		Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
 		
 		$user_id = Auth::user()->email;
@@ -317,7 +314,7 @@ class DashboardController extends Controller
     {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = trans('admin/users/general.page.index.description'); // "List of users";
 		
 		$user_id = Auth::user()->email;
@@ -456,6 +453,7 @@ class DashboardController extends Controller
     }
 
 	public function compose_single_upload(){
+		
 		session_start();
 		$session_id='1'; 
 		$path = 'attachment_file/';
@@ -522,6 +520,6 @@ class DashboardController extends Controller
 		}
 		else
 		echo "Please select image or pdf..!";
-		exit; 
+		exit;
 	}
 }
