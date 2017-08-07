@@ -66,8 +66,8 @@
                             <span> Memo</span>
                         </span>
                     </a>
-                    <ul class="treeview-menu">
-                    <li><a href="{{ url('/compose') }}"><i class="fa fa-send"></i> eDispatch</a></li>
+                    {{--  <ul class="treeview-menu">
+                    <li><a href="{{ url('/compose') }}"><i class="fa fa-exchange"></i> eDispatch</a></li>
                         <li>
                             <a href="{{url('inbox')}}">
                                 <i class="fa fa-envelope-o"></i><span> Incoming</span>
