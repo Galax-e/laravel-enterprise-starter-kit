@@ -90,6 +90,7 @@ class UploadController extends LfmController
                 $file=Input::file('upload');
                 $new_document->parent_path = $parent_path;
                 $new_document->name = $new_filename;//$new_file_path.'/'.$new_filename;
+                $new_document->original_name = $new_filename;
             }
             $new_document->save();
 
