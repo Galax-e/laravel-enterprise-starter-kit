@@ -66,8 +66,8 @@
                             <span> Memo</span>
                         </span>
                     </a>
-                    {{--  <ul class="treeview-menu">
-                    <li><a href="{{ url('/compose') }}"><i class="fa fa-exchange"></i> eDispatch</a></li>
+                    <ul class="treeview-menu">
+                    <li><a href="{{ url('/compose') }}"><i class="fa fa-send"></i> eDispatch</a></li>
                         <li>
                             <a href="{{url('inbox')}}">
                                 <i class="fa fa-envelope-o"></i><span> Incoming</span>
@@ -127,7 +127,7 @@
                                 </a>
                             </li>
                             <li><a href="{{ url('registry') }}"><i class="fa fa-folder"></i> File Manager</a></li>
-                            <li><a href="pages/layout/fixed.html"><i class="fa fa-share-square-o"></i> Shared</a></li>
+                            <li><a href="{{ url('registry_viewall') }}"><i class="fa fa-share-square-o"></i> Shared</a></li>
                         </ul>
                     </li>
                 @endif
