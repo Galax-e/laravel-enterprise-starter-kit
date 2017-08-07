@@ -25,6 +25,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Ionicons 2.0.1 -->
     <link href="{{ asset("/bower_components/admin-lte/ionicons/css/ionicons.min.css") }}" rel="stylesheet" type="text/css" />
     
+    {{--  <!-- Theme style -->
+    <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}" rel="stylesheet" type="text/css" />  --}}
 
     <!-- Colorbox -->
     <link href="{{ asset("/assets/colorbox/example1/colorbox.css") }}" rel="stylesheet" type="text/css" />
@@ -35,9 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE select2 -->
     <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/select2/dist/css/select2.min.css") }}" >
 
-    <!-- Theme style -->
-    <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}" rel="stylesheet" type="text/css" />
-
+    
     <!-- MUI -->
     <link href="{{ asset("/bower_components/admin-lte/mui/css/mui.min.css") }}" rel="stylesheet" type="text/css" />
 

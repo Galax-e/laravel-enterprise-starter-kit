@@ -406,9 +406,15 @@
 								$("#postPinBtn").on('click', function(e){
 									e.preventDefault();
 									e.stopPropagation();
+
+									if($('#post_pin_input').val().length > 4 ){
+										alert('Pin is invalid. Please enter a four digit pin');
+										return;
+									}
 									$('#postPinModal').modal('hide');
 
-									var postPinForm = $('#post_pin_form').serialize();
+									var postPinForm = $('#post_pin_form').serialize();							
+									
 									$('#post_pin_input').val(''); // cancel the value in the input field
 
 									var data = postPinForm;
@@ -423,7 +429,8 @@
 											console.log('good, right pin');											
 											var formData  = $("#commentForm{{$loopindex}}").serialize();
 											postCommentForm(formData);
-										}else{											
+										}
+										else{											
 											$.toast({
 												heading: 'PIN Verification',
 												text: 'Wrong pin: Enter the correct PIN',
@@ -535,7 +542,7 @@
 									dataType:"json",
 									data: data
 								}).done(function(returnData){
-									//location.href=location.href;
+									location.href=location.href;
 									console.log('Good, folder forward successful.');
 								}).fail(function(returnData){
 									console.log('Bad, not connected');

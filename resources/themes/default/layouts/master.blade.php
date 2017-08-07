@@ -22,8 +22,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link href="{{ asset("/bower_components/admin-lte/plugins/jQueryUI/jquery-ui-1.12.1/jquery-ui.min.css") }}" rel="stylesheet" />
     <!-- Font Awesome Icons 4.4.0 -->
     <link href="{{ asset("/bower_components/admin-lte/font-awesome/css/font-awesome.min.css") }}" rel="stylesheet" type="text/css" />
+   
     <!-- Ionicons 2.0.1 -->
     <link href="{{ asset("/bower_components/admin-lte/ionicons/css/ionicons.min.css") }}" rel="stylesheet" type="text/css" />
+    
     <!-- Theme style -->
     <link href="{{ asset("/bower_components/admin-lte/dist/css/AdminLTE.min.css") }}" rel="stylesheet" type="text/css" />
 
@@ -32,12 +34,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- @cpnwaugha jQuery Toast -->
     <link href="{{ asset("/bower_components/admin-lte/dist/css/jquery.toast.css") }}" rel="stylesheet" type="text/css" />
+    
     <!-- Application CSS-->
     <link href="{{ asset(elixir('css/all.css')) }}" rel="stylesheet" type="text/css" />
 
     <!-- elFinder CSS (REQUIRED) -->
-    <link rel="stylesheet" type="text/css" href="{{ asset("/packages/barryvdh/elfinder/css/elfinder.min.css") }}" >
-    <link rel="stylesheet" type="text/css" href="{{ asset("/packages/barryvdh/elfinder/css/theme.css") }}" >
+    {{--  <link rel="stylesheet" type="text/css" href="{{ asset("/packages/barryvdh/elfinder/css/elfinder.min.css") }}" >
+    <link rel="stylesheet" type="text/css" href="{{ asset("/packages/barryvdh/elfinder/css/theme.css") }}" >  --}}
 
 
     <!-- Head -->

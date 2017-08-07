@@ -238,7 +238,7 @@
                                             @if($activity->activity_by == Auth::user()->email || Auth::user()->username)
                                                 <li id="folder_notif{{ $loopindex }}"> 
                                                     <a href="{{route('dashboard')}}">  
-                                                        <div class="pull-left sm">{{ str_limit($activity->activity, 25) }}</div>                  
+                                                        <div class="pull-left sm"><small>{{ str_limit($activity->activity, 27) }}</small></div>                  
                                                         <h5 class="sm">                                                                                                                   
                                                             <small class="label label-primary pull-right"><i class="fa fa-clock-o pull-right"></i>{{ date('F d', strtotime($activity->created_at )) }}</small>
                                                         </h5>

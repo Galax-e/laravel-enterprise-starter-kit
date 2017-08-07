@@ -170,7 +170,7 @@ desired effect
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" max="9999" required/>
+                        <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" required/>
                     </div>
                 </div>
                 <div class="box-footer clearfix">
@@ -202,7 +202,7 @@ desired effect
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <input type="password" class="form-control" id="forward_pin_input" name="forward_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" max="9999" required />
+                        <input type="password" class="form-control" id="forward_pin_input" name="forward_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" required />
                     </div>
                 </div>
                 <div class="box-footer clearfix">

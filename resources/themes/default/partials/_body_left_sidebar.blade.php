@@ -59,15 +59,15 @@
             <ul class="sidebar-menu" data-widget="tree">
                
                 <li class="treeview">
-                    <a href="#">
+                    <a href="{{url('inbox')}}">
                         <i class="fa fa-envelope"></i>
                         <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
+                            {{--  <i class="fa fa-angle-left pull-right"></i>  --}}
                             <span> Memo</span>
                         </span>
                     </a>
-                    <ul class="treeview-menu">
-                    <li><a href="{{ url('/compose') }}"><i class="fa fa-send"></i> eDispatch</a></li>
+                    {{--  <ul class="treeview-menu">
+                    <li><a href="{{ url('/compose') }}"><i class="fa fa-exchange"></i> eDispatch</a></li>
                         <li>
                             <a href="{{url('inbox')}}">
                                 <i class="fa fa-envelope-o"></i><span> Incoming</span>
@@ -77,7 +77,7 @@
                             </a>
                         </li>
                         <li><a href="{{ url('/sent') }}"><i class="fa fa-exchange"></i> Outgoing</a></li>
-                    </ul>
+                    </ul>  --}}
                 </li>
 
                  <li class="treeview">
