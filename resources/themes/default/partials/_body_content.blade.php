@@ -18,7 +18,9 @@
                 {{ $page_title or "Page Title" }}
                 <small>{{ $page_description or "Page description" }}</small>
             </h1>
-            {!! MenuBuilder::renderBreadcrumbTrail(null, 'root', false)  !!}
+            @if(Auth::user()->isRoot())
+                {!! MenuBuilder::renderBreadcrumbTrail(null, 'root', false)  !!}
+            @endif
         </section>
 
         <!-- Main content -->
