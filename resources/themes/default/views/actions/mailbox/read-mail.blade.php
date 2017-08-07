@@ -67,7 +67,7 @@
                                <li>
                                    <span class="mailbox-attachment-icon"><i class="fa fa-file-image-o"></i></span>
                                    <div class="mailbox-attachment-info">
-                                           <i class="fa fa-paperclip"></i> <a href="../attachment_file/'.$attachment->name.'" style="color: #000000 ;" target="_blank"> '.$attachment->original_name.'</a><br/> <!-- </a> -->
+                                           <i class="fa fa-paperclip"></i> <a href="../attachment_file/'.$attachment->name.'" style="color: #000000 ;" data-toggle="modal" data-target="#FileModal"> '.$attachment->original_name.'</a><br/> <!-- </a> -->
                                            <span class="mailbox-attachment-size">
                                                '.$attachment->created_at.'
 
