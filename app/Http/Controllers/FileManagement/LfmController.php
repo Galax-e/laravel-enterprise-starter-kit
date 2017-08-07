@@ -32,9 +32,12 @@ class LfmController extends Controller
         $page_description = "Registry Area";
 
         $activity = '%Forward%';
+        $shared   = '%shared%';
         $comment  = '%Comment%';
         $creation = '%created%';
-        $activities = DB::select('select * from activities where activity like ? or activity like ? or activity like ?  order by created_at desc limit 5', [$activity, $comment, $creation]);
+
+        $registry_activities = DB::select('select * from activities where activity like ? or activity like ? order by created_at desc limit 5', [$shared, $creation]);
+        $activities = DB::select('select * from activities where activity like ? or activity like ? order by created_at desc limit 5', [$activity, $comment]);
 		
         if($request->ajax()){
 
@@ -59,7 +62,7 @@ class LfmController extends Controller
         $forward_to_users = DB::select('select * from users');
         
         Flash::success('Welcome! Registry File Management Area.');
-        return view('registry.index', compact('page_description', 'forward_to_users', 'page_title', 'activities'));
+        return view('registry.index', compact('page_description', 'forward_to_users', 'page_title', 'activities', 'registry_activities'));
     }
 
     public function getErrors()

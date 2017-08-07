@@ -163,7 +163,7 @@
                 <ul class="todo-list">
                 
                 <?php $loopindex = 0; ?>
-                @foreach($activities as $activity)
+                @foreach($registry_activities as $activity)
                   @if (++$loopindex >= 5)
                     @break;
                   @endif
@@ -193,7 +193,7 @@
                       <div class="pull-left" style="margin-right: 5px;">
                         <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
                       </div>
-                      <small class="">{{ $activity->folder_id }}&nbsp; created by &nbsp; {{ $folder_by }}                
+                      <small class="">{{ $activity->folder_id }} &nbsp; created by &nbsp; {{ $folder_by }}                
                       </small>
                       <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
                         <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
