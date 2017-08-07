@@ -118,10 +118,9 @@
 				</div><!-- /.box-header -->
 				<div class="box-body">
 					<ul class="todo-list">
-						@foreach($activities as $activity)
-							@if($activity->type == 'onfolder' )													
+						@foreach($activities as $activity)												
 								<?php $folder = Illuminate\Support\Facades\DB::table('folders')->where('id', $activity->element_id)->first(); ?>
-								@if($activity->activity_by && $activity->activity_by == Auth::user()->email)
+								@if($activity->activity_by == Auth::user()->email)
 									<?php $to_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first();
 									 ?>
 									<li>  
@@ -135,7 +134,7 @@
 									</li>
 								@endif
 
-								@if($activity->activity_by && $activity->activity_to == Auth::user()->email)
+								@if($activity->activity_to == Auth::user()->email)
 									<?php $from_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_by)->first();
 									?>
 									<li>  
@@ -148,17 +147,7 @@
 										</div>
 									</li>
 								@endif									
-							@endif
-							{{--  @if($activity->type == 'memo' )	
-								@if($activity->activity_by == Auth::user()->email)
-									<li>  
-										<small>{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}</small>
-										<div></span><small class=""><b>{{ $activity->activity }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-										<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
-										</div>
-									</li>
-								@endif
-							@endif  --}}
+	
 						@endforeach
 					</ul>
 				</div><!-- /.box-body -->
