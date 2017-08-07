@@ -312,7 +312,7 @@ class FilesController extends Controller {
 		$activity->fileinfo = Input::get('folder_no');
 		$activity->activity_to = $folder_to; //Input::get('share-input');
 		$activity->activity_by_post = Auth::user()->position;
-		$activity->activity = 'Registry Forwarded this folder to '. $shareInput;
+		$activity->activity = 'Registry shared this folder to '. $shareInput;
 		$activity->save();
 		
 		//return 'session';

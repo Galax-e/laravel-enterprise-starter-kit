@@ -133,8 +133,8 @@
                   <li>
                     <?php  
                       $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$forwarded_by] );  
-                      foreach($temp_user as $us ){
-                          $user_avatar = ((array)$us)['avatar'];
+                      foreach($temp_user as $user ){
+                          $user_avatar = ((array)$user)['avatar'];
                       }
                     ?>
                     
@@ -206,8 +206,8 @@
                     <li>
                     <?php  
                       $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$shared_by] );  
-                      foreach($temp_user as $us ){
-                          $user_avatar = ((array)$us)['avatar'];
+                      foreach($temp_user as $user ){
+                          $user_avatar = ((array)$user)['avatar'];
                       }
                     ?>
                     <div>
@@ -313,11 +313,15 @@
         <li>
           <a href="#"></a>
           <ul class="hide">
-            <li>
-              <a href="#" id="add-folder" data-mfb-label="{{ trans('registry/lfm.nav-new') }}">
-                <i class="fa fa-folder"></i>
-              </a>
-            </li>
+
+            {{--  @if(Auth::user()->isRoot())  --}}
+              <li>
+                <a href="#" id="add-folder" data-mfb-label="{{ trans('registry/lfm.nav-new') }}">
+                  <i class="fa fa-folder"></i>
+                </a>
+              </li>
+            {{--  @endif  --}}
+            
             <li>
               <a href="#" id="upload" data-mfb-label="{{ trans('registry/lfm.nav-upload') }}">
                 <i class="fa fa-upload"></i>
@@ -496,7 +500,7 @@
       </div>
     </div>
     
-  <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -506,10 +510,7 @@
           <div class="modal-body">
             <div class="box-body">
               <ul id="showactivities" class="todo-list">
-
-                {{--  Folder hostory comes here.
-                  --}}
-
+                {{--  Folder hostory comes here. --}}
               </ul>
             </div><!-- /.box-body -->
           </div>
@@ -530,9 +531,9 @@
     <script src="{{ asset('vendor/laravel-filemanager/js/cropper.min.js') }}"></script>
     <script src="{{ asset('vendor/laravel-filemanager/js/jquery.form.min.js') }}"></script>
     <script>
-    var route_prefix = "{{ url('/') }}";
-    var lfm_route = "{{ url(config('lfm.prefix')) }}";
-    var lang = {!! json_encode(trans('registry/lfm')) !!};
+      var route_prefix = "{{ url('/') }}";
+      var lfm_route = "{{ url(config('lfm.prefix')) }}";
+      var lang = {!! json_encode(trans('registry/lfm')) !!};
     </script>
     {{-- <script>{!! \File::get(base_path('vendor/unisharp/laravel-filemanager/public/js/script.js')) !!}</script> --}}
     {{-- <script>{!! \File::get(public_path('vendor/laravel-filemanager/js/script.js')) !!}</script> --}}
