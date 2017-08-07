@@ -57,7 +57,7 @@ class MemoController extends Controller
     {  
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = "Compose New Memo"; //trans('admin/users/general.page.index.description'); // 
         
         $user_id = Auth::user()->email;
@@ -71,7 +71,7 @@ class MemoController extends Controller
     {  
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = "Incomings"; //trans('admin/users/general.page.index.description'); // 
         
         $user_id = Auth::user()->email;
@@ -83,7 +83,7 @@ class MemoController extends Controller
     public function read_memo(Request $request, $id) {
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-        $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+        $page_title =  "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = "New Memo"; // trans('admin/users/general.page.index.description'); // "List of users";
         
         $user_id = Auth::user()->email;
@@ -118,7 +118,7 @@ class MemoController extends Controller
     {  
        Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
-       $page_title = trans('admin/users/general.page.index.title'); // "Admin | Users";
+       $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
        $page_description = "Outgoings"; //trans('admin/users/general.page.index.description'); // 
        
        $user_id = Auth::user()->email;
