@@ -72,7 +72,7 @@
                                                '.$attachment->created_at.'
 
 
-<a href="#" data-toggle="modal" data-target="#FileModal" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+
 
 <!-- Load file modal-->
    <div class="modal fade" id="FileModal" role="dialog">
@@ -115,7 +115,7 @@
                                            <i class="fa fa-paperclip"></i> <a href="../attachment_file/'.$attachment->name.'" style="color: #000000 ;" data-toggle="modal" data-target="#FileModal"> '.$attachment->original_name.'</a><br/> <!-- </a> -->
                                            <span class="mailbox-attachment-size">
                                                '.$attachment->created_at.'
-<a href="#" data-toggle="modal" data-target="#FileModal" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+
 
 <!-- Load file modal-->
    <div class="modal fade" id="FileModal" role="dialog">

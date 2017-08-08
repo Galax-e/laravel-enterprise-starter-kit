@@ -3,7 +3,7 @@
 return [
 
     'text'              => [
-        'welcome' 		=> 'Kaduna State Government | File Management System',
+        'welcome' 		=> 'File Management',
 		'home-header' 	=> 'Welcome to MyDESK v4.0',
         'newsstream'	=> 'New Stream',
         'newsfeed'  	=> 'News Feed',

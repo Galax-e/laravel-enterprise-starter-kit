@@ -119,10 +119,10 @@ class FilesController extends Controller {
 		$comment->save();
 		
 		$activity = new Activity;
-		$activity->activity_by= Input::get('comment_by');
+		$activity->activity_by = Input::get('comment_by');
 		$activity->activity_by_post = Auth::user()->position;
 		$activity->folder_id= Input::get('folder_id');
-		$activity->activity= Input::get('activity');
+		$activity->activity = Input::get('activity');
 		$activity->comment= Input::get('comment');
 		$activity->save();
 		
@@ -159,7 +159,7 @@ class FilesController extends Controller {
 		$activity->activity_by = $comment->comment_by; // request('comment_by');
 		$activity->folder_id   = $comment->folder_id; //request('folder_id');
 		$activity->element_id  = $folder_id;
-		$activity->activity    = Auth::user()->full_name. ' Commented on '. request('activity');
+		$activity->activity    = Auth::user()->full_name. ' commented on '. request('activity');
 		$activity->comment     = $comment->comment ; //request('comment');
 		$activity->save();
 
@@ -257,9 +257,9 @@ class FilesController extends Controller {
 		//$data = array('message' => 'Success', 'body' => "$html");
 		// return response()->json($data)->view('hello')->header('Content-Type', $type);
     	
-		$html = View::make('dashboard');
+		// $html = View::make('dashboard');
 
-		return Response::json(array('message' => 'Success', 'body' => "$html"));
+		return Response::json(array('message' => 'Success'));
     }
 	
 	public function share(Request $request)
@@ -312,7 +312,7 @@ class FilesController extends Controller {
 		$activity->fileinfo = Input::get('folder_no');
 		$activity->activity_to = $folder_to; //Input::get('share-input');
 		$activity->activity_by_post = Auth::user()->position;
-		$activity->activity = 'Registry shared this folder to '. $shareInput;
+		$activity->activity = 'Registry shared/forwarded this folder to '. $shareInput;
 		$activity->save();
 		
 		//return 'session';
@@ -326,7 +326,8 @@ class FilesController extends Controller {
 		$folder = DB::table('folders')->where('folder_no', $folder_no)->first();
 		
 		$folder_clearance = $folder->clearance_level; 
-		$users = DB::table('users')->where('clearance_level', '>=', $folder_clearance)->get();        
+		$users = DB::table('users')->where('clearance_level', '>=', $folder_clearance)
+		->where('email', '!=', Auth::user()->email)->get();        
 
 		$data = array('users'=>$users);
 		return response()->json($data);

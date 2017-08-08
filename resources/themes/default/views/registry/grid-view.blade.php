@@ -43,9 +43,12 @@
               <li><a href="javascript:move('{{ $item_name }}')"><i class="fa fa-external-link fa-fw"></i> Move</a></li>          
             @endif
             <li class="divider"></li>
-            <li><a href="javascript:history('{{ $item_name }}')" id='history'><i class="fa fa-arrows fa-fw"></i> History</a></li>
-            <li><a href="javascript:temp_delete('{{ $item_name }}')"><i class="fa fa-trash fa-fw"></i> Delete</a></li>
-
+            
+            @if(!$item->is_file)
+              <li><a href="javascript:history('{{ $item_name }}')" id='history'><i class="fa fa-arrows fa-fw"></i> History</a></li>
+              <li><a href="javascript:temp_delete('{{ $item_name }}')"><i class="fa fa-trash fa-fw"></i> Delete</a></li>
+            @endif
+            
           @else
             <li><a href="javascript:history('{{ $item_name }}')" id='history'><i class="fa fa-arrows fa-fw"></i> History</a></li>
           @endif

@@ -237,7 +237,7 @@ Route::group(['middleware' => 'authorize'], function () {
     }); // End of ADMIN group
 
     // Unisharp upload routes
-    Route::group(['prefix' => 'registry'], function (){
+    Route::group(['middleware'=>'registry','prefix' => 'registry'], function (){
         Route::get('/laravel-filemanager', 'FileManagement\LfmController@show');
         Route::post('/laravel-filemanager/upload', 'FileManagement\LfmController@upload');
 

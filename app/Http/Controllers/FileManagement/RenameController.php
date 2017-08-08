@@ -92,16 +92,21 @@ class RenameController extends LfmController
         $new_name = parent::translateFromUtf8(trim(request('items')));        
         $old_file = parent::getCurrentPath($new_name);
         $new_path = public_path().'/docs/files/trash/'.$new_name;
-        $move     =  File::copyDirectory($old_file, $new_path);
-        $delete   =  File::deleteDirectory($old_file);
+        $move     = File::copyDirectory($old_file, $new_path);
+        $delete   = File::deleteDirectory($old_file);
 
+        // delete file from database
+        DB::table('folders')->where('folder_no', $new_name)->delete();
 
-                    $activity = new Activity;
-                    $activity->activity_by= Auth::user()->email;
-                    $activity->activity_by_post = Auth::user()->position;
-                    $activity->folder_id= '10000';
-                    $activity->fileinfo= $new_name;
-                    $activity->activity= ' Delete File';
-                    $activity->save();
+        $activity = new Activity;
+        $activity->activity_by= Auth::user()->email;
+        $activity->activity_by_post = Auth::user()->position;
+        $activity->folder_id= '10000';
+        $activity->fileinfo= $new_name;
+        $activity->activity= 'One folder deleted from system';
+        $activity->save();
+
+        Flash::success('One Folder deleted');
+        return redirect()->back();
    }
 }

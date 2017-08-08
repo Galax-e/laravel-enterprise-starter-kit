@@ -3,6 +3,7 @@
 $middleware = array_merge(\Config::get('lfm.middlewares'), [
     '\Unisharp\Laravelfilemanager\middlewares\MultiUser',
     '\Unisharp\Laravelfilemanager\middlewares\CreateDefaultFolder',
+    '\App\Http\Middleware\RegistryAuth',
 ]);
 $prefix = \Config::get('lfm.prefix', 'laravel-filemanager');
 $as = 'unisharp.lfm.';

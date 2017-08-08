@@ -53,7 +53,7 @@
 
   {{-- <script type="text/javascript" src="file-upload/scripts/jquery.min.js"></script> --}}
   <script type="text/javascript" src="{{ asset("file-upload/scripts/jquery.form.js") }}"></script>
-  <script type="text/javascript" src="{{ asset("file-upload/scripts/upload.js") }}"></script>
+  {{--  <script type="text/javascript" src="{{ asset("file-upload/scripts/upload.js") }}"></script>  --}}
   <link type="text/css" rel="stylesheet" href="{{ asset("file-upload/style.css") }}" /> 
 
   <script type="text/javascript" src="{{ asset("bower_components/admin-lte/plugins/moment/moment.min.js") }}"></script>
@@ -248,36 +248,33 @@
 							<ul id="attachfile{{$loopindex}}" class="mailbox-attachments clearfix">
 							@foreach($files as $file)
 								@if($file->folder_id == $folder->id)
-					<?php
-                if (strpos($file->name, 'pdf') !== false) {
-                	echo'
-					<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-pdf-o"></i></span>
-							<div class="mailbox-attachment-info">
-							<i class="fa fa-paperclip"></i> <a href="docs/files'.$folder->path.'/'.$file->name.'" style="color: #000000;" target="_blank"> '.$file->original_name.'</a><br/>
-								<span class="mailbox-attachment-size">
-								'.$file->created_at.'
-									<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-								</span>
-							</div>
-					</li>';
+								<?php
+								if (strpos($file->name, 'pdf') !== false) {
+									echo'
+									<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-pdf-o"></i></span>
+											<div class="mailbox-attachment-info">
+											<i class="fa fa-paperclip"></i> <a href="docs/files'.$folder->path.'/'.$file->name.'" style="color: #000000;" target="_blank"> '.$file->original_name.'</a><br/>
+												<span class="mailbox-attachment-size">
+												'.$file->created_at.'
+													<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+												</span>
+											</div>
+									</li>';
 
-				} else{
-				echo '
-					<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-image-o"></i></span>
-						<div class="mailbox-attachment-info">
-						<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$file->original_name.'</a>
-							<span class="mailbox-attachment-size">
-							'.$file->created_at.'
-								<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-							</span>
-						</div>
-					</li>';
-				}
-				?>
-
-
-
-								@endif
+								} else{
+								echo '
+									<li><span class="mailbox-attachment-icon has-img"><i class="fa fa-file-image-o"></i></span>
+										<div class="mailbox-attachment-info">
+										<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$file->original_name.'</a>
+											<span class="mailbox-attachment-size">
+											'.$file->created_at.'
+												<a href="docs/files'.$folder->path.'/'.$file->name.'" target="_blank" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+											</span>
+										</div>
+									</li>';
+								}
+							?>
+							@endif
 							@endforeach
 							</ul>
 						</div> <!-- end box-footer for other pdfs attachment -->
@@ -317,39 +314,47 @@
 						</div>
 					
 						<div class="box"> <!-- div for comment header-->
-							<div class="box-header"> 
+					<div class="box-header"> 
 
-					<script type="text/javascript" src="scripts3/jquery.form.js"></script>
-					<script type="text/javascript" src="scripts3/upload.js"></script>
-					<link type="text/css" rel="stylesheet" href="style.css" />
+					<script>
+						$(document).ready(function() {		
+							$("#photo{{$loopindex}}").on('change', function()			{ 
+								$("#preview{{$loopindex}}").html('');		
+								$("#preview{{$loopindex}}").html('<img src="loader.gif" alt="Uploading...."/>');
+							$("#image_upload_form{{$loopindex}}").ajaxForm({
+										target: "#preview{{$loopindex}}"
+								}).submit();
+							});
+						})
+					</script>
 
-								<div style="width:350px" align="center">
-									<div id='preview'></div>    
-									<form id="image_upload_form" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
-										<input type = "hidden" id="folder_id" name = "folder_id" value = "{{ $folder->id }}"> 
-										<input type="hidden" name="_token" value="{{ csrf_token() }}">
-										<input type="hidden" name="path" value="{{"docs/files".$folder->path."/"}}">
-										
-										<div class="browse_text"><label>Attach File/Image:</label></div>
+					<div style="width:350px" align="center">
+						<div id="preview{{$loopindex}}"></div>    
+						<form id="image_upload_form{{$loopindex}}" method="post" enctype="multipart/form-data" action='single_upload' autocomplete="off">
+							<input type = "hidden" id="folder_id" name = "folder_id" value = "{{ $folder->id }}"> 
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="path" value="{{"docs/files".$folder->path."/"}}">
+							
+							<div class="browse_text"><label>Attach File/Image:</label></div>
 
-										<div class="file_input_container">
-											<div class="upload_button"><div class="btn btn-info btn-file">
-												<i class="fa fa-paperclip"></i> Attachment
-											<input type="file" name="photo" id="photo" class="file_input" />
-											</div>
-											<p class="help-block">Max. 32MB</p></div>
-										</div><br clear="all">
-									</form>
+							<div class="file_input_container">
+								<div class="upload_button"><div class="btn btn-info btn-file">
+									<i class="fa fa-paperclip"></i> Attachment
+								<input type="file" name="photo" id="photo{{ $loopindex }}" class="file_input" />
 								</div>
+								<p class="help-block">Max. 32MB</p></div>
+							</div><br clear="all">
+						</form>
+					</div>
 											     				        												
-							</div>
-							<div class="box-footer">
-								<ul class="list-inline">
-									<li class="pull-left">
-										<a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments</a></li>
-								</ul>
-							</div>
-						</div>  <!-- end box -->
+					</div>
+						<div class="box-footer">
+							<ul class="list-inline">
+								<li class="pull-left">
+									<a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments</a></li>
+							</ul>
+						</div>
+					</div>  <!-- end box -->
 					
 					<!-- chat item -->
 					<div class='chat'>					
@@ -580,7 +585,7 @@
 					<form action="comment" id="commentForm{{$loopindex}}" class='commentFormClass' method="post" enctype="multipart/form-data">
 						<input type="hidden" id="comment_by{{$loopindex}}" name="comment_by" value="{{ Auth::user()->email }}">
 						<input type="hidden" id="folder_id{{$loopindex}}" name="folder_id" value="{{ $folder->id }}">
-						<input type="hidden" id="activity{{$loopindex}}" name="activity" value="{{ substr($folder->name, 3) }}">
+						<input type="hidden" id="activity{{$loopindex}}" name="activity" value="{{ substr($folder->name, 0, 7) }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="box-footer">
 							<div class="input-group">
@@ -636,7 +641,7 @@
 						@foreach($file_movement as $activity)
 							@if($activity->element_id == $folder->id)
 								<li> 
-									<small>{{ $activity->activity }}  </small>                  
+									<small>{{ $activity->activity }}  </small><br/>                  
 									<small class="label label-info"> 
 									<i class="fa fa-clock-o"></i>
 									<b>{{ date('F d, Y', strtotime( $activity->created_at )) }}</b></small>

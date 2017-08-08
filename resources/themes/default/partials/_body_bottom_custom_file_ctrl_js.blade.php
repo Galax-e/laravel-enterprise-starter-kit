@@ -8,6 +8,7 @@
        });
        
        var temp_fn = 0, temp_mn = 0, temp_rfn = 0;
+       var dummy_count = 0;
        function pageRefresh(view = ''){
            
            $.ajax({
@@ -37,6 +38,11 @@
                             desktopNotification(event='New File', message = 'New shared folder on Desk', count);
                             temp_fn = notif_count;
                        }
+
+                       if(dummy_count++ < 1){
+                           //location.href = location.href;
+                       }
+                       //
                    }
                },
                error:function(){

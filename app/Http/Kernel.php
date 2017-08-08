@@ -22,6 +22,12 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\LocaleSelector::class,
         \App\Http\Middleware\WalledGarden::class,
         \Arcanedev\Settings\Http\Middleware\SettingsMiddleware::class,
+
+        /*
+         * @cpnwaugha: c-e: custom middlewares
+         */
+        \Unisharp\Laravelfilemanager\middlewares\MultiUser::class,
+        \Unisharp\Laravelfilemanager\middlewares\CreateDefaultFolder::class,
     ];
 
     /**
@@ -34,10 +40,12 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'authorize' => \App\Http\Middleware\AuthorizeRoute::class,
+
         /*
          * @cpnwaugha: c-e: custom middlewares
          */
-        'multiuser' => \Unisharp\Laravelfilemanager\middlewares\MultiUser::class,
-        'createdeffolder' => \Unisharp\Laravelfilemanager\middlewares\CreateDefaultFolder::class,
+
+         'registry' => \App\Http\Middleware\RegistryAuth::class,
+        
     ];
 }

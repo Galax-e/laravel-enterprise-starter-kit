@@ -113,17 +113,13 @@
               <div class="active tab-pane" id="activity">
                 <ul class="todo-list">
                 
-                <?php $loopindex = 0; ?>
-                @foreach($activities as $activity)
-                  @if (++$loopindex >= 5)
-                    @break;
-                  @endif
+                
+                @foreach($activities as $activity)                  
                     
                   <?php                     
                     $folder = Illuminate\Support\Facades\DB::select('select forwarded_by, folder_to from folders where folder_no=?', [$activity->folder_id] );  
                     $folder_to = null;
                     $forwarded_by = null;
-
                     foreach($folder as $fold ){
                         $folder_to = ((array)$fold)['folder_to'];
                         $forwarded_by = ((array)$fold)['forwarded_by'];
@@ -132,22 +128,26 @@
                   @if($forwarded_by)
                   <li>
                     <?php  
-                      $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$forwarded_by] );  
+                      $temp_user = Illuminate\Support\Facades\DB::select('select first_name, last_name, avatar from users where email=?', [$forwarded_by] ); 
                       foreach($temp_user as $user ){
                           $user_avatar = ((array)$user)['avatar'];
+                          $user_name = ((array)$user)['first_name'].', '.((array)$user)['last_name'];;
                       }
-                    ?>
-                    
+                      $temp_user_to = Illuminate\Support\Facades\DB::select('select first_name, last_name from users where email=?', [$folder_to] );                      
+                      foreach($temp_user_to as $user ){                          
+                          $user_to_name = ((array)$user)['first_name'].', '.((array)$user)['last_name'];;
+                      }
+                    ?>                    
                     <div>
                       <div class="pull-left" style="margin-right: 5px;">
                         <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
                       </div>
-                      <small>{{ $forwarded_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
-                        class="offline" style="width: 30px;" alt="User Image"/>  
-                        &nbsp; &nbsp; {{$folder_to}}
-                      </small>
-                      <small class="label pull-left">
-                        {{ $activity->folder_id }}
+                      <small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
+                        class="offline" style="width: 20px;" alt="User Image"/>  
+                        &nbsp; &nbsp; {{$user_to_name}}
+                      </small><br/>
+                      <small class="pull-left">
+                        <b>{{ $activity->folder_id }}</b>
                       </small>
                       <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
                         <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
@@ -160,13 +160,9 @@
                 </ul>
               </div><!-- /.box-body active tab-pane -->
               <div class="tab-pane" id="shared">
-                <ul class="todo-list">
+                <ul class="todo-list">                
                 
-                <?php $loopindex = 0; ?>
-                @foreach($registry_activities as $activity)
-                  @if (++$loopindex >= 5)
-                    @break;
-                  @endif
+                @foreach($reg_activities as $activity)                
                     
                   <?php 
                     
@@ -178,48 +174,33 @@
                         $folder_to = ((array)$fold)['folder_to'];
                         $shared_by = ((array)$fold)['shared_by'];
                         $folder_by = ((array)$fold)['folder_by'];
-                    }     
-                    
+                    }                         
                   ?>
-                  @if($folder_by)
-                  <li>
-                    <?php  
-                      $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$folder_by] );  
-                      foreach($temp_user as $user ){
-                          $user_avatar = ((array)$user)['avatar'];
-                      }
-                    ?>
-                    <div>
-                      <div class="pull-left" style="margin-right: 5px;">
-                        <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
-                      </div>
-                      <small class="">{{ $activity->folder_id }} &nbsp; created by &nbsp; {{ $folder_by }}                
-                      </small>
-                      <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
-                        <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>
-                      </small>
-                    </div>
-                  </li>
-                  @endif
+                  
 
                   @if($shared_by)
                     <li>
                     <?php  
-                      $temp_user = Illuminate\Support\Facades\DB::select('select avatar from users where email=?', [$shared_by] );  
+                      $temp_user = Illuminate\Support\Facades\DB::select('select first_name, last_name, avatar from users where email=?', [$shared_by] );  
                       foreach($temp_user as $user ){
                           $user_avatar = ((array)$user)['avatar'];
+                          $user_name = ((array)$user)['first_name'].', '.((array)$user)['last_name'];
+                      }
+                      $temp_user_to = Illuminate\Support\Facades\DB::select('select first_name, last_name from users where email=?', [$folder_to] );                      
+                      foreach($temp_user_to as $user ){                          
+                          $user_to_name = ((array)$user)['first_name'].', '.((array)$user)['last_name'];;
                       }
                     ?>
                     <div>
                       <div class="pull-left" style="margin-right: 5px;">
                         <img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
                       </div>
-                      <small>{{ $shared_by }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
-                        class="offline" style="width: 30px;" alt="User Image"/>  
-                        &nbsp; &nbsp; {{$folder_to}}
+                      <small>{{ $user_name }}  &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" 
+                        class="offline" style="width: 20px;" alt="User Image"/>  
+                        &nbsp; &nbsp; {{$user_to_name}}
                       </small>
                       <small class="pull-left">
-                        {{ $activity->folder_id }}
+                        <b>{{ $activity->folder_id }}</b>
                       </small>
                       <small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
                         <b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b>

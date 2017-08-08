@@ -52,7 +52,7 @@ class UploadController extends LfmController
         $new_activity->element_id  = $new_folder->id;
         $new_activity->folder_id   = Input::get('working_dir');
         $new_activity->fileinfo    = Input::get('folder_no').' | '.Input::get('fold_name').' | '.Input::get('add_folder_description');
-        $new_activity->activity    = 'New folder'.Input::get('fold_name').'created';
+        $new_activity->activity    = 'New folder'.Input::get('fold_name').' created';
         $new_activity->save();
     }
 	
