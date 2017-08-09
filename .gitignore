@@ -5,6 +5,9 @@
 .env~
 storage/
 
+# Remove exception handler from the head#
+/app/Exceptions/Handler.php
+
 # Package development #
 #######################
 /app/Modules/
