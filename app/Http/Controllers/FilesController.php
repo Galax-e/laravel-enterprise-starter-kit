@@ -291,7 +291,7 @@ class FilesController extends Controller {
 
 
 		$shared_by = $user->email;
-		DB::update('update folders set folder_to = ?, shared_by = ?, forwarded_at = ? where folder_no = ?', [$folder_to, $shared_by, $folder_no, Carbon::now()]);
+		DB::update('update folders set folder_to = ?, shared_by = ?, forwarded_at = ? where folder_no = ?', [$folder_to, $shared_by, Carbon::now(), $folder_no]);
 		
 		// get folder id
 		$folder = DB::select('select id from folders where folder_no = ?', [$folder_no]);
