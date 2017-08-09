@@ -412,8 +412,9 @@
 									e.preventDefault();
 									e.stopPropagation();
 									
-									if($('#post_pin_input').val().length > 4 || $('#post_pin_input').val().length < 4){
+									if( $('#post_pin_input').val().length !== 4 ){
 										alert('Pin is invalid. Please enter a four digit pin');
+										$('#post_pin_input').val('');
 										return;
 									}
 
@@ -465,8 +466,9 @@
 									e.preventDefault();
 									e.stopPropagation();
 
-									if( $('#post_pin_input').val().length > 4 || $('#post_pin_input').val().length < 4 ){
+									if( $('#forward_pin_input').val().length !== 4 ){
 										alert('Pin is invalid. Please enter a four digit pin');
+										$('#forward_pin_input').val('');
 										return;
 									}
 
