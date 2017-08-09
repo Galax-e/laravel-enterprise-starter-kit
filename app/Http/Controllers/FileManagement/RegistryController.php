@@ -34,23 +34,19 @@ class RegistryController extends Controller
         Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = "Shared File";
-        $page_description = "List of live file";
+        $page_description = "List of live files";
 
       
         $user_id = Auth::user()->email;
         $user_position = Auth::user()->position;
         $user_id2 = Auth::user()->username;
         
-        $act = '%Forward%';
+        $act = '%Forward%';        
+        //$folder = Folder::all();
         
-        //$folder = Folder::all();  
-
-
-        //$folder = Folder::all();  
         $folders = DB::table('folders')->whereNotNull('folder_to')->where('folder_to', '!=', 'registry@kdsg.gov.ng')->orderBy('created_at', 'DESC')->paginate(12);
         return view('views.actions.activity.shared', compact('page_title', 'page_description', 'folders'));
     }
-    
 }
 
 

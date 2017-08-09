@@ -47,10 +47,7 @@
                     <?php echo date("l"). ", "; echo date('d M Y');?>
                   </span>
                 </li>
-                <!-- /.timeline-label -->
-          
-
-
+                <!-- /.timeline-label -->        
 
             <ul class="nav nav-tabs">
                <li class="pull-right"> 
@@ -65,35 +62,32 @@
             </ul>
             </br>
 
+            <li>
+            <i class="fa fa-file bg-purple"></i>
+            <div class="timeline-item">
+              <span class="time"><i class="fa fa-clock-o"></i> <?php echo date("l"). ", "; echo date('d M Y');?></span>
+              <h3 class="timeline-header"> Shared Files or Live Files</h3>
+              <div class="timeline-body">
+                <ul class="mailbox-attachments clearfix">
 
-
-
-
-                  <li>
-                  <i class="fa fa-file bg-purple"></i>
-                  <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> <?php echo date("l"). ", "; echo date('d M Y');?></span>
-                    <h3 class="timeline-header"> Shared Files or Live Files</h3>
-                    <div class="timeline-body">
-                      <ul class="mailbox-attachments clearfix">
-
-
-        @foreach($folders as $folder)
-                <?php
-
-                echo '
-                 
-                 <li><span class="mailbox-attachment-icon"><i class="fa fa-folder-open"></i></span>
-                        <div class="mailbox-attachment-info">
-                          <a href="#" class="mailbox-attachment-name"><i class="fa fa-folder"></i> '.$folder->name.'</a>
-                              <span class="mailbox-attachment-size">'
-                                .date('H:i A | F d, Y', strtotime($folder->created_at )).'
-                              </span>
-                        </div>
-                 </li>';
-
-                ?>
-        @endforeach
+                  @foreach($folders as $folder)
+                          <?php
+                           $current_holder = Illuminate\Support\Facades\DB::table('users')->where('email', [$folder->folder_to])->first();
+                           $current_holder = $current_holder->first_name.', '.$current_holder->last_name;
+                          echo '                          
+                          <li><span class="mailbox-attachment-icon"><i class="fa fa-folder-open"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name"><i class="fa fa-folder"></i> '.$folder->name.'</a><br/>
+                                        <span>
+                                          <small>Held by <label></label><b style="color: tomato;">'.$current_holder.'</b></small>
+                                        </span>
+                                        <span class="mailbox-attachment-size">'
+                                          .date('H:i A | F d, Y', strtotime($folder->created_at )).'
+                                        </span>
+                                  </div>
+                          </li>';
+                          ?>
+                  @endforeach
 
               </ul>
              <div align="center"> </div>
