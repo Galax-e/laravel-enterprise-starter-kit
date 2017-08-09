@@ -412,7 +412,7 @@
 									e.preventDefault();
 									e.stopPropagation();
 
-									if($('#post_pin_input').val().length > 4 ){
+									if($('#post_pin_input').val().length !== 4 ){
 										alert('Pin is invalid. Please enter a four digit pin');
 										return;
 									}
@@ -462,6 +462,12 @@
 								$("#forwardPinBtn").on('click', function(e){
 									e.preventDefault();
 									e.stopPropagation();
+
+									if($('#forward_pin_input').val().length !== 4 ){
+										alert('Pin is invalid. Please enter a four digit pin');
+										return;
+									}
+
 									$('#forwardPinModal').modal('hide');
 
 									var forwardPinForm = $('#forward_pin_form').serialize();
