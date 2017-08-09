@@ -411,11 +411,12 @@
 								$("#postPinBtn").on('click', function(e){
 									e.preventDefault();
 									e.stopPropagation();
-
-									if($('#post_pin_input').val().length !== 4 ){
+									
+									if($('#post_pin_input').val().length > 4 || $('#post_pin_input').val().length < 4){
 										alert('Pin is invalid. Please enter a four digit pin');
 										return;
 									}
+
 									$('#postPinModal').modal('hide');
 
 									var postPinForm = $('#post_pin_form').serialize();							
@@ -435,7 +436,8 @@
 											var formData  = $("#commentForm{{$loopindex}}").serialize();
 											postCommentForm(formData);
 										}
-										else{											
+										else{	
+											console.log('Wrong pin');										
 											$.toast({
 												heading: 'PIN Verification',
 												text: 'Wrong pin: Enter the correct PIN',
@@ -463,7 +465,7 @@
 									e.preventDefault();
 									e.stopPropagation();
 
-									if($('#forward_pin_input').val().length !== 4 ){
+									if( $('#post_pin_input').val().length > 4 || $('#post_pin_input').val().length < 4 ){
 										alert('Pin is invalid. Please enter a four digit pin');
 										return;
 									}
@@ -553,7 +555,8 @@
 									dataType:"json",
 									data: data
 								}).done(function(returnData){
-									location.href=location.href;
+									//window.location.href=window.location.href;
+									window.location.reload();
 									console.log('Good, folder forward successful.');
 								}).fail(function(returnData){
 									console.log('Bad, not connected');

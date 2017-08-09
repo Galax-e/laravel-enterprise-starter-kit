@@ -77,6 +77,19 @@ class MemoController extends Controller
         $user_id = Auth::user()->email;
         $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14);  
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+        
+        // remove memo notification when user is in inbox.
+        $receiver_id =  Auth::user()->id;        
+        $status = 0;
+        $notifications = DB::select('select * from memo_notifications where receiver_id = ? and status = ?', [$receiver_id, $status]);
+
+        foreach($notifications as $notification){
+            $notif_id = ((array) $notification)["id"];
+
+            DB::update('update memo_notifications set status = ? where id = ?', [1, $notif_id]);
+        }
+        // end...
+        
         return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
     }
     
