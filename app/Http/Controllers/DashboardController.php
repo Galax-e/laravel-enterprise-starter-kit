@@ -79,10 +79,10 @@ class DashboardController extends Controller
 		$user_email = Auth::user()->email;
 
 		$activity = '%Forward%';
-		
+	
 		//$folder = Folder::all();	
 		$activities = DB::select('select * from activities where activity like ?  order by created_at desc limit 5', [$activity]);	
-		$file_movement = DB::select('select * from activities');
+		$file_movement = DB::select('select * from activities order by created_at desc limit 7');
 
 		$folders = DB::select('select * from folders where folder_to = ? order by created_at desc', [$user_email]);
 		$files = DB::select('select * from documents order by created_at desc');
@@ -419,7 +419,7 @@ class DashboardController extends Controller
 					echo'
 					<ul class="mailbox-attachments clearfix">
 					<li>
-						<span class="mailbox-attachment-icon has-img"><img src="'.$path.'/'.$image_name.'" style="width: 100%; height: 100%" alt="Attachment"></span>
+						<span class="mailbox-attachment-icon"><i class="fa fa-file-image-o"></i></span>
 						<div class="mailbox-attachment-info">
 						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$name.'</a>
 							<span class="mailbox-attachment-size">
