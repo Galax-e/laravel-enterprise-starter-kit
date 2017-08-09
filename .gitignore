@@ -10,6 +10,10 @@ storage/
 /app/Modules/
 #/public/vendor/
 
+# Remove exception handler from the head#
+
+/app/Exceptions/Handler.php
+
 # Configuration testing #
 #########################
 .env.mysql
