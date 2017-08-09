@@ -3,7 +3,7 @@
 return [
 
     'text'              => [
-        'welcome' 		=> 'File Management',
+        'welcome' 		=> 'KDSG | File Management System',
 		'home-header' 	=> 'Welcome to MyDESK v4.0',
         'newsstream'	=> 'New Stream',
         'newsfeed'  	=> 'News Feed',

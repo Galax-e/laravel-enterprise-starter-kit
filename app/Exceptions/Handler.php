@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Exceptions;
-
 use App\Libraries\Utils;
 use Auth;
 use Exception;
@@ -11,7 +9,6 @@ use LERN;
 use Request;
 use Setting;
 use View;
-
 class Handler extends ExceptionHandler
 {
    /**
@@ -22,7 +19,6 @@ class Handler extends ExceptionHandler
    protected $dontReport = [
        \Symfony\Component\HttpKernel\Exception\HttpException::class,
    ];
-
    /**
     * Report or log an exception.
     *
@@ -33,9 +29,7 @@ class Handler extends ExceptionHandler
     */
    public function report(Exception $e)
    {
-
    }
-
    /**
     * Render an exception into an HTTP response.
     *
@@ -47,8 +41,6 @@ class Handler extends ExceptionHandler
    {
      
    }
-
-
    private function setLERNNotificationFormat()
    {
        
