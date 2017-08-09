@@ -71,7 +71,7 @@ class DashboardController extends Controller
         $page_title = "Users | Dashboard"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = "e-Desk"; // trans('admin/users/general.page.index.description'); // "List of users";
 
-        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
+        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(8);
 		
 		$forward_to_users = DB::select('select * from users');
 
