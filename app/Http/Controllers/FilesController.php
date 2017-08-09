@@ -23,6 +23,7 @@ use App\Pin;
 use App\FolderNotification;
 use App\RequestFileNotification;
 use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
 
 class FilesController extends Controller {
    public function index(){
@@ -230,6 +231,8 @@ class FilesController extends Controller {
 		foreach($folder as $fid){
 			$folder_id = ((array) $fid)["id"];
 		}
+
+		DB::update('update folders set forwarded_at = ? where name=?', [Carbon::now(), $fold_name]);
      
         $sender_id = Auth::user()->id;
         $receiver_id =  $receiver_user['id']; // DB::table('users')->where('email', $receiver_email)->first()->id;
@@ -247,6 +250,8 @@ class FilesController extends Controller {
 		$activity->fileinfo    = Input::get('fileinfo');
         $activity->activity    = $user->full_name.' Forwarded this folder: '.Input::get('activity').', to '. $shareInput;
         $activity->save();  
+
+		
 
 		//return 'session';
         Flash::success('File has been sent to '. $first_name . ', '. $last_name);
@@ -286,7 +291,7 @@ class FilesController extends Controller {
 
 
 		$shared_by = $user->email;
-		DB::update('update folders set folder_to = ?, shared_by = ? where folder_no = ?', [$folder_to, $shared_by, $folder_no]);
+		DB::update('update folders set folder_to = ?, shared_by = ?, forwarded_at = ? where folder_no = ?', [$folder_to, $shared_by, $folder_no, Carbon::now()]);
 		
 		// get folder id
 		$folder = DB::select('select id from folders where folder_no = ?', [$folder_no]);
@@ -472,6 +477,8 @@ class FilesController extends Controller {
 				return "false";
 			}
 		}
+
+		return "false";
 		
 	}
 

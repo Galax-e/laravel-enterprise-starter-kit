@@ -564,6 +564,7 @@ class ComposerStaticInita7f14c694a901970200fd56ca9d9f9f7
         'AddFileinfoToActivities' => __DIR__ . '/../..' . '/database/migrations/2017_07_22_222110_add_fileinfo_to_activities.php',
         'AddFolderNoToFolders' => __DIR__ . '/../..' . '/database/migrations/2017_07_23_075039_add_folder_no_to_folders.php',
         'AddFolderNotifSeenToActivities' => __DIR__ . '/../..' . '/database/migrations/2017_08_05_104637_add_folder_notif_seen_to_activities.php',
+        'AddForwardedAtToFolders' => __DIR__ . '/../..' . '/database/migrations/2017_08_09_074439_add_forwarded_at_to_folders.php',
         'AddMemoAndActivityToActivities' => __DIR__ . '/../..' . '/database/migrations/2017_07_29_144827_add_memo_and_activity_to_activities.php',
         'AddNotifyToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_040142_add_notify_to_users_table.php',
         'AddOriginalNameToAttachments' => __DIR__ . '/../..' . '/database/migrations/2017_08_02_093323_add_original_name_to_attachments.php',

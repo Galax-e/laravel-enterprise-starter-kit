@@ -84,7 +84,7 @@ class DashboardController extends Controller
 		$activities = DB::select('select * from activities where activity like ?  order by created_at desc limit 5', [$activity]);	
 		$file_movement = DB::select('select * from activities order by created_at desc limit 7');
 
-		$folders = DB::select('select * from folders where folder_to = ? order by created_at desc', [$user_email]);
+		$folders = DB::select('select * from folders where folder_to = ? order by forwarded_at desc', [$user_email]);
 		$files = DB::select('select * from documents order by created_at desc');
 		$comments = DB::select('select * from comments');
 		

@@ -412,11 +412,11 @@
 									e.preventDefault();
 									e.stopPropagation();
 									
-									if( $('#post_pin_input').val().length !== 4 ){
-										alert('Pin is invalid. Please enter a four digit pin');
-										$('#post_pin_input').val('');
-										return;
-									}
+									//if( $('#post_pin_input').val().length !== 4 ){
+										//alert('Pin is invalid. Please enter a four digit pin');
+										// $('#post_pin_input').val('');
+										//return;
+									//}
 
 									$('#postPinModal').modal('hide');
 
@@ -466,11 +466,11 @@
 									e.preventDefault();
 									e.stopPropagation();
 
-									if( $('#forward_pin_input').val().length !== 4 ){
-										alert('Pin is invalid. Please enter a four digit pin');
-										$('#forward_pin_input').val('');
-										return;
-									}
+									//if( $('#forward_pin_input').val().length !== 4 ){
+										//alert('Pin is invalid. Please enter a four digit pin');
+										// $('#forward_pin_input').val('');
+										//return;
+									//}
 
 									$('#forwardPinModal').modal('hide');
 
@@ -531,22 +531,21 @@
 									data: data
 								}).done(function(returnData){
 									console.log('Good, comment added to database.');
+									$.toast({
+										heading: 'New Comment',
+										text: 'Comment added to Folder',
+										icon: 'success',
+										//bgColor: '#E01A31',
+										hideAfter: 5000,
+										showHideTransition: 'slide',
+										loader: false,        // Change it to false to disable loader
+										loaderBg: '#9EC600'  // To change the background
+									});
 								}).fail(function(returnData){
 									console.log('Bad, not connected');
 								});
-
-								$.toast({
-									heading: 'New Comment',
-									text: 'Comment added to Folder',
-									icon: 'success',
-									//bgColor: '#E01A31',
-									hideAfter: 5000,
-									showHideTransition: 'slide',
-									loader: false,        // Change it to false to disable loader
-									loaderBg: '#9EC600'  // To change the background
-								});
+								
 							};
-
 							// foward the folder
 							function forwardForm(formData){
 
@@ -560,20 +559,20 @@
 									//window.location.href=window.location.href;
 									window.location.reload();
 									console.log('Good, folder forward successful.');
+									$.toast({
+										heading: 'Folder Forwarded',
+										text: 'Folder forwarded from Your Desk',
+										icon: 'success',
+										// bgColor: '#E01A31',
+										hideAfter: 5000,
+										showHideTransition: 'slide',
+										loader: false,        // Change it to false to disable loader
+										loaderBg: '#9EC600'  // To change the background
+									});
 								}).fail(function(returnData){
 									console.log('Bad, not connected');
 								});
-
-								$.toast({
-									heading: 'Folder Forwarded',
-									text: 'Folder forwarded from Your Desk',
-									icon: 'success',
-									// bgColor: '#E01A31',
-									hideAfter: 5000,
-									showHideTransition: 'slide',
-									loader: false,        // Change it to false to disable loader
-									loaderBg: '#9EC600'  // To change the background
-								});
+								
 							}
 
 							function toastFunc(heading='heading', test='test', hideAfter=5000){
