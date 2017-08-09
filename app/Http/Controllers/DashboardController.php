@@ -424,7 +424,7 @@ class DashboardController extends Controller
 						<a href="#" class="mailbox-attachment-name"><i class="fa fa-camera"></i> '.$name.'</a>
 							<span class="mailbox-attachment-size">
 								'.$size.'
-								<a href="#" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+								<a href="'.$path.'/'.$image_name.'" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
 							</span>
 						</div>
 					</li></ul>';
