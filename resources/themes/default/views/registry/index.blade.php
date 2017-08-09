@@ -456,6 +456,7 @@
             <h4 class="modal-title" id="myModalLabel">{{ trans('registry/lfm.file-share') }}</h4>
           </div>
           <div class="modal-body">
+            <div id="current_holder"></div>
             <form action="{{route('share')}}" role='form' id='shareForm' name='shareForm' method='post'>
               
               <input type='hidden' name='folder_no' id='share_folder_no'>

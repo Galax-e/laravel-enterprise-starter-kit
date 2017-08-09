@@ -101,25 +101,28 @@
                    
                    //console.log('Working, data.count is: '+ notif_count);
 
-                   if(file_request_count === 0){
-                       $('#request_file_notif').html('');                       
-                       $('.folder_req_notif').html('');
-                       $('#request_file_notif').removeClass('label-warning');
-                       $('#request_file_notif_icon').removeClass('fa-bell-o').addClass('fa-bell-slash-o');
-                       temp_rfn = 0;
-                   }
-                   else{
-                       $('#request_file_notif').html(file_request_count);
-                       $('.folder_req_notif').html(file_request_count);
-                       $('#request_file_notif').addClass('label-warning');
-                       $('#request_file_notif_icon').removeClass('fa-bell-slash-o').addClass('fa-bell-o');
+                   if (returnData.user_role > 1){
+                       
+                        if(file_request_count === 0){
+                            $('#request_file_notif').html('');                       
+                            $('.folder_req_notif').html('');
+                            $('#request_file_notif').removeClass('label-warning');
+                            $('#request_file_notif_icon').removeClass('fa-bell-o').addClass('fa-bell-slash-o');
+                            temp_rfn = 0;
+                        }
+                        else{
+                            $('#request_file_notif').html(file_request_count);
+                            $('.folder_req_notif').html(file_request_count);
+                            $('#request_file_notif').addClass('label-warning');
+                            $('#request_file_notif_icon').removeClass('fa-bell-slash-o').addClass('fa-bell-o');
 
-                       // call notification
-                       count = file_request_count;
-                       if (file_request_count > temp_rfn){
-                            desktopNotification(event='File Request', message = 'New File Request', count);
-                            temp_rfn = file_request_count;
-                       }
+                            // call notification
+                            count = file_request_count;
+                            if (file_request_count > temp_rfn){
+                                desktopNotification(event='File Request', message = 'New File Request', count);
+                                temp_rfn = file_request_count;
+                            }
+                        }
                    }
 
                },

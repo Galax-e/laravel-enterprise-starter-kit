@@ -332,9 +332,13 @@ class FilesController extends Controller {
 		
 		$folder_clearance = $folder->clearance_level; 
 		$users = DB::table('users')->where('clearance_level', '>=', $folder_clearance)
-		->where('email', '!=', Auth::user()->email)->get();        
+		->where('email', '!=', Auth::user()->email)->get(); 
 
-		$data = array('users'=>$users);
+		$user_name = DB::table('users')->where('email', $folder->folder_to)->first();    
+
+		$user_name = $user_name->first_name.', '.$user_name->last_name;
+
+		$data = array('users'=>$users, 'current_holder'=>$user_name);
 		return response()->json($data);
 	}
 	

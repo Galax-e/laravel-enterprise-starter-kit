@@ -280,11 +280,18 @@ function share(item_name) {
         data: {item_name, item_name}
     }).done(function(returnVal){
         
-        var availableTags = [];       
-        $.each(returnVal, function(index, value){            
-            $.each(value, function(key, val){
-                availableTags.push(val.first_name+ ', '+val.last_name);
-            });            
+        var current_holder = returnVal.current_holder;
+        $('#current_holder').html('');
+        var chtml = `<label id='current_holder' style='background: red;'>The current holder of this file: <b style='color: white;'>${current_holder}</b></label>`;
+        //console.log(current_holder);
+        $('#current_holder').append(chtml);
+        var availableTags = []; 
+        //console.log(returnVal.users);      
+        $.each(returnVal.users, function(index, value){            
+            //$.each(value, function(key, val){
+                //console.log(value.first_name); 
+                availableTags.push(value.first_name+ ', '+value.last_name);
+            //});            
         });
 
         $(".js-parents").select2();

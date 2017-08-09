@@ -28,7 +28,7 @@ class RequestFileNotificationController extends Controller
             ->orderBy('created_at', 'desc')
             ->count();
         
-        $data = array('user'=>$user, 'file_request_count' => $file_request_count);
+        $data = array('user'=>$user, 'file_request_count' => $file_request_count, 'user_role'=>Auth::user()->roles->count() );
         return response()->json($data);
     }
 
