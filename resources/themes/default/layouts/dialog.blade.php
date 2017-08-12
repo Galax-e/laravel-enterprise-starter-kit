@@ -45,8 +45,10 @@
 
 <div class="login-box">
     <div class="login-logo">
-        <div class="login-logo" style="padding-top:-20px;"><img src="{{ asset ("/assets/themes/default/img/fms.png") }}" alt="User Image"></div>
-        {!! Setting::get('app.long_name') !!}<br/> FMS | {{ $page_title or "Page Title" }}
+        <div class="login-logo" style="padding-top:-20px;"><img src="{{ asset ("/assets/themes/default/img/fms.png") }}" alt="User Image" style="width: 90%; height: 60%;"></div>
+        {{--  {!! Setting::get('app.long_name') !!}  --}}
+        
+        <br/> eDesk | {{ $page_title or "Page Title" }}
     </div><!-- /.login-logo -->
     <div class="login-box-body">
 

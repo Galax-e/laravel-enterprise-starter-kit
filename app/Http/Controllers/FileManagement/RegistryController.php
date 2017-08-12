@@ -35,7 +35,6 @@ class RegistryController extends Controller
 
         $page_title = "Shared File";
         $page_description = "List of live files";
-
       
         $user_id = Auth::user()->email;
         $user_position = Auth::user()->position;

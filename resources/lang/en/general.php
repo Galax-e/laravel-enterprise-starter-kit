@@ -3,8 +3,8 @@
 return [
 
     'text'              => [
-        'welcome' 		=> 'KDSG | File Management System',
-		'home-header' 	=> 'Welcome to MyDESK v4.0',
+        'welcome' 		=> 'e-Desk | Content Central',
+		'home-header' 	=> 'DF17-APA',
         'newsstream'	=> 'New Stream',
         'newsfeed'  	=> 'News Feed',
     ],

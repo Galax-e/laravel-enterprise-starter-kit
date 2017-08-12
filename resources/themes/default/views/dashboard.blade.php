@@ -430,6 +430,7 @@
 										url:"authpin",
 										method:"GET",
 										dataType:"text",
+										cache: false,
 										data: data
 									}).done(function(returnVal){
 										if(returnVal == "true"){
@@ -483,6 +484,7 @@
 										url:"authpin",
 										method:"GET",
 										dataType:"text",
+										cache: false,
 										data: data
 									}).done(function(returnVal){
 										console.log(returnVal);
@@ -528,6 +530,7 @@
 									url:"ajaxcomment",
 									method:"GET",
 									dataType:"json",
+									cache: false,
 									data: data
 								}).done(function(returnData){
 									console.log('Good, comment added to database.');
@@ -554,6 +557,7 @@
 									url:"forward",
 									method:"POST",
 									dataType:"json",
+									cache: false,
 									data: data
 								}).done(function(returnData){
 									//window.location.href=window.location.href;

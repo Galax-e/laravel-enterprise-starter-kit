@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 
 class FilesController extends Controller {
+   
    public function index(){
 	  $id = 'Ayo';
       $users = DB::select('select * from files where file_by = ?',[$id]);
@@ -330,15 +331,34 @@ class FilesController extends Controller {
 		$folder_no = request('item_name');
 		$folder = DB::table('folders')->where('folder_no', $folder_no)->first();
 		
-		$folder_clearance = $folder->clearance_level; 
+		$folder_clearance = $folder->clearance_level;
+		$not_to_share = ['registry@kdsg.gov.ng', 'peter@hallowgate.com']; 
 		$users = DB::table('users')->where('clearance_level', '>=', $folder_clearance)
-		->where('email', '!=', Auth::user()->email)->get(); 
+		->whereNotIn('email', $not_to_share)->where('email', '!=', Auth::user()->email)->get();
 
-		$user_name = DB::table('users')->where('email', $folder->folder_to)->first();    
+		
+		$data = array('users'=>$users);
 
-		$user_name = $user_name->first_name.', '.$user_name->last_name;
+		$not_in = array("root@hallowgate.com", "peter@hallowgate.com", "registry@kdsg.gov.ng");
 
-		$data = array('users'=>$users, 'current_holder'=>$user_name);
+		if($folder->folder_to){
+
+			if (!in_array($folder->folder_to, $not_in)) {
+				$user_name = DB::table('users')->where('email', $folder->folder_to)->first();
+				$user_name = $user_name->first_name.', '.$user_name->last_name;
+				$data['current_holder'] = $user_name;
+				$user_is_admin = Auth::user()->isRoot();
+				$data['user_is_admin'] = $user_is_admin;
+				$data['folder'] = $folder;
+			}	
+			else{
+				$data['current_holder'] = 'Nobody';
+			}
+		}
+		else{
+			$data['current_holder'] = 'Nobody';
+		}
+		//$user_name = DB::table('users')->where('email', $folder->folder_to)->first(); 	
 		return response()->json($data);
 	}
 	

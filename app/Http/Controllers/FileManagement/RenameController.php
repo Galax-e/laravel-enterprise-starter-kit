@@ -79,12 +79,12 @@ class RenameController extends LfmController
         $delete   =  File::deleteDirectory($old_file);
 
 
-                    $activity = new Activity;
-                    $activity->activity_by= Auth::user()->email;
-                    $activity->activity_by_post = Auth::user()->position;
-                    $activity->folder_id= '10000';
-                    $activity->activity= ' Move File to KIV (Keep In View)';
-                    $activity->save();
+        $activity = new Activity;
+        $activity->activity_by= Auth::user()->email;
+        $activity->activity_by_post = Auth::user()->position;
+        $activity->folder_id= '10000';
+        $activity->activity= ' Move File to KIV (Keep In View)';
+        $activity->save();
    }
 
    Public function getTemp()

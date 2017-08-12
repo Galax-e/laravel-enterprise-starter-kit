@@ -118,6 +118,7 @@ Route::group(['middleware' => 'authorize'], function () {
 
     Route::get('registry_viewall',['as'=>'registry_viewall', 'uses'=>'FileManagement\RegistryController@viewAll']);
 
+    Route::get('ask_for_file_memo', ['as'=>'ask_for_file_memo', 'uses'=>'MemoController@askForFileMemo']);
 
     // creating documents and uploading file
     Route::post('newdocument',['as'=>'newdocument', 'uses'=>'FileManagement\UploadController@upload']);

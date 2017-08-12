@@ -61,6 +61,7 @@ class LfmController extends Controller
 
         $forward_to_users = DB::select('select * from users');
         
+        
         Flash::success('Welcome! Registry File Management Area.');
         return view('registry.index', compact('page_description', 'forward_to_users', 'page_title', 'activities', 'reg_activities'));
     }

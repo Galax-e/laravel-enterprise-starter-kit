@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Mail;
 use Setting;
 
+
 use App\Repositories\Criteria\User\UserWhereEmailEquals;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
@@ -32,6 +33,8 @@ use App\Http\Controllers\Controller;
 
 /** base table*/
 use App\Memo;
+use App\Activity;
+use App\MemoNotification;
 
 
 use Illuminate\Support\Facades\Input;
@@ -105,9 +108,7 @@ class MemoController extends Controller
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
         
         return view('views.actions.mailbox.read-mail', compact('users', 'page_title', 'page_description', 'memos', 'attachments'));
-   }
-
-    
+   }    
 
     public function dataphp(){
 
@@ -140,4 +141,44 @@ class MemoController extends Controller
        return view('views.actions.mailbox.sent', compact('users', 'page_title', 'page_description', 'memos'));
     }
 
+    public function askForFileMemo(Request $request)
+    {  
+		
+		$emailto = Input::get('emailto');
+        $user = Auth::user();
+
+		$memo = new Memo;
+		$memo->email_name = $user->email.', '.$user->last_name;
+		$memo->emailfrom  = $user->email;
+		$memo->subject    = Input::get('subject');
+		$memo->message    = Input::get('message');
+		$memo->emailto    = $emailto;
+		$memo->save();					
+			
+        $memo_id = $memo->id;
+        $sender_id = Auth::user()->id;
+
+        $receiver_user = DB::table('users')->where('email', $emailto)->first();        
+        $receiver_id =  $receiver_user->id;
+
+        $activity = new Activity;
+        $activity->activity_by = $user->email;
+        $activity->activity_by_post = $user->position || 'Admin';
+        $activity->activity  = 'Sends mail for file-return to: '.Input::get('email_name');
+        $activity->activity_to = $receiver_user->email;
+        $activity->comment= Input::get('subject');
+        $activity->type = 'memo';
+        $activity->memo= Input::get('message');
+        $activity->save();
+        
+        // create notification
+        MemoNotification::create(['memo_id'=>$memo_id, 'sender_id'=>$sender_id, 'receiver_id'=>$receiver_id]);
+		
+		// return to inbox with properties
+		Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
+
+                
+		Flash::success('Return File memo sent');
+		return redirect()->back()->with('Memo sent to current file holder');  //view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'))->with('Memo Sent');
+    }
 }

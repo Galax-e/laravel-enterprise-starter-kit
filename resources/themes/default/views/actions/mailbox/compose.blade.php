@@ -70,9 +70,9 @@
 						<div class="pull-right">
 						  <button type="submit" id="" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send</button>
 						</div>
-						</form>
-          	<div>
-          </div>
+					</form>
+					<div>
+				</div>
 
 						<div style="width:350px" align="center">
 							   

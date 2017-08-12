@@ -87,6 +87,13 @@
       margin-top: -11px;
       background: #ddd;
     }
+    .displayBtn{
+        display: block;
+        margin-top: -20px;
+    }
+    .removeBtn{
+      display: none;
+    }
   
   </style>
   <div class="container-fluid" id="wrapper">
@@ -293,21 +300,18 @@
       <ul id="fab">
         <li>
           <a href="#"></a>
-          <ul class="hide">
-
-            {{--  @if(Auth::user()->isRoot())  --}}
-              <li>
-                <a href="#" id="add-folder" data-mfb-label="{{ trans('registry/lfm.nav-new') }}">
-                  <i class="fa fa-folder"></i>
-                </a>
-              </li>
-            {{--  @endif  --}}
+          <ul id="mat_design_btn" class="hide">                
             
-            <li>
-              <a href="#" id="upload" data-mfb-label="{{ trans('registry/lfm.nav-upload') }}">
-                <i class="fa fa-upload"></i>
-              </a>
-            </li>
+              <li id="add-folder-li">
+                <a href="#" id="add-folder" data-mfb-label="{{ trans('laravel-filemanager::lfm.nav-new') }}">
+                  <i id="add-folder-i" class="fa fa-folder"></i>
+                </a>
+              </li>            
+              <li id="upload-li">
+                <a href="#" id="upload" data-mfb-label="{{ trans('laravel-filemanager::lfm.nav-upload') }}">
+                  <i id="upload-i" class="fa fa-upload"></i>
+                </a>
+              </li>           
           </ul>
         </li>
       </ul>
@@ -441,9 +445,6 @@
 
     $( function() {
 
-
-      
-    
     })
   </script>
 
@@ -520,7 +521,7 @@
     {{-- <script>{!! \File::get(base_path('vendor/unisharp/laravel-filemanager/public/js/script.js')) !!}</script> --}}
     {{-- <script>{!! \File::get(public_path('vendor/laravel-filemanager/js/script.js')) !!}</script> --}}
     {{-- Use the line below instead of the above if you need to cache the script. --}}
-    <script src="{{ asset('vendor/laravel-filemanager/js/script.js') }}"></script>
+    
     <script>
       $.fn.fab = function () {
         var menu = this;
@@ -532,8 +533,8 @@
           .append($('<i>').addClass('mfb-component__main-icon--resting fa fa-plus'))
           .append($('<i>').addClass('mfb-component__main-icon--active fa fa-times'));
         var children_list = wrapper.children('ul');
-        children_list.find('a').addClass('mfb-component__button--child');
-        children_list.find('i').addClass('mfb-component__child-icon');
+        children_list.find('a').addClass('mfb-component__button--child').addClass('hide');
+        children_list.find('i').addClass('mfb-component__child-icon').addClass('hide');
         children_list.addClass('mfb-component__list').removeClass('hide');
       };
       $('#fab').fab({
@@ -551,6 +552,7 @@
         ]
       });
     </script>
+    <script src="{{ asset('vendor/laravel-filemanager/js/script.js') }}"></script>
 
     {{-- Search script --}}
     @include('views.registry.folder_search_js')

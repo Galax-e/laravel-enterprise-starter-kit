@@ -33,16 +33,12 @@ $('#to-previous').click(function() {
 });
 
 $('#add-folder').click(function() {
-    //	  performance = new Date().getTime();
-    //  createFolder('KDSG-'+performance+'-'+result);
     $('#add-folderModal').modal('show');
 });
 
 $('#add-folder-btn').click(function() {
-    // performance = new Date().getTime();
     var folder_by = $('#folder_by').val();
     var foldername = $('#folder_no').val();
-    // foldername = 'KDSG-' + foldername + '-' + performance;
 
     var fold_name = $('#fold_name').val();
     var add_folder_description = $('#add_folder_description').val();
@@ -212,7 +208,8 @@ function performLfmRequest(url, parameter, type) {
 
 function displayErrorResponse(jqXHR) {
     console.log('Modal comes from here');
-    notify('<div style="max-height:50vh;overflow: scroll;">' + jqXHR.responseText + '</div>');
+    window.location.reload();
+    //notify('<div style="max-height:50vh;overflow: scroll;">' + jqXHR.responseText + '</div>');
 }
 
 function displaySuccessMessage(data){
@@ -231,7 +228,8 @@ var refreshFoldersAndItems = function(data) {
     loadFolders();
     if (data != 'OK') {
         data = Array.isArray(data) ? data.join('<br/>') : data;
-        notify(data);
+        //notify(data);
+        window.location.reload();
     }
 };
 
@@ -256,6 +254,34 @@ function loadItems() {
             $('#nav-buttons > ul').removeClass('hidden');
             $('#working_dir').val(response.working_dir);
             $('#current_dir').text(response.working_dir);
+
+            if($('#working_dir').val() !== '/shares'){              
+
+                //$("#mat_design_btn li:eq(0)").before($("#mat_design_btn li:eq(1)"));
+                $('#add-folder').addClass('hide');
+                $('#add-folder-i').addClass('hide');
+                $('#add-folder-li').addClass('hide');
+                //$("#mat_design_btn li:first").appendTo('#mat_design_btn');
+                
+                $('#upload').removeClass('hide');
+                $('#upload-i').removeClass('hide');
+                $('#upload-li').removeClass('hide');                
+                
+            }
+
+            if($('#working_dir').val() === '/shares'){
+
+                //$("#mat_design_btn li:eq(0)").after($("#mat_design_btn li:eq(1)"));
+                $('#upload').addClass('hide');
+                $('#upload-i').addClass('hide');
+                $('#upload-li').addClass('hide');
+                
+
+                $('#add-folder').removeClass('hide');
+                $('#add-folder-i').removeClass('hide');
+                $('#add-folder-li').removeClass('hide');                                               
+            }
+
             console.log('Current working_dir : ' + $('#working_dir').val());
             if (getPreviousDir() == '') {
                 $('#to-previous').addClass('hide');
@@ -277,13 +303,44 @@ function share(item_name) {
         url:"share_clearance_level",
         method:"GET",
         dataType:"json",
+        cache: false,
         data: {item_name, item_name}
     }).done(function(returnVal){
-        
+        // console.log(returnVal)
         var current_holder = returnVal.current_holder;
+        var user_is_admin  = returnVal.user_is_admin;
+        var folder = returnVal.folder;
         $('#current_holder').html('');
-        var chtml = `<label id='current_holder' style='background: red;'>The current holder of this file: <b style='color: white;'>${current_holder}</b></label>`;
-        //console.log(current_holder);
+        var chtml = `<label id='current_holder' style='background: red;'>
+                        The current holder of this file: <b style='color: white;'>${current_holder}</b>
+                    </label>`
+        if(current_holder == 'Nobody'){
+            chtml+= `<br/><label><em>Share to a user Below.</em></label>`;
+        }           
+        else{
+            if(folder){
+                var folder_to = folder.folder_to;
+                var folder_no =  folder.folder_no
+                var name = folder.name; 
+                var message = `Please return the file with the following details to registry@kdsg.gov.ng: 
+                            <div>File no. : <label> ${folder_no}</label></div>
+                            <div>File name: <label> ${name}</label></div>`;
+                chtml+=`<br/><label><em>Send a memo to user to return file to registry.</em></label>
+                        <form action="ask_for_file_memo" id="ask_for_file_form" method="get">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" class="form-control" name="subject" value="Return Folder to Registry"/>
+
+                            <input type="hidden" id="ask_for_file_form" class="form-control" name="emailto" value="${folder_to}">
+                            <input type="hidden" id="compose-textarea" class="form-control" name="message" value="${message}" style="height: 300px">
+                            
+                            <button class='btn btn-info btn-raised'>Request File</button>
+                        </form>`;
+            }
+            
+            if(!user_is_admin){
+                $('#share-btn').attr('disabled', true);
+            }
+        }
         $('#current_holder').append(chtml);
         var availableTags = []; 
         //console.log(returnVal.users);      
@@ -303,14 +360,14 @@ function share(item_name) {
             data: availableTags,
             tags: false
         });
+
+        //window.location.reload();
+        
     }).fail(function(returnData){
         console.log('bad request');
     });
-
     $('#shareModal').modal('show');
-
     $('#share-btn').click(function() {
-
         var folder_to = $('#share-input').val();
         $('#share_folder_no').val(item_name);
         //console.log(item_name);
@@ -320,12 +377,20 @@ function share(item_name) {
             return;
         
         $('#shareModal').modal('hide');
-        $('#share-btn').html(lang['btn-folder']).removeClass('disabled');
+        $('#share-btn').html(lang['btn-share']).removeClass('disabled');
 
         $('#shareForm').ajaxSubmit({
             success: function(data, statusText, xhr, $form) {
                 //refreshFoldersAndItems(data);
                 // implement sharing
+                 var success = $('<div>').addClass('alert alert-success')
+                    .append($('<i>').addClass('fa fa-check'))
+                    .append(' File Share Successfully.');    
+                $('#alerts').append(success);
+                setTimeout(function () {
+                    success.remove();
+                    window.location.reload();
+                }, 5000);
             }
         });
 
@@ -358,6 +423,7 @@ function history(item_name) {
       url:"registry/showhistory",
       method:"GET",
       dataType:"json",
+      cache: false,
       data: {item_name, item_name}
     }).done(function(returnVal){
 
