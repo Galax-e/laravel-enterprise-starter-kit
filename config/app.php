@@ -198,7 +198,7 @@ return [
     |
     | NOTE: The tag line supports HTML markup for styling.
     */
-    'tag_line' => env('app.tag_line', 'version 4.0'),
+    'tag_line' => env('app.tag_line', 'version 1.0'),
 
     /*
     |--------------------------------------------------------------------------

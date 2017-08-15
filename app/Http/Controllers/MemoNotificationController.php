@@ -54,8 +54,13 @@ class MemoNotificationController extends Controller
     {
         
         $memo_id = request('memo_id');
+        $user = Auth::user();
 
-        DB::update('update memos set treated=1 where id=?', [$memo_id]);
+        //DB::update('update memos set treated=1 where id=?', [$memo_id]);
+        DB::table('user_memos')
+            ->where('memo_id', $memo_id)
+            ->where('user_id', $user->id)
+            ->update(['status' => 1]);
 
         $data = array('done'=>'Success');
 

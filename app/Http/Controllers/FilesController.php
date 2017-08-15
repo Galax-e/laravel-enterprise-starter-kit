@@ -23,6 +23,7 @@ use App\Pin;
 use App\FolderNotification;
 use App\RequestFileNotification;
 use Illuminate\Support\Facades\Input;
+use App\UserFolder;
 use Carbon\Carbon;
 
 class FilesController extends Controller {
@@ -220,6 +221,7 @@ class FilesController extends Controller {
 		$receiver_user = $temp_arr;  // receiver user. It's now easy to get the fields
 		$receiver_email =  $receiver_user['email'];
 
+		
 		$folder_to = $receiver_email; // $temp;
 		try{
         	DB::update('update folders set folder_to = ?, forwarded_by=? where name = ?', [$folder_to, $user->email, $fold_name]);
@@ -233,9 +235,16 @@ class FilesController extends Controller {
 			$folder_id = ((array) $fid)["id"];
 		}
 
+		// update the folder to reflect the current user
+		$userFolder = new UserFolder;
+		$userFolder->user_id = $receiver_user['id'];
+		$userFolder->passer_id = $user->id;
+		$userFolder->folder_id = $folder_id;
+		$userFolder->save();
+
 		DB::update('update folders set forwarded_at = ? where name=?', [Carbon::now(), $fold_name]);
      
-        $sender_id = Auth::user()->id;
+        $sender_id = $user->id;
         $receiver_id =  $receiver_user['id']; // DB::table('users')->where('email', $receiver_email)->first()->id;
 		
         // create notification
@@ -249,21 +258,12 @@ class FilesController extends Controller {
         $activity->folder_id   = Input::get('fold_name');
 		$activity->element_id  = $folder_id;
 		$activity->fileinfo    = Input::get('fileinfo');
-        $activity->activity    = $user->full_name.' Forwarded this folder: '.Input::get('activity').', to '. $shareInput;
-        $activity->save();  
-
-		
+        $activity->activity    = $user->full_name.' Forwarded this folder: '.$fold_name.' to '. $shareInput;
+        $activity->save();  	
 
 		//return 'session';
         Flash::success('File has been sent to '. $first_name . ', '. $last_name);
         //return redirect()->back()->with('Dashboard up-to-date');
-
-		//$html = View::make('welcome_new_user', array('first_name' => Input::get('first_name')));
-		// 'body' => View::make('audit.create')->render()
-		//$data = array('message' => 'Success', 'body' => "$html");
-		// return response()->json($data)->view('hello')->header('Content-Type', $type);
-    	
-		// $html = View::make('dashboard');
 
 		return Response::json(array('message' => 'Success'));
     }
@@ -302,6 +302,13 @@ class FilesController extends Controller {
 			$folder_id = ((array) $fid)["id"];
 		}
 
+		// update the folder to reflect the current user
+		$userFolder = new UserFolder;
+		$userFolder->user_id = $receiver_user['id'];
+		$userFolder->passer_id = $user->id;
+		$userFolder->folder_id = $folder_id;
+		$userFolder->save();
+
 		// create a notification and save to database
 		$sender_id = $user->id;
 		$receiver_email = $folder_to;// Input::get('share-input');
@@ -312,13 +319,13 @@ class FilesController extends Controller {
 
 		$activity = new Activity;
 		$shareInput = $receiver_email; // Input::get('share-input');
-		$activity->activity_by= $user->email;
-		$activity->folder_id = $folder_no; // Input::get('folder_no');
-		$activity->element_id = $folder_id;
-		$activity->fileinfo = Input::get('folder_no');
+		$activity->activity_by = $user->email;
+		$activity->folder_id   = $folder_no; // Input::get('folder_no');
+		$activity->element_id  = $folder_id;
+		$activity->fileinfo    = Input::get('folder_no');
 		$activity->activity_to = $folder_to; //Input::get('share-input');
-		$activity->activity_by_post = Auth::user()->position;
-		$activity->activity = 'Registry shared/forwarded this folder to '. $shareInput;
+		$activity->activity_by_post = $user->position;
+		$activity->activity    = 'Registry shared/forwarded this folder to '. $shareInput;
 		$activity->save();
 		
 		//return 'session';
@@ -332,28 +339,34 @@ class FilesController extends Controller {
 		$folder = DB::table('folders')->where('folder_no', $folder_no)->first();
 		
 		$folder_clearance = $folder->clearance_level;
-		$not_to_share = ['registry@kdsg.gov.ng', 'peter@hallowgate.com']; 
+		$not_to_share = [Auth::user()->email, 'registry@kdsg.gov.ng', 'peter@hallowgate.com', 'root@hallowgate.com']; 
 		$users = DB::table('users')->where('clearance_level', '>=', $folder_clearance)
-		->whereNotIn('email', $not_to_share)->where('email', '!=', Auth::user()->email)->get();
-
+		->whereNotIn('email', $not_to_share)->get();
 		
 		$data = array('users'=>$users);
 
-		$not_in = array("root@hallowgate.com", "peter@hallowgate.com", "registry@kdsg.gov.ng");
+		$not_in = $not_to_share;// array("root@hallowgate.com", "peter@hallowgate.com", "registry@kdsg.gov.ng");
 
-		if($folder->folder_to){
 
-			if (!in_array($folder->folder_to, $not_in)) {
-				$user_name = DB::table('users')->where('email', $folder->folder_to)->first();
+		$folder2 = DB::table('folders')->whereNotNull('folder_to')
+			->where('folder_no', $folder_no)
+			->orWhere(function($query){
+				$query->whereNotIn('folder_to', ['', 'registry@kdsg.gov.ng', 'peter@hallowgate.com', 'root@hallowgate.com']);
+			})->first();
+
+		if($folder2){
+
+			//if (!in_array($folder->folder_to, $not_in)) {
+				$user_name = DB::table('users')->where('email', $folder2->folder_to)->first();
 				$user_name = $user_name->first_name.', '.$user_name->last_name;
 				$data['current_holder'] = $user_name;
 				$user_is_admin = Auth::user()->isRoot();
 				$data['user_is_admin'] = $user_is_admin;
-				$data['folder'] = $folder;
-			}	
-			else{
-				$data['current_holder'] = 'Nobody';
-			}
+				$data['folder'] = $folder2;
+			//}	
+			//else{
+				//$data['current_holder'] = 'Nobody';
+			//}
 		}
 		else{
 			$data['current_holder'] = 'Nobody';

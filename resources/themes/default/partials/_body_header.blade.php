@@ -75,17 +75,19 @@
 
                         <li class="dropdown messages-menu">
                             <!-- Menu toggle button -->
-                             <a href="#" id="memo_toggle" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="#" id="memo_toggle" class="dropdown-toggle" data-toggle="dropdown">
                                 <i id="memo_notif_icon" class="fa fa-envelope-o"></i>
                                 <span id="memo_notif" class="label label-success"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">Messages</li>
+                                <li class="header bg-orange">Messages</li>
                                 <li>
                                     <!-- inner menu: contains the messages -->
                                     <ul class="menu">
                                         <?php $useremail = Auth::user()->email; 
-                                        $memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto like ? and treated=0 order by created_at desc limit 5', ['%'.$useremail.'%']);
+                                        //$memos = Illuminate\Support\Facades\DB::select('select * from memos where emailto like ? and treated=0 order by created_at desc limit 5', ['%'.$useremail.'%']);
+                                        $memos = Illuminate\Support\Facades\DB::select('select * from user_memos where user_id=? and status=0 order by created_at desc limit 5', [Auth::user()->id]);
+                                        
                                         $loopindex = 0;
                                         ?>                                    
                                         @foreach($memos as $memo)  
@@ -97,7 +99,7 @@
                                                             url:"seen_memo",
                                                             method:"GET",
                                                             dataType:"json",
-                                                            data: {memo_id: parseInt("{{$memo->id}}")}
+                                                            data: {memo_id: parseInt("{{$memo->memo_id}}")}
                                                         }).done(function(data){
                                                                 console.log(data);
                                                         }).fail(function(){
@@ -108,10 +110,12 @@
                                             </script>
 
                                             <li id="memo{{ $loopindex }}"><!-- start message -->
-                                                <a href="{{url('read_memo/'.$memo->id) }}">
+                                                <a href="{{url('read_memo/'.$memo->memo_id) }}">                                                    
                                                     <div class="pull-left">
                                                         <!-- User Image -->
-                                                        <?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $memo->emailfrom)->first();
+                                                        <?php 
+                                                        $temp_memo = Illuminate\Support\Facades\DB::table('memos')->where('id', '=', $memo->memo_id)->first();
+                                                        $user = Illuminate\Support\Facades\DB::table('users')->where('email', '=', $temp_memo->emailfrom)->first();
                                                         
                                                         $temp = array();
                                                         foreach($user as $field => $val ){
@@ -124,11 +128,10 @@
                                                     <!-- Message title and timestamp -->
                                                     <h4>
                                                         {{ $user_name }}                                                        
-                                                        <small class="label label-primary pull-right"><i class="fa fa-clock-o pull-right"></i>{{ date('F d', strtotime($memo->created_at )) }} </small>
-                                                        
                                                     </h4>
                                                     <!-- The message -->
-                                                    <p>{{ $memo->subject}}</p>
+                                                    <p>{{ $temp_memo->subject}}<small class="bg-info pull-right"><i class="fa fa-clock-o"></i>{{ date('F d, Y | H:i A', strtotime($temp_memo->created_at )) }} </small>
+                                                    </p>
                                                 </a>
                                             </li><!-- end message -->                                                
                                         @endforeach
@@ -206,17 +209,18 @@
                                 <span id="folder_notif" class="label label-danger"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">Folders on Desk</li>
+                                <li class="header bg-yellow">Folders on Desk</li>
                                 <li>
                                     <!-- Inner menu: contains the tasks -->
                                     <ul class="menu">                                        
                                         <?php $usertoemail = Auth::user()->email; 
-                                        $query = "%Forward%";
-                                        $activities = Illuminate\Support\Facades\DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$query]);                                        
+                                        //$query = "%Forward%";
+                                        //$activities = Illuminate\Support\Facades\DB::select('select * from activities where activity like ? or activity like ? order by created_at desc limit 5', [$query, '%Shared%']);                                        
+                                        $userFolders = Illuminate\Support\Facades\DB::table('user_folders')->where('user_id', auth()->user()->id)->get();
                                         $loopindex = 0;
                                         ?>
                                         
-                                        @foreach($activities as $activity)
+                                        @foreach($userFolders as $userFolder)
                                             <?php $loopindex++; ?>
                                             <script>
                                                 $(function(){
@@ -225,28 +229,32 @@
                                                             url:"seen_folder",
                                                             method:"GET",
                                                             dataType:"json",
-                                                            data: {folder_id: parseInt("{{$activity->element_id}}")}
+                                                            data: {folder_id: parseInt("{{$userFolder->folder_id}}")}
                                                         }).done(function(data){
                                                                 console.log(data);
                                                         }).fail(function(){
-                                                                console.log('error, not getting to seen memo ');
+                                                                console.log('error, not getting to seen folder ');
                                                         });
                                                     });
                                                 })
                                             </script>
 
-                                            @if($activity->activity_by == Auth::user()->email || Auth::user()->username)
+                                            {{--  @if($activity->activity_to == Auth::user()->email)  --}}
+                                            <?php                                                 
+                                                $by_username = Illuminate\Support\Facades\DB::table('users')->where('id', $userFolder->passer_id)->first();
+                                                $by_username = $by_username->first_name.', '. $by_username->last_name;
+                                                ?>
                                                 <li id="folder_notif{{ $loopindex }}"> 
-                                                    <a href="{{route('dashboard')}}">  
-                                                        <div class="pull-left sm"><small>{{ str_limit($activity->activity, 27) }}</small></div>                  
-                                                        <h5 class="sm">                                                                                                                   
-                                                            <small class="label label-primary pull-right"><i class="fa fa-clock-o pull-right"></i>{{ date('F d', strtotime($activity->created_at )) }}</small>
-                                                        </h5>
+                                                    <a href="{{route('dashboard')}}">
+                                                    <h3>
+                                                        <div style="word-wrap: break-word;">{{ $by_username }}&nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+										&nbsp; &nbsp;{{ auth()->user()->full_name }}</div>
+                                                        <small class="bg-info pull-right"><i class="fa fa-clock-o"></i>{{ date('F d', strtotime($userFolder->created_at )) }}</small>
+                                                    </h3>
                                                     </a>
                                                 </li>                                                 
-                                            @endif
-                                        @endforeach
-                                                            
+                                            {{--  @endif  --}}
+                                        @endforeach                                                            
                                     </ul>
                                 </li>
                                 <li class="footer">

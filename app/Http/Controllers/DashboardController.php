@@ -22,6 +22,7 @@ use Flash;
 use Illuminate\Http\Request;
 use Mail;
 use Setting;
+use Cache;
 
 use App\Repositories\Criteria\User\UserWhereEmailEquals;
 use Illuminate\Foundation\Auth\ResetsPasswords;
@@ -44,6 +45,7 @@ use App\Document;
 use App\MemoNotification;
 use App\folder_request;
 use App\Attachment;
+use App\UserMemo;
 
 use Illuminate\Support\Facades\Input;
 
@@ -66,22 +68,32 @@ class DashboardController extends Controller
 
     public function index()
     {
-        Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
+		$user = Auth::user();
+        Audit::log($user->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = "Users | Dashboard"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = "e-Desk"; // trans('admin/users/general.page.index.description'); // "List of users";
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(8);
 		
+		Cache::put('email'.$user->id, $user->email, 5);
+
 		$forward_to_users = DB::select('select * from users');
 
 		$dept_users = DB::select('select * from users');
-		$user_email = Auth::user()->email;
+		$user_email = $user->email;
 
 		$activity = '%Forward%';
 	
 		//$folder = Folder::all();	
-		$activities = DB::select('select * from activities where activity like ?  order by created_at desc limit 5', [$activity]);	
+		$activities = DB::select('select * from activities where activity_to is not null and activity like ? and activity_to != ? and activity_by != ? order by created_at desc limit 5', [$activity, '', '']);	
+		// $activities = DB::table('activities')->whereNotNull('activity_to')
+		// 	->where('activity_to', '!=', '')
+		// 	->where('activity_by', '!=', '')
+		// 	->where('activity', 'like', '%Forward%')
+		// 	->orderBy('created_at', 'desc')
+		// 	->paginate(5);
+		
 		$file_movement = DB::select('select * from activities order by created_at desc limit 7');
 
 		$folders = DB::select('select * from folders where folder_to = ? order by forwarded_at desc', [$user_email]);
@@ -132,6 +144,7 @@ class DashboardController extends Controller
 		$memo->emailto = "";
 		$memo->save();
 
+		
 		foreach($emailto as $key => $user_name){
 
 			// Create memonotification for each user.
@@ -151,6 +164,12 @@ class DashboardController extends Controller
 			
 			$receiver_email=  $receiver_user['email'];
 			$memo->emailto .= $receiver_email.', ';		
+
+			// Attach each memo to a user
+			$user_memo = new UserMemo;
+			$user_memo->user_id = $receiver_user['id'];
+			$user_memo->memo_id = $memo->id;
+			$user_memo->save();
 			
 			// call attachment...
 			$attachment_name = Input::get('attachment_name');

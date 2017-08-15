@@ -7,6 +7,7 @@
    
     @include('partials._head_extra_jstree_css') 
     @include('partials._head_extra_select2_css')
+	
 @endsection
 
 @section('content')
@@ -121,12 +122,12 @@
 						@foreach($activities as $activity)												
 								<?php $folder = Illuminate\Support\Facades\DB::table('folders')->where('id', $activity->element_id)->first(); ?>
 								@if($activity->activity_by == Auth::user()->email)
-									<?php $to_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_to)->first();
+									<?php $to_username = \App\User::where('email', $activity->activity_to)->first();
 									 ?>
-									<li>  
-										<small>{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}&nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+									<li>  									
+										<small>{{ auth()->user()->full_name }}&nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
 										&nbsp; &nbsp;
-										{{ $to_username->first_name }}, {{ $to_username->last_name }}							  
+										{{ $to_username->full_name }}						  
 										</small>
 										<div></span><small class=""><b>{{ $folder->folder_no }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 										<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
@@ -135,12 +136,12 @@
 								@endif
 
 								@if($activity->activity_to == Auth::user()->email)
-									<?php $from_username = Illuminate\Support\Facades\DB::table('users')->where('email', $activity->activity_by)->first();
+									<?php $from_username = \App\User::where('email', $activity->activity_by)->first();
 									?>
 									<li>  
-										<small>{{ $from_username->first_name }}, {{ $from_username->last_name }} &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+										<small>{{ $from_username->full_name }} &nbsp; &nbsp;<img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
 										&nbsp; &nbsp;
-										{{ Auth::user()->first_name }}, {{ Auth::user()->last_name }}							  
+										{{ Auth::user()->full_name }}							  
 										</small>
 										<div></span><small class=""><b>{{ $folder->folder_no }}</b><small class="label label-default pull-right"><i class="fa fa-clock-o"></i>
 										<b>{{ date('F d, Y', strtotime($activity->created_at )) }}</b></small></small>
@@ -408,9 +409,12 @@
 								}
 								$('#postPinModal').modal('show');
 								// when you click on the modal send button...
-								$("#postPinBtn").on('click', function(e){
+								$("#postPinBtn").on('click, keypress', function(e){
 									e.preventDefault();
 									e.stopPropagation();
+									if(e.keyCode !== 13){
+										$('#postPinModal').modal('hide');
+									}
 									
 									//if( $('#post_pin_input').val().length !== 4 ){
 										//alert('Pin is invalid. Please enter a four digit pin');
@@ -463,9 +467,13 @@
 								e.stopPropagation();
 								$('#forwardPinModal').modal('show');
 
-								$("#forwardPinBtn").on('click', function(e){
+								$("#forwardPinBtn").on('click keypress', function(e){
 									e.preventDefault();
 									e.stopPropagation();
+
+									if(e.keyCode !== 13){
+										$('#forwardPinBtn').modal('hide');
+									}
 
 									//if( $('#forward_pin_input').val().length !== 4 ){
 										//alert('Pin is invalid. Please enter a four digit pin');

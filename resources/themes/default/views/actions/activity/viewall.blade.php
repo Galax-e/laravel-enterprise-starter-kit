@@ -50,10 +50,8 @@
 
   <style type="text/css">
     .column{margin-top: -10px; float: right; }
-  </style>
- 
+  </style> 
             <section class="content">
-
           <!-- row -->
           <div class="row">
             <div class="col-md-12">
@@ -66,10 +64,6 @@
                   </span>
                 </li>
                 <!-- /.timeline-label -->
-          
-
-
-
             <ul class="nav nav-tabs">
                <li class="pull-right"> 
                 <div class="has-feedback">
@@ -83,15 +77,7 @@
             </ul>
             </br>
 
-
-
-
-
-
         @foreach($activity as $activity_by)
-
-
-
                 <?php
                 if (strpos($activity_by->activity, 'Comment') !== false) {
                 echo '

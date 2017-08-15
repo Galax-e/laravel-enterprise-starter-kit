@@ -53,7 +53,7 @@
             @foreach($memos as $memo)
             <tr>
                 <td>{{ $memo->emailfrom }}</td>
-                <td><a href="read_memo/{{ $memo->id }}"><b>{{ str_limit($memo->subject, 25) }} </b></a> | {{ str_limit(substr($memo->message, 3, -6), 70) }}</td>
+                <td><a href="read_memo/{{ $memo->id }}"><b>{{ str_limit($memo->subject, 25) }} </b></a> | {{ str_limit(substr($memo->message, 0, -6), 70) }}</td>
                 <td>{{ date('F d, Y', strtotime($memo->created_at)) }}</td>
             </tr>
             @endforeach

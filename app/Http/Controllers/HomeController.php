@@ -43,7 +43,7 @@ class HomeController extends Controller
     public function welcome(Request $request)
     {
         $page_title = trans('general.text.welcome');
-        $page_description = "This is the welcome page";
+        $page_description = "Home";
 
 //        $request->flashExcept(['password', 'password_confirmation']);
         $request->session()->reflash();

@@ -43,7 +43,12 @@ class RegistryController extends Controller
         $act = '%Forward%';        
         //$folder = Folder::all();
         
-        $folders = DB::table('folders')->whereNotNull('folder_to')->where('folder_to', '!=', 'registry@kdsg.gov.ng')->orderBy('created_at', 'DESC')->paginate(12);
+        $folders = DB::table('folders')->whereNotNull('folder_to')
+            ->orWhere(function($query){
+                $query->whereNotIn('folder_to', ['','registry@kdsg.gov.ng', 'root@hallowgate.com', 'peter@hallowgate.com']);
+            })->orderBy('created_at', 'DESC')->paginate(12);
+        //->where('folder_to', '!=', 'registry@kdsg.gov.ng')
+        
         return view('views.actions.activity.shared', compact('page_title', 'page_description', 'folders'));
     }
 }

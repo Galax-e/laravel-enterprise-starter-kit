@@ -43,7 +43,11 @@ class RequestFileNotificationController extends Controller
         foreach($notifications as $notification){
             $notif_id = ((array) $notification)["id"];
 
-            DB::update('update request_file_notifications set status = ? where id = ?', [1, $notif_id]);
+            DB::table('request_file_notifications')
+            ->where('id', $notif_id)
+            ->update(['status' => 1]);
+
+            //DB::update('update request_file_notifications set status = ? where id = ?', [1, $notif_id]);
         }
 
         return response()->json((array) $notifications); //redirect()->back();
@@ -53,7 +57,11 @@ class RequestFileNotificationController extends Controller
 
         $request_folder_id = request('folder_req_id');
 
-        DB::update('update folder_requests set treated=1 where id=?', [$request_folder_id]);
+        DB::table('folder_requests')
+            ->where('id', $request_folder_id)
+            ->update(['treated' => 1]);
+
+        //DB::update('update folder_requests set treated=1 where id=?', [$request_folder_id]);
 
         $data = array('done'=>'Success');
 

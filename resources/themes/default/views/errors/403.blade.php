@@ -84,7 +84,7 @@
     <!-- Automatic element centering -->
     <div class="lockscreen-wrapper">
       <div class="lockscreen-logo">
-        <a href="/"><b>Kaduna State</b></br>FMS | LockScreen</a>
+        <a href="/"><b>Defence Files</b></br>FMS | LockScreen</a>
       </div>
       <!-- User name -->
       <div class="lockscreen-name"></div>
@@ -101,7 +101,8 @@
         <form class="lockscreen-credentials" method="POST" action="{!! route('loginPost') !!}">
         {!! csrf_field() !!}
           <div class="input-group">
-            <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required autofocus/>
+          <?php $user_email = Illuminate\Support\Facades\Cache::get('email'.Auth::user()->id); ?>
+            <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="{{$user_email}}" required autofocus/>
              <input type="password" id="password" name="password" class="form-control" placeholder="Password" required/>
             <div class="input-group-btn">
               <button class="btn"><i class="fa fa-arrow-right text-muted"></i></button>

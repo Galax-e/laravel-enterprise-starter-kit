@@ -35,6 +35,7 @@ use App\Http\Controllers\Controller;
 use App\Memo;
 use App\Activity;
 use App\MemoNotification;
+use App\UserMemo;
 
 
 use Illuminate\Support\Facades\Input;
@@ -160,6 +161,12 @@ class MemoController extends Controller
 
         $receiver_user = DB::table('users')->where('email', $emailto)->first();        
         $receiver_id =  $receiver_user->id;
+
+        // send memo to user_memo table
+        $user_memo = new UserMemo;
+        $user_memo->user_id = $receiver_id;
+        $user_memo->memo_id = $memo_id;
+        $user_memo->save();
 
         $activity = new Activity;
         $activity->activity_by = $user->email;

@@ -257,12 +257,14 @@ function loadItems() {
 
             if($('#working_dir').val() !== '/shares'){              
 
-                //$("#mat_design_btn li:eq(0)").before($("#mat_design_btn li:eq(1)"));
+                $("#mat_design_btn li:eq(0)").before($("#mat_design_btn li:eq(1)"));
+                
                 $('#add-folder').addClass('hide');
                 $('#add-folder-i').addClass('hide');
                 $('#add-folder-li').addClass('hide');
                 //$("#mat_design_btn li:first").appendTo('#mat_design_btn');
                 
+                $("#mat_design_btn li:eq(1)").after($("#mat_design_btn li:eq(0)"));
                 $('#upload').removeClass('hide');
                 $('#upload-i').removeClass('hide');
                 $('#upload-li').removeClass('hide');                
@@ -271,12 +273,12 @@ function loadItems() {
 
             if($('#working_dir').val() === '/shares'){
 
-                //$("#mat_design_btn li:eq(0)").after($("#mat_design_btn li:eq(1)"));
+                $("#mat_design_btn li:eq(1)").before($("#mat_design_btn li:eq(0)"));
                 $('#upload').addClass('hide');
                 $('#upload-i').addClass('hide');
                 $('#upload-li').addClass('hide');
                 
-
+                $("#mat_design_btn li:eq(0)").after($("#mat_design_btn li:eq(1)"));
                 $('#add-folder').removeClass('hide');
                 $('#add-folder-i').removeClass('hide');
                 $('#add-folder-li').removeClass('hide');                                               

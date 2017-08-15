@@ -52,7 +52,12 @@ class FolderNotificationController extends Controller
 
         $folder_id = request('folder_id');
 
-        DB::update('update activities set onfolder_notif_seen=1 where element_id=? and type=?', [$folder_id, 'onfolder']);
+        DB::table('user_folders')
+            ->where('user_id', $user_id)
+            ->where('folder_id', $folder_id)
+            ->update(['status' => 1]);
+
+        //DB::update('update activities set activity_to=? where element_id=?', ['none@kdsg.gov.ng', $folder_id]);
 
         $data = array('done'=>'Success');
 

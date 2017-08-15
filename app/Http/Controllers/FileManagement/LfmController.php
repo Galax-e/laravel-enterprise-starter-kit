@@ -36,8 +36,21 @@ class LfmController extends Controller
         // $comment  = '%Comment%';
         $creation = '%created%';
 
-        $reg_activities = DB::select('select distinct * from activities where activity like ? or activity like ? order by created_at desc limit 5', [$shared, $creation]);
-        $activities = DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$activity]);
+        $reg_activities = DB::table('activities')->whereNotNull('activity')
+        ->orWhere(function($query){
+            $query->where('activity', 'like', '%created%')
+                ->where('activity', 'like', '%shared%')
+                ->where('activity', '<>', '');
+        })->distinct()->orderBy('created_at', 'desc')->skip(10)->take(5)->get();
+
+        //$reg_activities = DB::select('select distinct * from activities where activity like ? or activity like ? order by created_at desc limit 5', [$shared, $creation]);
+        $activities = DB::table('activities')->whereNotNull('activity')
+        ->orWhere(function($query){
+            $query->where('activity', 'like', '%Forward%')
+                ->where('activity', '<>', '');
+        })->distinct()->orderBy('created_at', 'desc')->skip(10)->take(5)->get();
+        
+        //$activities = DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$activity]);
 		
         if($request->ajax()){
 
@@ -48,7 +61,14 @@ class LfmController extends Controller
                 $folder_id = ((array) $fid)["id"];
             }
 
-            $activities = DB::select('select * from activities');
+            $activities = DB::table('activities')->whereNotNull(['activity', 'activity_to', 'activity_by'])
+                ->orWhere(function($query){
+                    $query->where('activity', '<>', '')
+                        ->where('activity_to', '<>', '')
+                        ->where('activity_by', '<>', '');
+                })->get();
+
+            //$activities = DB::select('select * from activities');
             $data = array();
             foreach($activities as $activity){
 
