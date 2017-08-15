@@ -27,7 +27,7 @@
                 <table class="content" width="100%" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; margin: 0; padding: 0; width: 100%; -premailer-cellpadding: 0; -premailer-cellspacing: 0; -premailer-width: 100%;">
 <tr>
 <td class="header" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 25px 0; text-align: center;">
-        <a href="http://localhost:8000" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #bbbfc3; font-size: 19px; font-weight: bold; text-decoration: none; text-shadow: 0 1px 0 white;">
+        <a href="#" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #bbbfc3; font-size: 19px; font-weight: bold; text-decoration: none; text-shadow: 0 1px 0 white;">
            <img src="{{ asset ("/assets/themes/default/img/fms.png") }}" height="100" alt="User Image"> Kaduna State Government
         </a>
     </td>
@@ -64,7 +64,7 @@ and you should go to the <a href="{{ route('recover_password') }}">Recover passw
 <table class="subcopy" width="100%" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-top: 1px solid #EDEFF2; margin-top: 25px; padding-top: 25px;"><tr>
 <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
             <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 12px;">If you’re having trouble clicking the "Reset Password" button, copy and paste the URL below
-into your web browser: <a href="{{ URL::to('auth/verify/' . $user->confirmation_code) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;"></a><a href="{{ URL::to('auth/verify/' . $user->confirmation_code) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;">{{ URL::to('auth/verify/' . $user->confirmation_code) }}</a></p>
+into your web browser: <a href="{{ URL::to('recover_password) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;"></a><a href="{{ URL::to('recover_password') }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;">{{ URL::to('recover_password') }}</a></p>
         </td>
     </tr></table>
 </td>

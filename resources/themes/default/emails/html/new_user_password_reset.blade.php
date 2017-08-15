@@ -65,7 +65,7 @@ You are required to reset your password on first login and change you default PI
 <table class="subcopy" width="100%" cellpadding="0" cellspacing="0" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-top: 1px solid #EDEFF2; margin-top: 25px; padding-top: 25px;"><tr>
 <td style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
             <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 12px;">If you’re having trouble clicking the "Reset Password" button, copy and paste the URL below
-into your web browser: <a href="{{ URL::to('auth/verify/' . $user->confirmation_code) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;"></a><a href="{{ URL::to('auth/verify/' . $user->confirmation_code) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;">{{ URL::to('auth/verify/' . $user->confirmation_code) }}</a></p>
+into your web browser: <a href="{{ URL::to('password/reset/'.$token) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;"></a><a href="{{ URL::to('password/reset/'.$token) }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;">{{ URL::to('password/reset/'.$token) }}</a></p>
         </td>
     </tr></table>
 </td>
