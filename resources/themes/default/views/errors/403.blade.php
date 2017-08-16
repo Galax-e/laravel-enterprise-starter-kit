@@ -101,7 +101,7 @@
         <form class="lockscreen-credentials" method="POST" action="{!! route('loginPost') !!}">
         {!! csrf_field() !!}
           <div class="input-group">
-          <?php $user_email = Illuminate\Support\Facades\Cache::get('email'.Auth::user()->id); ?>
+          <?php $user_email = Illuminate\Support\Facades\Cache::get('email'); ?>
             <input type="text" id="email" name="email" class="form-control" placeholder="Email" value="{{$user_email}}" required autofocus/>
              <input type="password" id="password" name="password" class="form-control" placeholder="Password" required/>
             <div class="input-group-btn">

@@ -72,8 +72,8 @@
 
                   @foreach($folders as $folder)
                           <?php
-                           $current_holder = Illuminate\Support\Facades\DB::table('users')->where('email', $folder->folder_to)->first();
-                           $current_holder = $current_holder->first_name.', '.$current_holder->last_name;
+                           $current_holder = \App\User::where('email', $folder->folder_to)->first();
+                           $current_holder = $current_holder->full_name;
                           echo '                          
                           <li><span class="mailbox-attachment-icon"><i class="fa fa-folder-open"></i></span>
                                   <div class="mailbox-attachment-info">

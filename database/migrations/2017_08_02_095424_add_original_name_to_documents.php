@@ -12,10 +12,14 @@ class AddOriginalNameToDocuments extends Migration
      */
     public function up()
     {
+        
         //
-        Schema::table('documents', function($table) {
-         $table->string('original_name');
-             });
+        Schema::table('documents', function($table){
+            
+            if(!Schema::hasColumn('documents', 'original_name')) {
+               $table->string('original_name');
+           }     
+       });
     }
 
     /**
@@ -26,8 +30,5 @@ class AddOriginalNameToDocuments extends Migration
     public function down()
     {
         //
-        Schema::table('documents', function($table) {
-        $table->dropColumn('original_name');
-             });
     }
 }

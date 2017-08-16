@@ -76,7 +76,7 @@ class DashboardController extends Controller
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(8);
 		
-		Cache::put('email'.$user->id, $user->email, 5);
+		Cache::put('email', $user->email, 5);
 
 		$forward_to_users = DB::select('select * from users');
 

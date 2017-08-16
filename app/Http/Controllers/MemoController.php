@@ -93,6 +93,12 @@ class MemoController extends Controller
             DB::update('update memo_notifications set status = ? where id = ?', [1, $notif_id]);
         }
         // end...
+
+        // remove user memo when user is in inbox.
+        $userMemos = DB::table('user_memos')                        
+                        ->where('user_id', $receiver_id)
+                        ->where('status', 0)
+                        ->update(['status' => 1]);
         
         return view('views.actions.mailbox.inbox', compact('users', 'page_title', 'page_description', 'memos'));
     }
@@ -137,7 +143,7 @@ class MemoController extends Controller
        $page_description = "Outgoings"; //trans('admin/users/general.page.index.description'); // 
        
        $user_id = Auth::user()->email;
-       $memos = DB::table('memos')->where('emailto', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14); 
+       $memos = DB::table('memos')->where('emailfrom', 'like', '%'.$user_id.'%')->orderBy('created_at', 'DESC')->paginate(14); 
        $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(10);
        return view('views.actions.mailbox.sent', compact('users', 'page_title', 'page_description', 'memos'));
     }

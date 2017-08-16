@@ -7,7 +7,7 @@
           }
        });
        
-       var temp_fn = 0, temp_mn = 0, temp_rfn = 0;
+       var temp_fn = 0, temp_mn = 0, temp_rfn = 0; refresh_sent_memo = 0;
        var dummy_count = 0;
        function pageRefresh(view = ''){
            
@@ -76,12 +76,21 @@
                        $('#inbox_left').addClass('label-primary');
                        $('#inbox_on_mailbox').addClass('bg-red');
 
+                       //refresh header to show memo sent 
+                       refresh_sent_memo++; 
+
+                       if(refresh_sent_memo === 1){
+                           //window.location.reload();
+                           refresh_sent_memo++;
+                       }
+
                        // call notification
                        count = memo_count;
                        if (memo_count > temp_mn){
                             desktopNotification(event='Memo shared', message = 'New memo received', count);
-                            temp_mn = memo_count;
+                            temp_mn = memo_count;                            
                        }
+                       
                    }
                    
                },
