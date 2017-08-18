@@ -32,10 +32,10 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 /** base table*/
-use App\Memo;
-use App\Activity;
-use App\MemoNotification;
-use App\UserMemo;
+use App\Models\AppModels\Memo;
+use App\Models\AppModels\Activity;
+use App\Models\AppModels\MemoNotification;
+use App\Models\AppModels\UserMemo;
 
 
 use Illuminate\Support\Facades\Input;

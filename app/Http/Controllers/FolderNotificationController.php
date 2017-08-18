@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\FolderNotification;
+use App\Models\AppModels\FolderNotification;
 use DB;
 use Auth;
 
@@ -51,9 +51,10 @@ class FolderNotificationController extends Controller
     public function seenFolder(Request $request){
 
         $folder_id = request('folder_id');
+        $user = Auth::user();
 
         DB::table('user_folders')
-            ->where('user_id', $user_id)
+            ->where('user_id', $user->id)
             ->where('folder_id', $folder_id)
             ->update(['status' => 1]);
 

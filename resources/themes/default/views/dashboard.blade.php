@@ -364,16 +364,16 @@
 							@if($comment->folder_id == $folder->id)
 								<div class="item">
 
-									<?php $user = Illuminate\Support\Facades\DB::table('users')->where('email', $comment->comment_by)->first();
+									<?php $user = \App\User::where('email', $comment->comment_by)->first();
 	                    
-										$temp = array();
-										foreach($user as $field => $val ){
-											$temp[$field] = $val;
-										}	                    
-										$user_avatar = $temp['avatar']; $comment_user_name = $temp['first_name'] . ', '.$temp['last_name'];									
+										//$temp = array();
+										//foreach($user as $field => $val ){
+											//$temp[$field] = $val;
+										//}	                    
+										//$user_avatar = $temp['avatar']; $comment_user_name = $temp['first_name'] . ', '.$temp['last_name'];									
 									?>
 									{{--<img src="{{ Gravatar::get(Auth::user()->email), 'tiny'}}" class="offline" alt="User Image"/>--}}
-									<img src="img/profile_picture/photo/{{ $user_avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
+									<img src="img/profile_picture/photo/{{ $user->avatar }}" class="offline" style="width: 42px; height: 42px; top: 10px; left: 10px; border-radius: 50%;" alt="User Image"/>
 									<!--<img src="{{ asset("/bower_components/admin-lte/dist/img/user2-160x160.jpg") }}" alt="user image" class="offline"/>-->
 									<p class="message">
 										<a href="#" class="name"> <!-- @cpnwaugha: c-e: comments to have date and time -->
@@ -381,7 +381,7 @@
 												<i class="fa fa-clock-o"></i> {{ date('M d, Y', strtotime($comment->created_at)) }}
 											</small> 
 											 
-											{{ $comment_user_name }}
+											{{ $user->full_name }}
 										</a>
 										{{ $comment->comment }}
 									</p>
@@ -398,24 +398,23 @@
 								headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
 							});
 
-							// posting comments...
-							$(document).on('click', "button#submitPostBtn{{$loopindex}}", function(e){
+							var postPinBtnKeyPress = function(e){
 								e.preventDefault();
 								e.stopPropagation();
 
-								if ($("#comment{{$loopindex}}").val() == ''){
-									alert('Comment cannot be empty');
-									return;
-								}
-								$('#postPinModal').modal('show');
-								// when you click on the modal send button...
-								$("#postPinBtn").on('click, keypress', function(e){
+								if(e.keyCode == 13){
+									alert('From here');
+									runPostPinFunct(e);
+								}								
+							}
+
+							var runPostPinFunct = function(e){
 									e.preventDefault();
-									e.stopPropagation();
-									if(e.keyCode !== 13){
-										$('#postPinModal').modal('hide');
-									}
-									
+									e.stopPropagation();	
+
+									alert('Working');
+									return;																
+																	
 									//if( $('#post_pin_input').val().length !== 4 ){
 										//alert('Pin is invalid. Please enter a four digit pin');
 										// $('#post_pin_input').val('');
@@ -458,7 +457,21 @@
 									}).fail(function(){										
 										console.log('No connection to pin controller');
 									});
-								});
+								};
+
+							// posting comments...
+							$(document).on('click', "button#submitPostBtn{{$loopindex}}", function(e){
+								e.preventDefault();
+								e.stopPropagation();
+
+								if ($("#comment{{$loopindex}}").val() == ''){
+									alert('Comment cannot be empty');
+									return;
+								}
+								$('#postPinModal').modal('show');
+								// when you click on the modal send button...
+								$("#postPinBtn").on('click', runPostPinFunct);							
+								
 							});
 
 							// forwarding new files...

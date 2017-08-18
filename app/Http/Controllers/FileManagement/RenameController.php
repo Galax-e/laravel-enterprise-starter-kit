@@ -7,7 +7,7 @@ use Unisharp\Laravelfilemanager\Events\FolderIsRenaming;
 use Unisharp\Laravelfilemanager\Events\FolderWasRenamed;
 
 use Illuminate\Support\Facades\Input;
-use App\Activity;
+use App\Models\AppModels\Activity;
 use Auth;
 /**
  * Class RenameController

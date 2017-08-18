@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\File;
 
-use App\activity;
+use App\Models\AppModels\activity;
 use DB;
 
 /**

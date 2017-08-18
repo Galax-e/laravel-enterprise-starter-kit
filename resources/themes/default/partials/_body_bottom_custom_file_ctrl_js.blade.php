@@ -1,6 +1,10 @@
 <script type="text/javascript">    
     $(function(){
 
+       if($('#memo_notif').html() !== ''){
+           window.location.reload();
+       }
+
        $.ajaxSetup({
            headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

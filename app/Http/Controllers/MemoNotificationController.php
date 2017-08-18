@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\MemoNotification;
+use App\Models\AppModels\MemoNotification;
 use DB;
 use Auth;
 

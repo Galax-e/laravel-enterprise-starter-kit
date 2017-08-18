@@ -4,7 +4,7 @@ use Unisharp\Laravelfilemanager\traits\LfmHelpers;
 use Illuminate\Http\Request;
 
 
-use App\activity;
+use App\Models\AppModels\activity;
 use DB;
 use Flash;
 /**

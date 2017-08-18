@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models\AppModels;
 
 use Illuminate\Database\Eloquent\Model;
 
-class folder_request extends Model
+class Memo extends Model
 {
     //
 }

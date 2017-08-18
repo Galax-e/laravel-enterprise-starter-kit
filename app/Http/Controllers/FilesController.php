@@ -11,19 +11,19 @@ use Response;
 
 /** base table*/
 use Auth;
-use App\File;
-use App\Memo;
-use App\Comment;
-use App\Folder;
-use App\Activity;
-use App\User;
-use App\FolderRequest;
-use App\folder_request;
-use App\Pin;
-use App\FolderNotification;
-use App\RequestFileNotification;
+use App\Models\AppModels\File;
+use App\Models\AppModels\Memo;
+use App\Models\AppModels\Comment;
+use App\Models\AppModels\Folder;
+use App\Models\AppModels\Activity;
+use App\Models\AppModels\User;
+use App\Models\AppModels\FolderRequest;
+use App\Models\AppModels\folder_request;
+use App\Models\AppModels\Pin;
+use App\Models\AppModels\FolderNotification;
+use App\Models\AppModels\RequestFileNotification;
 use Illuminate\Support\Facades\Input;
-use App\UserFolder;
+use App\Models\AppModels\UserFolder;
 use Carbon\Carbon;
 
 class FilesController extends Controller {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models\AppModels;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Activity extends Model
+class file extends Model
 {
     //
 }

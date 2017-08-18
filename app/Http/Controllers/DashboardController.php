@@ -36,16 +36,17 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 /** base table*/
-use App\File;
-use App\Memo;
-use App\Comment;
-use App\Folder;
-use App\Activity;
-use App\Document;
-use App\MemoNotification;
-use App\folder_request;
-use App\Attachment;
-use App\UserMemo;
+use App\Models\AppModels\File;
+use App\Models\AppModels\Memo;
+//use App\Models\AppModels\Memo;
+use App\Models\AppModels\Comment;
+use App\Models\AppModels\Folder;
+use App\Models\AppModels\Activity;
+use App\Models\AppModels\Document;
+use App\Models\AppModels\MemoNotification;
+use App\Models\AppModels\folder_request;
+use App\Models\AppModels\Attachment;
+use App\Models\AppModels\UserMemo;
 
 use Illuminate\Support\Facades\Input;
 
@@ -76,7 +77,7 @@ class DashboardController extends Controller
 
         $users = $this->user->pushCriteria(new UsersWithRoles())->pushCriteria(new UsersByUsernamesAscending())->paginate(8);
 		
-		Cache::put('email', $user->email, 5);
+		Cache::put('user'.$user->id, $user->email, 5);
 
 		$forward_to_users = DB::select('select * from users');
 

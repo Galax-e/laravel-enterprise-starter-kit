@@ -12,7 +12,7 @@ use Flash;
 use DB;
 
 /** base table*/
-use App\Folder;
+use App\Models\AppModels\Folder;
 
 class RegistryController extends Controller
 {

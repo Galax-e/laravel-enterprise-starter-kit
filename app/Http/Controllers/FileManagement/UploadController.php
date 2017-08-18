@@ -7,9 +7,9 @@ use Unisharp\Laravelfilemanager\Events\ImageIsUploading;
 use Unisharp\Laravelfilemanager\Events\ImageWasUploaded;
 
 use DB;
-use App\Document;
-use App\Folder;
-use App\Activity;
+use App\Models\AppModels\Document;
+use App\Models\AppModels\Folder;
+use App\Models\AppModels\Activity;
 use Auth;
 
 use Illuminate\Support\Facades\Input;

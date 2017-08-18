@@ -170,7 +170,9 @@ desired effect
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" required max="4" min="4"/>
+                        <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" 
+                        placeholder="Enter your PIN" autofocus pattern=".{4,4}" required max="4" min="4"
+                        onkeypress="postPinBtnKeyPress(event)" />
                     </div>
                 </div>
                 <div class="box-footer clearfix">

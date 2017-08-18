@@ -216,11 +216,13 @@
                                         <?php $usertoemail = Auth::user()->email; 
                                         //$query = "%Forward%";
                                         //$activities = Illuminate\Support\Facades\DB::select('select * from activities where activity like ? or activity like ? order by created_at desc limit 5', [$query, '%Shared%']);                                        
-                                        $userFolders = Illuminate\Support\Facades\DB::table('user_folders')->where('user_id', auth()->user()->id)->get();
+                                        $userFolders = Illuminate\Support\Facades\DB::table('user_folders')->where('user_id', auth()->user()->id)
+                                            ->where('status', 0)->get();
                                         $loopindex = 0;
                                         ?>
                                         
                                         @foreach($userFolders as $userFolder)
+                                            
                                             <?php $loopindex++; ?>
                                             <script>
                                                 $(function(){
@@ -241,8 +243,8 @@
 
                                             {{--  @if($activity->activity_to == Auth::user()->email)  --}}
                                             <?php                                                 
-                                                $by_username = Illuminate\Support\Facades\DB::table('users')->where('id', $userFolder->passer_id)->first();
-                                                $by_username = $by_username->first_name.', '. $by_username->last_name;
+                                                $by_username = \App\User::where('id', $userFolder->passer_id)->first();
+                                                $by_username = $by_username->full_name;
                                                 ?>
                                                 <li id="folder_notif{{ $loopindex }}"> 
                                                     <a href="{{route('dashboard')}}">

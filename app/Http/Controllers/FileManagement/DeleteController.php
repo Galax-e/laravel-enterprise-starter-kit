@@ -5,7 +5,7 @@ use Unisharp\Laravelfilemanager\Events\ImageIsDeleting;
 use Unisharp\Laravelfilemanager\Events\ImageWasDeleted;
 use DB;
 use Auth;
-use App\Activity;
+use App\Models\AppModels\Activity;
 
 /**
  * Class CropController
