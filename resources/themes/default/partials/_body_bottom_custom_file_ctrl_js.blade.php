@@ -79,19 +79,14 @@
                        $('#memo_notif').addClass('label-success');
                        $('#inbox_left').addClass('label-primary');
                        $('#inbox_on_mailbox').addClass('bg-red');
-
-                       //refresh header to show memo sent 
-                       refresh_sent_memo++; 
-
-                       if(refresh_sent_memo === 1){
-                           //window.location.reload();
-                           refresh_sent_memo++;
-                       }
+                     
 
                        // call notification
                        count = memo_count;
                        if (memo_count > temp_mn){
                             desktopNotification(event='Memo shared', message = 'New memo received', count);
+                            //refresh div in _body_header to show updated notification content
+                            $("#navbar-reload").load(location.href+" #navbar-reload>*","");
                             temp_mn = memo_count;                            
                        }
                        
@@ -261,8 +256,17 @@
             $('#createPinModal').modal('hide');
        });
 
-       $('#createPinBtn').on('click', function(){
-            $('#createPinModal').modal('hide');
-       });
+       $('#postPinModal').on('shown.bs.modal', function (e) {
+            // do something...
+            $('#post_pin_input').focus();
+        });
+        $('#forwardPinModal').on('shown.bs.modal', function (e) {
+            // do something...
+            $('#forward_pin_input').focus();
+        });
+
+        var postPinBtnKeyPress = function(){
+            swal('Yaay!');
+        }
    })
 </script>

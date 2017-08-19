@@ -34,7 +34,8 @@
             <span class="sr-only">Toggle navigation</span>
         </a>
         <!-- Navbar Right Menu -->
-        <div class="navbar-custom-menu">
+        <div id="navbar-reload">
+        <div id="navbar-reload-child" class="navbar-custom-menu">
             <ul class="nav navbar-nav">
 
                 @if (Auth::check())
@@ -336,7 +337,8 @@
                     @endif
                 @endif
             </ul>
-        </div>
+        </div><!-- ./navbar-custom-menu -->
+        </div> <!-- ./navbar-reload -->
     </nav>
     {{-- <script>
     // Work on this later. Fix like on Linked in

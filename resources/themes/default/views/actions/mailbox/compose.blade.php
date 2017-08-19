@@ -42,7 +42,7 @@
 				<div class="box-header with-border">
 					<h3 class="box-title">Compose New Message</h3>
 				</div><!-- /.box-header -->
-				<form action="store_memo" method="post" enctype="multipart/form-data">
+				<form action="{{route('store_memo')}}" method="post" enctype="multipart/form-data">
 					<div class="box-body">
 						<input type="hidden" name="email_name" value="{{ Auth::user()->email }} {{ Auth::user()->last_name }}">
 						<input type="hidden" name="emailfrom" value="{{ Auth::user()->email }}">
@@ -76,7 +76,7 @@
 
 						<div style="width:350px" align="center">
 							   
-							<form id="image_upload_form" method="post" enctype="multipart/form-data" action='compose_single_upload' autocomplete="off">
+							<form id="image_upload_form" method="post" enctype="multipart/form-data" action="{{route('compose_single_upload')}}" autocomplete="off">
 							  <input type="hidden" name="_token" value="{{ csrf_token() }}">
 								<div class="browse_text"><label>Attach File/Image:</label>
 								</div>

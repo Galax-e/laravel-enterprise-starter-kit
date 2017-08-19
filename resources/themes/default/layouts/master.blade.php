@@ -90,6 +90,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Material Dashboard javascript methods -->
 	    <script src="{{asset("/bower_components/material-dashboard/assets/js/material-dashboard.js") }}"></script>
 
+      <script src="{{asset("/bower_components/admin-lte/plugins/sweetalert2/dist/sweetalert2.min.js")}}"></script>
+
+      <link rel="stylesheet" href="{{asset("/bower_components/admin-lte/plugins/sweetalert2/dist/sweetalert2.min.css")}}" />
       
       <!-- Application JS-->
       <script src="{{ asset(elixir('js/all.js')) }}"></script>

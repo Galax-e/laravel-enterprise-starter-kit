@@ -162,16 +162,16 @@ desired effect
                     <h3 class="box-title">Enter your PIN</h3>
                     <!-- tools box -->
                     <div class="pull-right box-tools">
-                        <button class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></button>
+                        <a class="btn btn-info btn-sm" data-dismiss="modal" title="Remove"><i class="fa fa-times"></i></a>
                     </div><!-- /. tools -->
                 </div> <!-- /. box-header -->
             </div>        
-            <form method="post" id="post_pin_form" action="postpinform">
+            <form method="post" id="post_pin_form" action="#">
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
                         <input type="password" class="form-control" id="post_pin_input" name="post_pin_input" 
-                        placeholder="Enter your PIN" autofocus pattern=".{4,4}" required max="4" min="4"
+                        placeholder="Enter your PIN" pattern=".{4,4}" required max="4" min="4"
                         onkeypress="postPinBtnKeyPress(event)" />
                     </div>
                 </div>
@@ -200,11 +200,11 @@ desired effect
                     </div><!-- /. tools -->
                 </div> <!-- /. box-header -->
             </div>        
-            <form method="post" id="forward_pin_form" action="forwardpinform">
+            <form method="post" id="forward_pin_form" action="#">
                 {{ csrf_field() }}
                 <div class="box-body">
                     <div class="form-group">
-                        <input type="password" class="form-control" id="forward_pin_input" name="forward_pin_input" placeholder="Enter your PIN" autofocus pattern=".{4,4}" required max="4" min="4" />
+                        <input type="password" class="form-control" id="forward_pin_input" name="forward_pin_input" placeholder="Enter your PIN" pattern=".{4,4}" required max="4" min="4" />
                     </div>
                 </div>
                 <div class="box-footer clearfix">

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\AppModels\MemoNotification;
+use App\Models\AppModels\UserMemo;
 use DB;
 use Auth;
 
@@ -20,10 +21,9 @@ class MemoNotificationController extends Controller
     public function fetch(Request $request){
 
         $user = Auth::user();
-        //$notif_count = DB::select('select count(*) from folder_notifications where status=0');
-        
-        $memo_count = MemoNotification::where('receiver_id', '=', Auth::user()->id)
-            ->where('status', '=', 0)
+                
+        $memo_count = MemoNotification::where('receiver_id', Auth::user()->id)
+            ->where('status', 0)
             ->orderBy('created_at', 'desc')
             ->count();
         
@@ -38,10 +38,12 @@ class MemoNotificationController extends Controller
         $receiver_id =  $user->id;
         
         $status = 0;
-        $notifications = DB::select('select * from memo_notifications where receiver_id = ? and status = ?', [$receiver_id, $status]);
+        $notifications = MemoNotification::where('receiver_id', $receiver_id)->where('status', 0)->get();
+        //DB::select('select * from memo_notifications where receiver_id = ? and status = ?', [$receiver_id, $status]);
 
         foreach($notifications as $notification){
-            $notif_id = ((array) $notification)["id"];
+            $notif_id = $notification->id;
+            //((array) $notification)["id"];
 
             DB::update('update memo_notifications set status = ? where id = ?', [1, $notif_id]);
         }
@@ -58,13 +60,21 @@ class MemoNotificationController extends Controller
 
         //DB::update('update memos set treated=1 where id=?', [$memo_id]);
         DB::table('user_memos')
-            ->where('memo_id', $memo_id)
-            ->where('user_id', $user->id)
+            ->where('user_id', $memo_id)
+            ->where('memo_id', $user->id)
             ->update(['status' => 1]);
 
-        $data = array('done'=>'Success');
+        $update = UserMemo::where('user_id', $user->id)->where('memo_id', $memo_id)->first();
+        if($update->status == 0){
+            $update->status = 1;
+            $update->save();
+        }
 
-        return response()->json($data); //redirect()->back();
+        echo $update->status;
+
+        //$data = array('done'=>'Success');
+
+        //return response()->json($data); //redirect()->back();
     }
 
 }

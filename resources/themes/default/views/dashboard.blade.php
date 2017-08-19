@@ -398,81 +398,118 @@
 								headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
 							});
 
-							var postPinBtnKeyPress = function(e){
-								e.preventDefault();
-								e.stopPropagation();
-
-								if(e.keyCode == 13){
-									alert('From here');
+							//$(document).on('keypress', "input[type='password']#post_pin_input", function(e){
+							//	swal('LaiLai');
+							//});
+							 
+							$('#post_pin_form').find('input').keypress(function(e) {
+								// Enter pressed?								
+								if(e.which == 10 || e.which == 13) {
+									e.preventDefault();
+									e.stopPropagation();
+									
 									runPostPinFunct(e);
-								}								
-							}
+								}
+							});	
+
+							$('#forward_pin_form').find('input').keypress(function(e) {
+								// Enter pressed?								
+								if(e.which == 10 || e.which == 13) {
+									e.preventDefault();
+									e.stopPropagation();
+									
+									runForwardPinFunct(e);
+								}
+							});					
 
 							var runPostPinFunct = function(e){
-									e.preventDefault();
-									e.stopPropagation();	
+								e.preventDefault();
+								e.stopPropagation();												
 
-									alert('Working');
-									return;																
-																	
-									//if( $('#post_pin_input').val().length !== 4 ){
-										//alert('Pin is invalid. Please enter a four digit pin');
-										// $('#post_pin_input').val('');
-										//return;
-									//}
+								$('#postPinModal').modal('hide');
 
-									$('#postPinModal').modal('hide');
+								var postPinForm = $('#post_pin_form').serialize();							
+								
+								$('#post_pin_input').val(''); // cancel the value in the input field
 
-									var postPinForm = $('#post_pin_form').serialize();							
-									
-									$('#post_pin_input').val(''); // cancel the value in the input field
+								var data = postPinForm;
 
-									var data = postPinForm;
-
-									$.ajax({
-										url:"authpin",
-										method:"GET",
-										dataType:"text",
-										cache: false,
-										data: data
-									}).done(function(returnVal){
-										if(returnVal == "true"){
-											console.log('good, right pin');											
-											var formData  = $("#commentForm{{$loopindex}}").serialize();
-											postCommentForm(formData);
-										}
-										else{	
-											console.log('Wrong pin');										
-											$.toast({
-												heading: 'PIN Verification',
-												text: 'Wrong pin: Enter the correct PIN',
-												icon: 'success',
-												//bgColor: '#E01A31',
-												hideAfter: 5000,
-												showHideTransition: 'slide',
-												loader: false,        // Change it to false to disable loader
-												loaderBg: '#9EC600'  // To change the background
-											});
-										}
-									}).fail(function(){										
-										console.log('No connection to pin controller');
-									});
-								};
-
+								$.ajax({
+									url:"authpin",
+									method:"GET",
+									dataType:"text",
+									cache: false,
+									data: data
+								}).done(function(returnVal){
+									if(returnVal == "true"){
+										console.log('good, right pin');											
+										var formData  = $("#commentForm{{$loopindex}}").serialize();
+										postCommentForm(formData);
+									}
+									else{	
+										console.log('Wrong pin');										
+										$.toast({
+											heading: 'PIN Verification',
+											text: 'Wrong pin: Enter the correct PIN',
+											icon: 'success',
+											//bgColor: '#E01A31',
+											hideAfter: 5000,
+											showHideTransition: 'slide',
+											loader: false,        // Change it to false to disable loader
+											loaderBg: '#9EC600'  // To change the background
+										});
+									}
+								}).fail(function(){										
+									console.log('No connection to pin controller');
+								});
+							};
+							
 							// posting comments...
 							$(document).on('click', "button#submitPostBtn{{$loopindex}}", function(e){
 								e.preventDefault();
 								e.stopPropagation();
 
 								if ($("#comment{{$loopindex}}").val() == ''){
-									alert('Comment cannot be empty');
+									// use sweet alert 2 plugin to output message;
+									swal('Comment cannot be empty', 'Enter your comment', 'error');
 									return;
 								}
-								$('#postPinModal').modal('show');
+								$('#postPinModal').modal('show');								
 								// when you click on the modal send button...
 								$("#postPinBtn").on('click', runPostPinFunct);							
 								
 							});
+
+							var runForwardPinFunct = function(e){
+								e.preventDefault();
+								e.stopPropagation();						
+								
+								$('#forwardPinModal').modal('hide');
+
+								var forwardPinForm = $('#forward_pin_form').serialize();
+								$('#forward_pin_input').val('');
+
+								var data = forwardPinForm;
+
+								$.ajax({
+									url:"authpin",
+									method:"GET",
+									dataType:"text",
+									cache: false,
+									data: data
+								}).done(function(returnVal){
+									console.log(returnVal);
+									if(returnVal == "true"){
+										console.log('good, right pin');											
+										var formData  = $("#forwardForm{{$loopindex}}").serialize();
+										forwardForm(formData);
+									}else{
+										console.log('bad, wrong pin.');
+									}
+								}).fail(function(returnData){
+									console.log('No connection to pin controller');
+								});
+							};
 
 							// forwarding new files...
 							$(document).on('click', "button#forwardBtn{{$loopindex}}", function(e){
@@ -480,46 +517,7 @@
 								e.stopPropagation();
 								$('#forwardPinModal').modal('show');
 
-								$("#forwardPinBtn").on('click keypress', function(e){
-									e.preventDefault();
-									e.stopPropagation();
-
-									if(e.keyCode !== 13){
-										$('#forwardPinBtn').modal('hide');
-									}
-
-									//if( $('#forward_pin_input').val().length !== 4 ){
-										//alert('Pin is invalid. Please enter a four digit pin');
-										// $('#forward_pin_input').val('');
-										//return;
-									//}
-
-									$('#forwardPinModal').modal('hide');
-
-									var forwardPinForm = $('#forward_pin_form').serialize();
-									$('#forward_pin_input').val('');
-
-									var data = forwardPinForm;
-
-									$.ajax({
-										url:"authpin",
-										method:"GET",
-										dataType:"text",
-										cache: false,
-										data: data
-									}).done(function(returnVal){
-										console.log(returnVal);
-										if(returnVal == "true"){
-											console.log('good, right pin');											
-											var formData  = $("#forwardForm{{$loopindex}}").serialize();
-											forwardForm(formData);
-										}else{
-											console.log('bad, wrong pin.');
-										}
-									}).fail(function(returnData){
-										console.log('No connection to pin controller');
-									});
-								});
+								$("#forwardPinBtn").on('click', runForwardPinFunct);
 							});		
 
 							function postCommentForm(formData){

@@ -262,7 +262,7 @@ class FilesController extends Controller {
         $activity->save();  	
 
 		//return 'session';
-        Flash::success('File has been sent to '. $first_name . ', '. $last_name);
+        Flash::success('File has been forwarded to '. $first_name . ', '. $last_name);
         //return redirect()->back()->with('Dashboard up-to-date');
 
 		return Response::json(array('message' => 'Success'));
@@ -329,7 +329,7 @@ class FilesController extends Controller {
 		$activity->save();
 		
 		//return 'session';
-		Flash::success('File has been sent to '. Input::get('share-input'));
+		Flash::success('File has been shared with '. Input::get('share-input'));
 		return redirect()->back()->with('comment saved');
     }
 

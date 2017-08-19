@@ -93,7 +93,12 @@
       <div class="lockscreen-item">
         <!-- lockscreen image -->
         <div class="lockscreen-image">
-          <img src="{{ asset ("/img/profile_picture/photo/".$user->avatar) }}" alt="User Image">
+
+        <?php 
+          $user_avatar =  isset($user->avatar) ? $user->avatar : 'default-user.jpg';
+        //$user_avatar = $user->avatar ?? 'default-user.jpg'; 
+        ?>
+          <img src="{{ asset ("/img/profile_picture/photo/".$user_avatar) }}" alt="User Image">
         </div>
         <!-- /.lockscreen-image -->
 
@@ -101,9 +106,21 @@
         <form class="lockscreen-credentials" method="POST" action="{!! route('loginPost') !!}">
         {!! csrf_field() !!}
           <div class="input-group">
-          <?php $user_email = Illuminate\Support\Facades\Cache::get("user{{$user->id}}"); ?>
+          <?php 
+            //$user_email = isset($user->id) ? Illuminate\Support\Facades\Cache::get("user$user->id")  : 'noemail';
+            $user_email = 'noemail';
+            if(isset($user->id)){
+              if(Illuminate\Support\Facades\Cache::has("user$user->id")){
+                $user_email = Illuminate\Support\Facades\Cache::get("user$user->id");
+              }              
+            }  
+          ?>
+           @if($user_email != 'noemail')
             <input type="hidden" id="email" name="email" class="form-control" placeholder="Email" value="{{$user_email}}" required autofocus/>
-             <input type="password" id="password" name="password" class="form-control" placeholder="Password" required/>
+           @else
+            <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="" required autofocus/>
+           @endif
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required/>
             <div class="input-group-btn">
               <button class="btn"><i class="fa fa-arrow-right text-muted"></i></button>
             </div>
