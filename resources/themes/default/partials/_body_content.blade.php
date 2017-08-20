@@ -46,7 +46,7 @@
     @endif
 
 {{-- custom scripts when user is authenticaated goes here. --}}
-@if(Auth::user())
+@if(Auth::check())
     @include('partials._body_bottom_custom_file_ctrl_js')
 @endif
 

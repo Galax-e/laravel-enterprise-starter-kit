@@ -3,8 +3,7 @@
 use Unisharp\Laravelfilemanager\traits\LfmHelpers;
 use Illuminate\Http\Request;
 
-
-use App\Models\AppModels\activity;
+use App\Models\AppModels\Activity;
 use DB;
 use Flash;
 /**
@@ -36,19 +35,29 @@ class LfmController extends Controller
         // $comment  = '%Comment%';
         $creation = '%created%';
 
-        $reg_activities = DB::table('activities')->whereNotNull('activity')
-        ->orWhere(function($query){
-            $query->where('activity', 'like', '%created%')
-                ->where('activity', 'like', '%shared%')
-                ->where('activity', '<>', '');
-        })->distinct()->orderBy('created_at', 'desc')->skip(10)->take(5)->get();
+        // $reg_activities = DB::table('activities')->whereNotNull('activity')
+        // ->orWhere(function($query){
+        //     $query->where('activity', 'like', '%created%')
+        //         ->where('activity', 'like', '%shared%')
+        //         ->where('activity', '<>', '');
+        // })->distinct()->orderBy('created_at', 'desc')->take(50)->skip(10)->get();
 
-        //$reg_activities = DB::select('select distinct * from activities where activity like ? or activity like ? order by created_at desc limit 5', [$shared, $creation]);
-        $activities = DB::table('activities')->whereNotNull('activity')
-        ->orWhere(function($query){
-            $query->where('activity', 'like', '%Forward%')
-                ->where('activity', '<>', '');
-        })->distinct()->orderBy('created_at', 'desc')->skip(10)->take(5)->get();
+        $reg_activities = DB::select('select distinct * from activities 
+        where activity is not null and activity != ? and (activity like ? or activity like ?) 
+        order by created_at desc limit 5', 
+        ['', $shared, $creation]);
+
+
+        $activities = DB::select('select distinct * from activities 
+        where activity is not null and activity != ? and activity like ? 
+        order by created_at desc limit 5', 
+        ['', '%Forward%']);
+        
+        // $activities = DB::table('activities')->whereNotNull('activity')
+        // ->orWhere(function($query){
+        //     $query->where('activity', 'like', '%Forward%')
+        //         ->where('activity', '<>', '');
+        // })->distinct()->orderBy('created_at', 'desc')->take(50)->skip(10)->get();
         
         //$activities = DB::select('select * from activities where activity like ? order by created_at desc limit 5', [$activity]);
 		

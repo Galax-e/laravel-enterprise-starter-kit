@@ -10,8 +10,8 @@
 </style>
 <script type="text/javascript">
     $(function(){
-        var imageBgCol = $('.user-header').css('background-color');
-        $('#image_view_update').css('background-color', imageBgCol);
+        //var imageBgCol = $('.user-header').css('background-color');
+        //$('#image_view_update').css('background-color', imageBgCol);
     });
     
 </script>

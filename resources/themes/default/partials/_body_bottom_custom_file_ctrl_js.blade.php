@@ -40,6 +40,7 @@
                        count = notif_count;
                        if (notif_count > temp_fn){
                             desktopNotification(event='New File', message = 'New shared folder on Desk', count);
+                            $("#navbar-reload").load(location.href+" #navbar-reload>*","");
                             temp_fn = notif_count;
                        }
 
@@ -128,6 +129,7 @@
                             count = file_request_count;
                             if (file_request_count > temp_rfn){
                                 desktopNotification(event='File Request', message = 'New File Request', count);
+                                $("#navbar-reload").load(location.href+" #navbar-reload>*","");
                                 temp_rfn = file_request_count;
                             }
                         }

@@ -215,7 +215,6 @@ desired effect
     </div>
     </div>
 
-
     <script>
         $(function(){
             $('#navi').hover(function(){
@@ -225,7 +224,6 @@ desired effect
             }).trigger('mouseleave');
         });
     </script>
-
-    <script type="text/javascript" src="{{ asset ("/packages/barryvdh/elfinder/js/standalonepopup.min.js") }}"></script>
+    {{--  <script type="text/javascript" src="{{ asset ("/packages/barryvdh/elfinder/js/standalonepopup.min.js") }}"></script>  --}}
 
 </body>
