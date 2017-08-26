@@ -20,26 +20,26 @@
 				<!-- Profile Image -->
 				<div class="box box-primary">
 					<div class="box-body box-profile">
-						<div style="margin: 0 125px;">
-							<img class="profile-user-img img-responsive img-circle" src="{{ asset('/img/profile_picture/photo/'.$user->avatar) }}" alt="User profile picture">
+						<div style="margin: 0 auto;">
+							<img class="profile-user-img img-responsive img-circle center-block" src="{{ asset('/img/profile_picture/photo/'.$user->avatar) }}" alt="User profile picture">
 						</div>
 
-						<h3 class="profile-username text-center col-md-6">{{$user->full_name}}</h3>
+						<h3 class="profile-username text-center">{{$user->full_name}}</h3>
 
 						{{--  <p class="text-muted text-center">{{$user->full_name}}</p>  --}}
-						<ul class="list-group list-group-unbordered">
+						<ul class="list-group list-group-unbordered text-center">
 							@if($user->position)
-							<li class="list-group-item">
-								<h6 class="category text-gray">{{$user->position}},  </h6>
-							</li>
+								<li class="list-group-item">
+									<h6 class="category text-muted">{{$user->position}},  
 							@endif
-							@if($user->department)
-							<li class="list-group-item">
-								<p class="card-content">
-										{{$user->department}}
-								</p>
-							</li>
+							@if($user->department)								
+								<em class="">
+									<?php $user_dept = ['secretreg' => 'Secret Registry', 'openreg' => 'Open Registry', 'finance' => 'Finance', 'hr' => 'Human Resources', 'gsl' => 'General Services and Logistics', 'adminsupply' => 'Admin and Supply', 'procurement' => 'Procurement', 'permsec' => 'Permanent Secretary and GOC', 'ict' => 'ICT and Communications', 'legal' => 'Legal']; ?>
+									{{$user_dept[$user->department]}}
+								</em>
 							@endif
+								</h6>
+							</li>
 						</ul>
 						<div style="width: 70%; margin-left: 50px;" class="footer">
 							{!! Form::open(['route' => 'user.profile.photo.patch', 'files' => true, 'id' => 'form_edit_picture', 'method' => 'PATCH']) !!}

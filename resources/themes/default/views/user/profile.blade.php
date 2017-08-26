@@ -27,12 +27,12 @@
 
                                 <div class="form-group">
                                     {!! Form::label('first_name', trans('admin/users/general.columns.first_name')) !!}
-                                    {!! Form::text('first_name', null, ['class' => 'form-control', $readOnlyIfLDAP]) !!}
+                                    {!! Form::text('first_name', null, ['class' => 'form-control', 'readonly', $readOnlyIfLDAP]) !!}
                                 </div>
 
                                 <div class="form-group">
                                     {!! Form::label('last_name', trans('admin/users/general.columns.last_name')) !!}
-                                    {!! Form::text('last_name', null, ['class' => 'form-control', $readOnlyIfLDAP]) !!}
+                                    {!! Form::text('last_name', null, ['class' => 'form-control', 'readonly', $readOnlyIfLDAP]) !!}
                                 </div>
 
                                 <div class="form-group">
@@ -42,7 +42,7 @@
 
                                 <div class="form-group">
                                     {!! Form::label('email', trans('admin/users/general.columns.email')) !!}
-                                    {!! Form::text('email', null, ['class' => 'form-control', $readOnlyIfLDAP]) !!}
+                                    {!! Form::text('email', null, ['class' => 'form-control', 'readonly', $readOnlyIfLDAP]) !!}
                                 </div>
 
                                 <div class="form-group">

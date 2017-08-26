@@ -13,7 +13,7 @@
       .content-wrapper,
       .right-side,
       .main-footer {
-        margin-left: 50px!important;
+        margin-left: 50px !important;
         z-index: 840;
       }
 
@@ -21,7 +21,7 @@
       .main-sidebar {
         //Don't go away! Just shrink
         .translate(0, 0);
-        width: 50px!important;
+        width: 50px !important;
         z-index: 850;
       }
 
@@ -29,7 +29,7 @@
         > li {
           position: relative;
           > a {
-            margin-right: 0;            
+            margin-right: 0;
           }
           > a > span {
             border-top-right-radius: 4px;
@@ -42,36 +42,10 @@
           }
 
           > .treeview-menu {
-            //Add some padding to the treeview menu
+            // Add some padding to the treeview menu
             padding-top: 5px;
             padding-bottom: 5px;
             border-bottom-right-radius: 4px;
-          }
-
-          //Show menu items on hover
-          &:hover {
-            > a {
-              //overflow: visible;
-            }
-            > a > span:not(.pull-right),
-            > .treeview-menu {
-              display: block!important;
-              position: absolute;
-              width: @sidebar-width - 50;
-              left: 50px;
-            }
-
-            //position the header & treeview menus
-            > a > span {
-              top: 0;
-              margin-left: -3px;
-              padding: 12px 5px 12px 20px;
-              background-color: inherit;
-            }
-            > .treeview-menu {
-              top: 44px;
-              margin-left: 0;
-            }
           }
         }
       }
@@ -82,9 +56,10 @@
       .sidebar-form,
       .sidebar-menu > li > a > span,
       .sidebar-menu > li > .treeview-menu,
-      .sidebar-menu >li > a > .pull-right,
+      .sidebar-menu > li > a > .pull-right,
       .sidebar-menu li.header {
-        display: none!important;
+        display: none !important;
+        -webkit-transform: translateZ(0);
       }
 
       .main-header {
@@ -111,27 +86,80 @@
   }
 }
 
+// Show menu items on hover
+.sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse {
+  .sidebar-menu > li:hover {
+    > a {
+      //overflow: visible;
+    }
+    > a > span:not(.pull-right), //:not(.pull-right-container),
+    > .treeview-menu {
+      display: block !important;
+      position: absolute;
+      width: @sidebar-width - 50;
+      left: 50px;
+    }
+
+    //position the header & treeview menus
+    > a > span {
+      top: 0;
+      margin-left: -3px;
+      padding: 12px 5px 12px 20px;
+      background-color: inherit;
+    }
+    > a > .pull-right-container {
+      //display: block!important;
+      position: relative !important;
+      float: right;
+      width: auto !important;
+      left: 200px - 20px !important;
+      top: -22px !important;
+      z-index: 900;
+      > .label:not(:first-of-type) {
+        display: none;
+      }
+    }
+    > .treeview-menu {
+      top: 44px;
+      margin-left: 0;
+    }
+  }
+}
+
+.sidebar-expanded-on-hover {
+  .main-footer,
+  .content-wrapper {
+    margin-left: 50px;
+  }
+  .main-sidebar {
+    box-shadow: @sidebar-expanded-shadow;
+  }
+}
+
 //A fix for text overflow while transitioning from sidebar mini to full sidebar
 .sidebar-menu,
 .main-sidebar .user-panel,
 .sidebar-menu > li.header {
-  white-space: nowrap!important;
+  white-space: nowrap;
   overflow: hidden;
 }
+
 .sidebar-menu:hover {
   overflow: visible;
 }
+
 .sidebar-form,
 .sidebar-menu > li.header {
   overflow: hidden;
   text-overflow: clip;
 }
+
 .sidebar-menu li > a {
   position: relative;
-  > .pull-right {
+  > .pull-right-container {
     position: absolute;
-    top: 50%;
     right: 10px;
+    top: 50%;
     margin-top: -7px;
   }
 }

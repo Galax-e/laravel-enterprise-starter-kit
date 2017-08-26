@@ -78,6 +78,92 @@ desired effect
         </div>
     </div>
 
+    <style>
+        .el-hover:hover{
+            background-color: #F0FFFF;
+        }
+    </style>
+    <!-- View user modal -->
+    <div class="modal fade viewuser" role="dialog" style="overflow: auto; z-index: 9999;">
+        <div class="modal-dialog"> 
+            <!-- Modal content-->
+            <div class="modal-content">   
+                <!-- Widget: user widget style 1 -->
+                <div class="box box-widget widget-user">
+                    <!-- Modal header -->
+                    <div class="modal-header">
+                        <label class="label bg-orange">User Detail</label>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box-body bg-aqua-active">
+                            <div class="widget-user-header bg-aqua-active">
+                                <div class="widget-user-image" style="margin: auto; margin-right: 30px;">
+                                    <img id="user_detail_img" class="img-circle img-responsive center-block" alt="User Image"/>
+                                </div>
+                                <!-- /.widget-user-image -->
+                                <span class="text-center">
+                                    <h3 id="user_detail_name" class="widget-user-username"></h3>
+                                    <h5 id="user_detail_pos" class="widget-user-desc text-muted"></h5>
+                                </span>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="box-footer">
+                            <div class="row">
+                                <div class="col-sm-3 border-right el-hover">
+                                    <div class="description-block">
+                                        <a href="#">
+                                            <span class="description-text" title="chat">
+                                                <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 border-right el-hover">
+                                    <div class="description-block">
+                                        <a href="#">
+                                            <span class="description-text" title="share file">
+                                                <img src="{{asset("/img/smaller.png") }}" class="offline" style="width: 25px;"/>
+                                            </span>
+                                        </a>                                        
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 border-right el-hover">
+                                    <div class="description-block">
+                                        <a href="#">
+                                            <span class="description-text" title="voice call">
+                                                <i class="fa fa-phone" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-3 el-hover">
+                                    <div class="description-block">
+                                        <a href="#">
+                                            <span class="description-text" title="video call">
+                                                <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                            </div><!-- /.row -->                                
+                        </div> <!-- /.box-footer -->
+                    </div><!-- /.modal-footer -->
+                </div><!-- /.widget-user -->
+            </div> <!-- ./modal-content -->
+        </div>
+    </div>
+
+
      <!-- Request file modal-->
    <div class="modal fade" id="requestFileModal" role="dialog">
    <div class="modal-dialog">
@@ -100,7 +186,7 @@ desired effect
                  <input type="text" class="form-control" id="name" name="name" placeholder="File No/ Name"/>
                </div>
                <div>
-                 <textarea class="" name="desc" id="desc" placeholder="Enter a description about the folder or file ..." style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                 <textarea class="" name="desc" id="desc" placeholder="Describe the folder or file ..." style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                </div>
            </div>
            <div class="box-footer clearfix">

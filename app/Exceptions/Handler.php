@@ -65,20 +65,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        $status = 403;
-        //$user = Auth::user();
-        if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
-            return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
+        // $status = 403;
+        // //$user = Auth::user();
+        // if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
+        //     return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
 
-        if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
-            //return response(view('error.403', compact('user')), 403);
-            return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
+        // if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException)
+        //     //return response(view('error.403', compact('user')), 403);
+        //     return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
         
-        if ($e instanceof \Exception)
-            return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
+        // if ($e instanceof \Exception)
+        //     return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
             
-        if ($e instanceof \Illuminate\Session\TokenMismatchException)
-            return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
+        // if ($e instanceof \Illuminate\Session\TokenMismatchException)
+        //     return response()->view("errors.{$status}", ['exception' => $e, 'user'=>Auth::user()], $status);
 
         return parent::render($request, $e);
     }

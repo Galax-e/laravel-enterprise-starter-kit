@@ -8,6 +8,7 @@ use Unisharp\Laravelfilemanager\Events\FolderWasRenamed;
 
 use Illuminate\Support\Facades\Input;
 use App\Models\AppModels\Activity;
+use App\Models\AppModels\Folder;
 use Auth;
 /**
  * Class RenameController
@@ -87,24 +88,32 @@ class RenameController extends LfmController
         $activity->save();
    }
 
-   Public function getTemp()
+    Public function getTemp()
     {
-        $new_name = parent::translateFromUtf8(trim(request('items')));        
+        $folder_name = request('items');
+        $new_name = parent::translateFromUtf8(trim($folder_name));        
         $old_file = parent::getCurrentPath($new_name);
         $new_path = public_path().'/docs/files/trash/'.$new_name;
         $move     = File::copyDirectory($old_file, $new_path);
         $delete   = File::deleteDirectory($old_file);
 
-        // delete file from database
-        DB::table('folders')->where('folder_no', $new_name)->delete();
-
+        // delete file from the database...
+        $folder = Folder::where('folder_no', $folder_name)->first();
+        
         $activity = new Activity;
         $activity->activity_by= Auth::user()->email;
-        $activity->activity_by_post = Auth::user()->position;
-        $activity->folder_id= '10000';
-        $activity->fileinfo= $new_name;
-        $activity->activity= 'One folder deleted from system';
+        $activity->activity_by_post = Auth::user()->position;        
+        $activity->folder_id = $folder->id;               
+        $activity->fileinfo  = $new_name;
+        $activity->activity  = 'One folder deleted from system';
         $activity->save();
+
+        // delete file from database
+        //DB::table('folders')->where('folder_no', $new_name)->delete();
+        Folder::where('folder_no', $folder_name)->delete();
+        Activity::where('element_id', $folder->id)->delete(); // delete all activities associated to the folder
+
+        //Folder::findOrFail($folder->id)->delete();
 
         Flash::success('One Folder deleted');
         return redirect()->back();

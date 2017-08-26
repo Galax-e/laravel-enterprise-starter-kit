@@ -54,18 +54,22 @@ class DeleteController extends LfmController
         Audit::log(Auth::user()->id, trans('registry/lfm.audit-log.category'), trans('registry/lfm.audit-log.msg-destroy'));
 
         // delete file from the database...
-        $new_name = parent::translateFromUtf8(trim(request('items'))); 
-        $folder = DB::table('folders')->where('folder_no', $new_name)->first();
+        
+        // $new_name = parent::translateFromUtf8(trim(request('items'))); 
+        $folder_name = request('items');
+        $folder = DB::table('folders')->where('folder_no', $folder_name)->first();
 
         $activity = new Activity;
         $activity->activity_by= Auth::user()->email;
         $activity->activity_by_post = Auth::user()->position;        
         $activity->folder_id = $folder->id;               
-        $activity->fileinfo  = $new_name;
+        $activity->fileinfo  = $folder_name;
         $activity->activity  = 'One folder deleted from system';
         $activity->save();
 
-        DB::table('folders')->where('folder_no', $new_name)->delete();
+        DB::table('folders')->where('folder_no', $folder_name)->delete();
+        Activity::where('element_id', $folder->id)->delete(); // delete all activities associated to the folder
+        
 
         return parent::$success_response;
     }

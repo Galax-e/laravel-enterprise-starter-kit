@@ -81,10 +81,8 @@ class DashboardController extends Controller
 			Cache::put('user'.$user->id, $user->email, 60);
 		}
 		//abort(403);
-
 		$forward_to_users = DB::select('select * from users');
-
-		$dept_users = DB::select('select * from users');
+		$dept_users = $forward_to_users; //DB::select('select * from users');
 		$user_email = $user->email;
 
 		$activity = '%Forward%';

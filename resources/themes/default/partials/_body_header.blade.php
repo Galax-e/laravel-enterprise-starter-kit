@@ -55,7 +55,7 @@
                        </li>
 
                        <li class="">
-                           <!-- Request File button -->
+                           <!-- Create Memo button -->
                            <a href="{{route('compose')}}" class="btn btn-block" title="Memo">
                                <i id="" class="fa fa-send"></i>
                            </a>
