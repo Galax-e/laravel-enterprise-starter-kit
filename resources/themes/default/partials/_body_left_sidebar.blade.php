@@ -61,9 +61,9 @@
                 <li class="treeview">
                     <a href="{{url('inbox')}}">
                         <i class="fa fa-envelope"></i>
-                        <span class="pull-right-container">
+                        <span class="">
                             {{--  <i class="fa fa-angle-left pull-right"></i>  --}}
-                            <span> Memo</span>
+                            Memo<span id="inbox_on_mailbox"  class="badge"></span>
                         </span>
                     </a>
                     {{--  <ul class="treeview-menu">

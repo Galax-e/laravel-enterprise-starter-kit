@@ -1,6 +1,5 @@
 <?php
 
- // $namespace = '\Unisharp\Laravelfilemanager\controllers';
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -12,9 +11,7 @@
 |
 */
 
-
-
-Route::get('dataphp', ['as' => 'dataphp', 'uses' => 'MemoController@dataphp']);
+// Route::get('dataphp', ['as' => 'dataphp', 'uses' => 'MemoController@dataphp']);
 
 Route::get('show-message/{id}','FilesController@show_message');
 Route::post('edit/{id}','FilesController@edit');
@@ -25,7 +22,7 @@ Route::get('/error',function(){
    abort(503);
 });
 
-Route::get('testnotif', 'MessageController@index');
+Route::get('testnotif', ['as'=>'testnotif', 'uses'=>'MessageController@index']);
 
 
 // Authentication routes...
@@ -57,72 +54,60 @@ Route::get( 'welcome',    ['as' => 'welcome',     'uses' => 'HomeController@welc
 // Routes in this group must be authorized.
 Route::group(['middleware' => 'authorize'], function () {
     // Application routes...
-    Route::get(   'compose',        ['as' => 'compose',          'uses' => 'MemoController@compose']);
-    Route::get(   'dashboard',      ['as' => 'dashboard',          'uses' => 'DashboardController@index']);
+    Route::get(   'compose',        ['as' => 'compose',        'uses' => 'MemoController@compose']);
+    Route::get(   'dashboard',      ['as' => 'dashboard',      'uses' => 'DashboardController@index']);
     Route::get(   'inbox',          ['as' => 'inbox',          'uses' => 'MemoController@inbox']);
-    Route::get(   'read_memo/{id}', ['as' => 'read_memo/{id}',          'uses' => 'MemoController@read_memo']);
-    Route::get(   'session',        ['as' => 'session',          'uses' => 'DashboardController@session']);
-    Route::post(   'searchactivity',      ['as' => 'searchactivity',          'uses' => 'DashboardController@searchactivity']);
-    Route::post(   'searchcontact',      ['as' => 'searchcontact',          'uses' => 'DashboardController@searchcontact']);
+    Route::get(   'read_memo/{id}', ['as' => 'read_memo/{id}', 'uses' => 'MemoController@read_memo']);
+    Route::get(   'session',        ['as' => 'session',        'uses' => 'DashboardController@session']);
+    Route::post(  'searchactivity', ['as' => 'searchactivity', 'uses' => 'DashboardController@searchactivity']);
+    Route::post(  'searchcontact',  ['as' => 'searchcontact',  'uses' => 'DashboardController@searchcontact']);
     Route::post(  'store',          ['as' => 'store',          'uses' => 'DashboardController@store']);
-    Route::get(   'viewall',        ['as' => 'viewall',          'uses' => 'DashboardController@viewall']);
-    Route::get(   'viewallcontacts',        ['as' => 'viewallcontacts',          'uses' => 'DashboardController@viewallcontacts']);
-    Route::get(   'viewallrequest', ['as' => 'viewallrequest',          'uses' => 'DashboardController@viewallrequest']);
-    Route::post(  'store-session',  ['as' => 'store-session',          'uses' => 'DashboardController@store_session']);
-    Route::post(  'store_memo',     ['as' => 'store_memo',          'uses' => 'DashboardController@store_memo']);
-    
-    Route::get(   'sent',          ['as' => 'sent',          'uses' => 'MemoController@sent']);
-    
-    Route::post(  'insert',     ['as' => 'insert',          'uses' => 'DashboardController@insert']);
-    Route::post(  'attachment',     ['as' => 'attachment',          'uses' => 'DashboardController@attachment']);
-    Route::post(  'single_upload',     ['as' => 'single_upload',          'uses' => 'DashboardController@single_upload']);
-    Route::post(  'compose_single_upload',     ['as' => 'compose_single_upload', 'uses' => 'DashboardController@compose_single_upload']);
+    Route::get(   'viewall',        ['as' => 'viewall',        'uses' => 'DashboardController@viewall']);
+    Route::get(   'viewallcontacts',['as' => 'viewallcontacts','uses' => 'DashboardController@viewallcontacts']);
+    Route::get(   'viewallrequest', ['as' => 'viewallrequest', 'uses' => 'DashboardController@viewallrequest']);
+    Route::post(  'store-session',  ['as' => 'store-session',  'uses' => 'DashboardController@store_session']);
+    Route::post(  'store_memo',     ['as' => 'store_memo',     'uses' => 'DashboardController@store_memo']);
+    Route::get(   'sent',           ['as' => 'sent',           'uses' => 'MemoController@sent']);
+    Route::post(  'insert',         ['as' => 'insert',         'uses' => 'DashboardController@insert']);
+    Route::post(  'attachment',     ['as' => 'attachment',     'uses' => 'DashboardController@attachment']);
+    Route::post(  'single_upload',  ['as' => 'single_upload',  'uses' => 'DashboardController@single_upload']);
+    Route::post(  'compose_single_upload',['as' => 'compose_single_upload', 'uses' => 'DashboardController@compose_single_upload']);
     //Route::post(  'memo_attachment',     ['as' => 'memo_attachment', 'uses' => 'AttachmentController@memoAttachment']);
-    
-    Route::get(   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
-    Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
-
     //Notifications
-    Route::get( 'folder_notification',['as' => 'folder_notification',  'uses' => 'FolderNotificationController@fetch']);
-    Route::get( 'memo_notification',  ['as' => 'memo_notification',    'uses' => 'MemoNotificationController@fetch']);
-    Route::get( 'request_file_notification',  ['as' => 'request_file_notification',    'uses' => 'RequestFileNotificationController@fetch']);
-
-    Route::get( 'notif_seen',           ['as' => 'notif_seen',          'uses' => 'FolderNotificationController@notificationseen']);
-    Route::get( 'memo_seen',            ['as' => 'memo_seen',           'uses' => 'MemoNotificationController@notificationseen']);
-    Route::get( 'request_file_seen',    ['as' => 'request_file_seen',   'uses' => 'RequestFileNotificationController@notificationseen']);
-
-    Route::get( 'seen_memo',            ['as' => 'seen_memo',           'uses' => 'MemoNotificationController@seenMemo']);
-
-    Route::get( 'seen_folder_req',      ['as' => 'seen_folder_req',     'uses' => 'RequestFileNotificationController@seenFolderReq']);
-
-    Route::get( 'seen_folder',          ['as' => 'seen_folder',         'uses' => 'FolderNotificationController@seenFolder']);
-    
-    Route::get(   'user/profile/photo', ['as' => 'user.profile.photo',       'uses' => 'UsersController@profilePhoto']);
-    Route::patch( 'user/profile/photo', ['as' => 'user.profile.photo.patch', 'uses' => 'UsersController@profilePhotoUpdate']);
+    Route::get  ( 'folder_notification',       ['as' => 'folder_notification',      'uses' => 'FolderNotificationController@fetch']);
+    Route::get  ( 'memo_notification',         ['as' => 'memo_notification',        'uses' => 'MemoNotificationController@fetch']);
+    Route::get  ( 'request_file_notification', ['as' => 'request_file_notification','uses' => 'RequestFileNotificationController@fetch']);
+    Route::get  ( 'notif_seen',                ['as' => 'notif_seen',               'uses' => 'FolderNotificationController@notificationseen']);
+    Route::get  ( 'memo_seen',                 ['as' => 'memo_seen',                'uses' => 'MemoNotificationController@notificationseen']);
+    Route::get  ( 'request_file_seen',         ['as' => 'request_file_seen',        'uses' => 'RequestFileNotificationController@notificationseen']);
+    Route::get  ( 'seen_memo',                 ['as' => 'seen_memo',                'uses' => 'MemoNotificationController@seenMemo']);
+    Route::get  ( 'seen_folder_req',           ['as' => 'seen_folder_req',          'uses' => 'RequestFileNotificationController@seenFolderReq']);
+    Route::get  ( 'seen_folder',               ['as' => 'seen_folder',              'uses' => 'FolderNotificationController@seenFolder']);
+    Route::get  (  'user/profile/photo',       ['as' => 'user.profile.photo',       'uses' => 'UsersController@profilePhoto']);
+    Route::patch( 'user/profile/photo',        ['as' => 'user.profile.photo.patch', 'uses' => 'UsersController@profilePhotoUpdate']);
 
     // other routers
-    Route::get('read', 'FilesController@read');
-    Route::post('comment', 'FilesController@comment');
-    Route::get('commentrefresh', ['as' => 'commentrefresh', 'uses' => 'DashboardController@commentRefresh']);
-    Route::get('ajaxcomment', ['as' => 'ajaxcomment', 'uses' => 'FilesController@ajaxComment']);
-
-    Route::get('authpin', ['as' => 'authpin', 'uses' => 'FilesController@authenticatePin']);
-
-    Route::post('requestform','FilesController@requestform');
-    Route::post('ajaxfolderrequest', ['as'=>'ajaxfolderrequest', 'uses'=>'FilesController@ajaxFolderRequest']);
-    Route::post('storepinform', ['as'=>'storepinform', 'uses'=>'FilesController@storepinform']);
-
-    Route::post('forward',['as'=>'forward', 'uses'=>'FilesController@forward']); // remove the id
-    Route::post('share',['as'=>'share', 'uses'=>'FilesController@share']);
-    Route::get('share_clearance_level',['as'=>'share_clearance_level', 'uses'=>'FilesController@shareClearanceLevel']);
-
-    Route::get('registry_viewall',['as'=>'registry_viewall', 'uses'=>'FileManagement\RegistryController@viewAll']);
-
-    Route::get('ask_for_file_memo', ['as'=>'ask_for_file_memo', 'uses'=>'MemoController@askForFileMemo']);
+    Route::get ('read',                 ['as' => 'read',            'uses' => 'FilesController@read']);
+    Route::post('comment',              ['as'=>'comment',           'uses' => 'FilesController@comment']);
+    Route::get ('commentrefresh',       ['as' => 'commentrefresh',  'uses' => 'DashboardController@commentRefresh']);
+    Route::get ('ajaxcomment',          ['as' => 'ajaxcomment',     'uses' => 'FilesController@ajaxComment']);
+    Route::get ('authpin',              ['as' => 'authpin',         'uses' => 'FilesController@authenticatePin']);
+    Route::post('requestform',          ['as'=>'requestform',       'uses' => 'FilesController@requestform']);
+    Route::post('ajaxfolderrequest',    ['as'=>'ajaxfolderrequest', 'uses' => 'FilesController@ajaxFolderRequest']);
+    Route::post('storepinform',         ['as'=>'storepinform',      'uses' => 'FilesController@storepinform']);
+    Route::post('forward',              ['as'=>'forward',           'uses' => 'FilesController@forward']); // remove the id
+    Route::post('share',                ['as'=>'share',             'uses' => 'FilesController@share']);
+    Route::get ('share_clearance_level',['as'=>'share_clearance_level','uses'=>'FilesController@shareClearanceLevel']);
+    Route::get ('registry_viewall',     ['as'=>'registry_viewall',  'uses' => 'FileManagement\RegistryController@viewFolderTransactions']);
+    Route::get ('search_viewall',       ['as'=>'search_viewall',    'uses' => 'FileManagement\RegistryController@searchFolderTransactions']);
+    Route::get ('ask_for_file_memo',    ['as'=>'ask_for_file_memo', 'uses' => 'MemoController@askForFileMemo']);
 
     // creating documents and uploading file
-    Route::post('newdocument',['as'=>'newdocument', 'uses'=>'FileManagement\UploadController@upload']);
-    Route::post('newfolder',['as'=>'newfolder', 'uses'=>'FileManagement\UploadController@newfolder']);
+    Route::post ('newdocument', ['as'=>'newdocument', 'uses'=>'FileManagement\UploadController@upload']);
+    Route::post ('newfolder',   ['as'=>'newfolder',   'uses'=>'FileManagement\UploadController@newfolder']);
+
+    Route::get  (   'user/profile',   ['as' => 'user.profile',       'uses' => 'UsersController@profile']);
+    Route::patch( 'user/profile',   ['as' => 'user.profile.patch', 'uses' => 'UsersController@profileUpdate']);
 
     // Site administration section
     Route::group(['prefix' => 'admin'], function () {

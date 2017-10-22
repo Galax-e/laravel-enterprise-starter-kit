@@ -125,8 +125,8 @@ class DashboardController extends Controller
 	}
 	
 	public function store_memo()
-    {  
-		
+    {
+
 		Audit::log(Auth::user()->id, trans('admin/users/general.audit-log.category'), trans('admin/users/general.audit-log.msg-index'));
 
         $page_title = "Users"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
@@ -139,11 +139,11 @@ class DashboardController extends Controller
 		$emailto = Input::get('emailto');
 
 		$memo = new Memo;
-		$memo->email_name = Input::get('email_name');
+		$memo->email_name= Input::get('email_name');
 		$memo->emailfrom = Input::get('emailfrom');
-		$memo->subject = Input::get('subject');
-		$memo->message = Input::get('message');
-		$memo->emailto = "";
+		$memo->subject   = Input::get('subject');
+		$memo->message   = Input::get('message');
+		$memo->emailto   = "";
 		$memo->save();
 
 		
@@ -276,8 +276,8 @@ class DashboardController extends Controller
         
 		$page_title = "Users | All Contact"; // trans('admin/users/general.page.index.title'); // "Admin | Users";
         $page_description = "All contact based on Department"; // trans('admin/users/general.page.index.description'); // "List of users";
-        $user_id = Auth::user()->email;
-		$users = DB::select('select * from users'); 
+        //$user_id = Auth::user()->email;
+		//$users = DB::select('select * from users'); 
 		$search = Input::get('search'); 
 		$search = '%'.$search.'%';
 		$users = DB::table('users')->where('first_name', 'like', $search)->orderBy('created_at', 'DESC')->paginate(12);

@@ -12,8 +12,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Set a meta reference to the CSRF token for use in AJAX request -->
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-
-
     <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
     <meta name="viewport" content="width=device-width,initial-scale=1">
 
@@ -26,13 +24,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="shortcut icon" href="{{ URL::asset('assets/themes/default/img/favicon.png') }}" />
 
     <!-- Material Design fonts -->
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    {{--  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">  --}}
 
     <!-- Bootstrap 3.3.4 -->
     <link href="{{ asset("/bower_components/admin-lte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
 
-    <!-- Bootstrap Material Design to be included-->
+    <!-- Bootstrap Material Design to be included -->
     <!-- <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/bootstrap-material-design/dist/css/bootstrap-material-design.css") }}">
     <link rel="stylesheet" type="text/css" href="{{ asset("/bower_components/admin-lte/bootstrap-material-design/dist/css/ripples.min.css") }}"> -->  
 
@@ -57,9 +55,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('vendor/laravel-filemanager/css/mfb.css') }}">
     <link rel="stylesheet" href="{{ asset("/bower_components/admin-lte/plugins/jQueryUI/jquery-ui-1.12.1/jquery-ui.min.css") }}">
 
-    
-
-    
     <!-- Head -->
     @include('partials._head')
 
@@ -92,13 +87,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
       <!-- Application JS-->
       <script src="{{ asset(elixir('js/all.js')) }}"></script>
-
       <!-- Optional header section  -->
       @yield('head_extra')
-
   </head>
 
   <!-- Body -->
   @include('partials._body')
-
 </html>

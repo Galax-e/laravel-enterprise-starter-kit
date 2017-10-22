@@ -10,6 +10,9 @@
       <?php $thumb_src = $item->thumb; ?>
       <?php $item_path = $item->is_file ? $item->url : $item->path; ?>
 
+      <?php $folder = \App\Models\AppModels\Folder::where('folder_no', $item_name);  ?>
+      
+
       <div class="square clickable {{ $item->is_file ? 'file' : 'folder'}}-item" name="gridView" data-id="{{ $item_path }}">
         @if($thumb_src)
         <img src="{{ $thumb_src }}">

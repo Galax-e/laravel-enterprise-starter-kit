@@ -33,7 +33,7 @@
             <div class="box-header">
               <i class="ion ion-clipboard"></i>
 
-              <h3 class="box-title">Request Board List</h3>
+              <h3 class="box-title">Folder Request Board</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -191,8 +191,8 @@
 
 
 <!-- Morris.js charts -->
-<script src="{{ asset("/bower_components/raphael/raphael.min.js") }}"></script>
-<script src="{{ asset("/bower_components/morris.js/morris.min.js") }}"></script>
+{{--  <script src="{{ asset("/bower_components/raphael/raphael.min.js") }}"></script>
+<script src="{{ asset("/bower_components/morris.js/morris.min.js") }}"></script>  --}}
 <!-- Sparkline -->
 <script src="{{ asset("/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js") }}"></script>
 <!-- jvectormap -->
@@ -201,10 +201,11 @@
 <!-- jQuery Knob Chart -->
 <script src="{{ asset("/bower_components/jquery-knob/dist/jquery.knob.min.js") }}"></script>
 <!-- daterangepicker -->
-<script src="{{ asset("/bower_components/moment/min/moment.min.js") }}"></script>
-<script src="{{ asset("/bower_components/bootstrap-daterangepicker/daterangepicker.js") }}"></script>
+{{--  <script src="{{ asset("/bower_components/moment/min/moment.min.js") }}"></script>
+<script src="{{ asset("/bower_components/bootstrap-daterangepicker/daterangepicker.js") }}"></script>  --}}
 <!-- datepicker -->
-<script src="{{ asset("/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js") }}"></script>
+{{--  <script src="{{ asset("/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js") }}"></script>  --}}
+
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{ asset("/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js") }}"></script>
 <!-- Slimscroll -->

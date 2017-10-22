@@ -273,11 +273,15 @@
         
    })
    
-   var showUser = function(user_id, user){
-       $('.viewuser').attr('id', 'viewUserModal'+user_id);
-       $('#user_detail_name').html(user.first_name + ', '+ user.last_name);
-       $('#user_detail_pos').html(user.position);
-       $('#user_detail_img').attr('src', "{{asset("/img/profile_picture/photo/".$user->avatar) }}")
-       $('#viewUserModal'+user_id).modal({ keyboard: false });
+   var showUser = function(user_id, user=null){
+       
+       if(user){
+            $('.viewuser').attr('id', 'viewUserModal'+user_id);
+            $('#user_detail_name').html(user.first_name + ', '+ user.last_name);
+            $('#user_detail_pos').html(user.position);
+            {{-- $('#user_detail_img').attr('src', "{{asset("/img/profile_picture/photo/".$user->avatar) }}"); --}}
+            $('#user_detail_img').attr('src', `./../img/profile_picture/photo/${user.avatar}`);
+            $('#viewUserModal'+user_id).modal({ keyboard: false });
+       }
    }
 </script>

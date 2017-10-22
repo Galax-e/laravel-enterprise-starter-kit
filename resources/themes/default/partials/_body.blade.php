@@ -83,6 +83,7 @@ desired effect
             background-color: #F0FFFF;
         }
     </style>
+
     <!-- View user modal -->
     <div class="modal fade viewuser" role="dialog" style="overflow: auto; z-index: 9999;">
         <div class="modal-dialog"> 
@@ -94,22 +95,25 @@ desired effect
                     <div class="modal-header">
                         <label class="label bg-orange">User Detail</label>
                     </div>
+                    
                     <div class="modal-body">
                         <div class="box-body bg-aqua-active">
-                            <div class="widget-user-header bg-aqua-active">
-                                <div class="widget-user-image" style="margin: auto; margin-right: 30px;">
-                                    <img id="user_detail_img" class="img-circle img-responsive center-block" alt="User Image"/>
-                                </div>
-                                <!-- /.widget-user-image -->
-                                <span class="text-center">
+                            <div class="widget-user-header bg-aqua-active" style="height: 100%;">
+                                <!-- /.widget-user-image -->                                
+                                <div class="box-profile" style="margin: auto;">
+                                    <img id="user_detail_img" class="profile-user-img img-circle img-responsive center-block" alt="User Image"/>
+                                </div> 
+                                <br/>
+                                <span class="text-center clearfix">
                                     <h3 id="user_detail_name" class="widget-user-username"></h3>
                                     <h5 id="user_detail_pos" class="widget-user-desc text-muted"></h5>
                                 </span>
+
                             </div>                            
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <div class="box-footer">
+                    <div class="modal-footer box-footer">
+                        <!--<div class=""> -->
                             <div class="row">
                                 <div class="col-sm-3 border-right el-hover">
                                     <div class="description-block">
@@ -156,7 +160,7 @@ desired effect
                                 </div>
                                 <!-- /.col -->
                             </div><!-- /.row -->                                
-                        </div> <!-- /.box-footer -->
+                         <!--</div> /.box-footer -->
                     </div><!-- /.modal-footer -->
                 </div><!-- /.widget-user -->
             </div> <!-- ./modal-content -->

@@ -100,8 +100,8 @@
     <div class="row">
       <div class="col-md-3 col-sm-3 hidden-xs">
         <div id="tree" class="list-group-item"></div>
+        
         <!-- Activities -->
-
         <div id="activity-timeline" class="box box-primary active tab-pane" style="margin-top: 10px;">
           <div class="box-header">
             <i class="ion ion-clipboard"></i>
@@ -337,7 +337,7 @@
               </div>
             </div>
             <input type="hidden" name="comment_by" value="registry@hallowgate.com">
-            <input type="hidden" name="activity" value="registry@hallowgate.com added a new document to this folder">
+            <input type="hidden" name="activity" value="{{Auth::user()->full_name}} added a new document">
             <input type='hidden' name='working_dir' id='working_dir'>
             <input type='hidden' name='type' id='type' value='{{ request("type") }}'>
             <input type='hidden' name='_token' value='{{csrf_token()}}'>
@@ -371,7 +371,6 @@
             <input type="hidden" name="activity" value="new folder created by system">
             <input type='hidden' name='working_dir'>
             <input type='hidden' name='folder_by' id='folder_by' value='{{ Auth::user()->email }}'>
-
             
               <div class="form-group">
                 <input type="text" class="form-control" id="folder_no" name="folder_no" placeholder="File No"/>
@@ -383,9 +382,10 @@
                 <label>Enter Description</label>
                 <textarea class="form-control" id="add_folder_description" name="add_folder_description" rows="3" style="">
                 </textarea>
-              </div>               
+              </div>  
+                           
               <div class="form-group">                
-                <label>Department</label>
+                <label>Ministry</label>
                 <select id="agency_dept" class="form-control" name="agency_dept">
                   <option value='agric'>Agric</option>
                   <option value='education'>Education</option>
@@ -407,7 +407,24 @@
                   <option value='csc' selected="true">CSC</option>
                   <option value='asc'>ASC</option>
                 </select>
-              </div>               
+              </div>
+
+              {{--  <div class="form-group">                
+                <label>Department</label>
+                <select id="dept" class="form-control" name="dept">
+                  <option value='secretreg'>Secret Registry</option>
+                  <option value='openreg'>Open Registry</option>
+                  <option value='finance'>Finance</option>
+                  <option value='hr'>Human Resources</option>
+                  <option value='gsl'>General Services and Logistics</option>
+                  <option value='adminsupply'>Admin and Supply</option>
+                  <option value='procurement'>Procurement</option>
+                  <option value='permsec'>Permanent Secretary and GOC</option>
+                  <option value='ict' selected="true">ICT and Communications</option>
+                  <option value='legal'>Legal</option>
+                </select>
+              </div>  --}}
+
               <div class="form-group">
               <label>Clearance Level</label>
                 <select id="clearance_level" class="form-control" name="clearance_level">
